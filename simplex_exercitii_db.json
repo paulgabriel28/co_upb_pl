@@ -1,0 +1,467 @@
+{
+  "_version": 1,
+  "_app": "SimplexSolverDB",
+  "_exportedAt": "2024-03-22T10:00:00.000Z",
+  "_count": 30,
+  "exercises": [
+    {
+      "name": "Seminar clasic MAX 3x3 — problema din imagini",
+      "savedAt": "2024-01-10T09:00:00.000Z",
+      "objType": "max",
+      "numVars": 3,
+      "numCons": 3,
+      "objCoefs": [8, 5, 2],
+      "constraints": [
+        {"coefs": [1, 1, 1], "sign": "≥", "rhs": 12},
+        {"coefs": [3, 2, 1], "sign": "=", "rhs": 30},
+        {"coefs": [2, 1, 1], "sign": "≤", "rhs": 22}
+      ],
+      "solved": true,
+      "objVal": 78
+    },
+    {
+      "name": "MIN clasic 3x3 — seminar ex. 2",
+      "savedAt": "2024-01-10T09:05:00.000Z",
+      "objType": "min",
+      "numVars": 3,
+      "numCons": 3,
+      "objCoefs": [5, -2, -1],
+      "constraints": [
+        {"coefs": [6, 2, -3], "sign": "≤", "rhs": 6},
+        {"coefs": [1, 3, 2],  "sign": "=", "rhs": 12},
+        {"coefs": [2, -1, 4], "sign": "≥", "rhs": 4}
+      ],
+      "solved": true,
+      "objVal": -7.4286
+    },
+    {
+      "name": "MIN fractii — x* cu 20/7 si 12/7",
+      "savedAt": "2024-01-10T09:10:00.000Z",
+      "objType": "min",
+      "numVars": 3,
+      "numCons": 3,
+      "objCoefs": [1, 3, -2],
+      "constraints": [
+        {"coefs": [1,  1,  1], "sign": "=", "rhs": 2},
+        {"coefs": [1,  2,  3], "sign": "≤", "rhs": 5},
+        {"coefs": [-1, 1,  2], "sign": "≥", "rhs": 1}
+      ],
+      "solved": true,
+      "objVal": -2.5
+    },
+    {
+      "name": "MAX 2x2 simplu — initiere",
+      "savedAt": "2024-01-11T08:00:00.000Z",
+      "objType": "max",
+      "numVars": 2,
+      "numCons": 2,
+      "objCoefs": [5, 4],
+      "constraints": [
+        {"coefs": [6, 4], "sign": "≤", "rhs": 24},
+        {"coefs": [1, 2], "sign": "≤", "rhs": 6}
+      ],
+      "solved": true,
+      "objVal": 21
+    },
+    {
+      "name": "MIN 2x2 — dieta simpla",
+      "savedAt": "2024-01-11T08:10:00.000Z",
+      "objType": "min",
+      "numVars": 2,
+      "numCons": 2,
+      "objCoefs": [2, 3],
+      "constraints": [
+        {"coefs": [1, 1], "sign": "≥", "rhs": 4},
+        {"coefs": [2, 1], "sign": "≥", "rhs": 6}
+      ],
+      "solved": true,
+      "objVal": 10
+    },
+    {
+      "name": "MAX 2x3 — asimetric mai multa variabile",
+      "savedAt": "2024-01-12T09:00:00.000Z",
+      "objType": "max",
+      "numVars": 3,
+      "numCons": 2,
+      "objCoefs": [3, 5, 2],
+      "constraints": [
+        {"coefs": [1, 2, 1], "sign": "≤", "rhs": 14},
+        {"coefs": [2, 1, 3], "sign": "≤", "rhs": 14}
+      ],
+      "solved": true,
+      "objVal": 31
+    },
+    {
+      "name": "MIN 3x2 — mai multe restrictii decat variabile",
+      "savedAt": "2024-01-12T09:15:00.000Z",
+      "objType": "min",
+      "numVars": 2,
+      "numCons": 3,
+      "objCoefs": [1, 2],
+      "constraints": [
+        {"coefs": [1, 1], "sign": "≥", "rhs": 3},
+        {"coefs": [2, 1], "sign": "≥", "rhs": 4},
+        {"coefs": [1, 3], "sign": "≥", "rhs": 5}
+      ],
+      "solved": true,
+      "objVal": 3.6667
+    },
+    {
+      "name": "MAX patrat 4x4 — alocare resurse",
+      "savedAt": "2024-01-13T10:00:00.000Z",
+      "objType": "max",
+      "numVars": 4,
+      "numCons": 4,
+      "objCoefs": [2, 3, 1, 4],
+      "constraints": [
+        {"coefs": [1, 1, 0, 0], "sign": "≤", "rhs": 10},
+        {"coefs": [0, 0, 1, 1], "sign": "≤", "rhs": 10},
+        {"coefs": [1, 0, 1, 0], "sign": "≤", "rhs": 8},
+        {"coefs": [0, 1, 0, 1], "sign": "≤", "rhs": 8}
+      ],
+      "solved": true,
+      "objVal": 42
+    },
+    {
+      "name": "MIN patrat 4x4 — costuri productie",
+      "savedAt": "2024-01-13T10:30:00.000Z",
+      "objType": "min",
+      "numVars": 4,
+      "numCons": 4,
+      "objCoefs": [3, 2, 4, 1],
+      "constraints": [
+        {"coefs": [1, 0, 0, 1], "sign": "≥", "rhs": 5},
+        {"coefs": [0, 1, 1, 0], "sign": "≥", "rhs": 4},
+        {"coefs": [1, 1, 0, 0], "sign": "≥", "rhs": 6},
+        {"coefs": [0, 0, 1, 1], "sign": "≥", "rhs": 3}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MAX 3x4 — planificare productie",
+      "savedAt": "2024-01-14T08:00:00.000Z",
+      "objType": "max",
+      "numVars": 4,
+      "numCons": 3,
+      "objCoefs": [5, 4, 3, 2],
+      "constraints": [
+        {"coefs": [6, 4, 2, 1], "sign": "≤", "rhs": 240},
+        {"coefs": [3, 2, 5, 4], "sign": "≤", "rhs": 270},
+        {"coefs": [5, 6, 5, 4], "sign": "≤", "rhs": 420}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MIN 4x3 — transport asimetric",
+      "savedAt": "2024-01-14T08:30:00.000Z",
+      "objType": "min",
+      "numVars": 3,
+      "numCons": 4,
+      "objCoefs": [2, 3, 1],
+      "constraints": [
+        {"coefs": [1, 0, 0], "sign": "≥", "rhs": 2},
+        {"coefs": [0, 1, 0], "sign": "≥", "rhs": 3},
+        {"coefs": [0, 0, 1], "sign": "≥", "rhs": 1},
+        {"coefs": [1, 1, 1], "sign": "=", "rhs": 8}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MAX mixturat — semne mixte coeficienti",
+      "savedAt": "2024-01-15T09:00:00.000Z",
+      "objType": "max",
+      "numVars": 3,
+      "numCons": 3,
+      "objCoefs": [-6, 5, 4],
+      "constraints": [
+        {"coefs": [1, 1, 2], "sign": "≤", "rhs": 7},
+        {"coefs": [-1, 1, 3], "sign": "≥", "rhs": 5},
+        {"coefs": [2, 1, 3], "sign": "≤", "rhs": 3}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MIN coeficienti negativi obiectiv",
+      "savedAt": "2024-01-15T09:30:00.000Z",
+      "objType": "min",
+      "numVars": 3,
+      "numCons": 3,
+      "objCoefs": [3, -2, 7],
+      "constraints": [
+        {"coefs": [2, 1, -1], "sign": "≥", "rhs": 4},
+        {"coefs": [1, 2,  3], "sign": "≤", "rhs": 14},
+        {"coefs": [1, 1,  1], "sign": "=", "rhs": 6}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MAX patrat 3x3 — toate egalitati",
+      "savedAt": "2024-01-16T10:00:00.000Z",
+      "objType": "max",
+      "numVars": 3,
+      "numCons": 3,
+      "objCoefs": [2, 1, 3],
+      "constraints": [
+        {"coefs": [1, 2, 1], "sign": "=", "rhs": 10},
+        {"coefs": [2, 1, 3], "sign": "=", "rhs": 20},
+        {"coefs": [1, 1, 1], "sign": "=", "rhs": 8}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MIN toate >= (metoda Big-M pura)",
+      "savedAt": "2024-01-16T10:30:00.000Z",
+      "objType": "min",
+      "numVars": 3,
+      "numCons": 3,
+      "objCoefs": [4, 5, 3],
+      "constraints": [
+        {"coefs": [2, 1, 0], "sign": "≥", "rhs": 8},
+        {"coefs": [1, 2, 1], "sign": "≥", "rhs": 10},
+        {"coefs": [0, 1, 2], "sign": "≥", "rhs": 6}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MAX 5x3 — probleme mai mari",
+      "savedAt": "2024-01-17T08:00:00.000Z",
+      "objType": "max",
+      "numVars": 3,
+      "numCons": 5,
+      "objCoefs": [4, 5, 3],
+      "constraints": [
+        {"coefs": [1, 0, 0], "sign": "≤", "rhs": 10},
+        {"coefs": [0, 1, 0], "sign": "≤", "rhs": 8},
+        {"coefs": [0, 0, 1], "sign": "≤", "rhs": 6},
+        {"coefs": [1, 1, 0], "sign": "≤", "rhs": 15},
+        {"coefs": [1, 1, 1], "sign": "≤", "rhs": 20}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MIN 2x4 — 4 variabile 2 restrictii",
+      "savedAt": "2024-01-17T08:30:00.000Z",
+      "objType": "min",
+      "numVars": 4,
+      "numCons": 2,
+      "objCoefs": [1, 2, 3, 4],
+      "constraints": [
+        {"coefs": [1, 1, 1, 1], "sign": "=", "rhs": 10},
+        {"coefs": [1, 2, 1, 3], "sign": "≥", "rhs": 12}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MAX coeficienti mari — industrie grea",
+      "savedAt": "2024-01-18T09:00:00.000Z",
+      "objType": "max",
+      "numVars": 3,
+      "numCons": 3,
+      "objCoefs": [150, 200, 300],
+      "constraints": [
+        {"coefs": [2, 1, 1], "sign": "≤", "rhs": 1400},
+        {"coefs": [1, 3, 2], "sign": "≤", "rhs": 2100},
+        {"coefs": [1, 1, 2], "sign": "≤", "rhs": 1800}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MIN problema dieta extinsa — 4 alimente",
+      "savedAt": "2024-01-18T09:30:00.000Z",
+      "objType": "min",
+      "numVars": 4,
+      "numCons": 4,
+      "objCoefs": [1.5, 2.0, 1.0, 3.5],
+      "constraints": [
+        {"coefs": [3, 2, 1, 4], "sign": "≥", "rhs": 10},
+        {"coefs": [1, 3, 2, 1], "sign": "≥", "rhs": 8},
+        {"coefs": [2, 1, 3, 2], "sign": "≥", "rhs": 9},
+        {"coefs": [1, 1, 1, 1], "sign": "≤", "rhs": 6}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MAX patrat 4x4 identic — matrice densa",
+      "savedAt": "2024-01-19T10:00:00.000Z",
+      "objType": "max",
+      "numVars": 4,
+      "numCons": 4,
+      "objCoefs": [3, 2, 5, 1],
+      "constraints": [
+        {"coefs": [1, 2, 3, 1], "sign": "≤", "rhs": 20},
+        {"coefs": [2, 1, 1, 3], "sign": "≤", "rhs": 18},
+        {"coefs": [3, 3, 2, 2], "sign": "≤", "rhs": 30},
+        {"coefs": [1, 1, 1, 1], "sign": "≤", "rhs": 10}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MIN 3x5 — sistem supradeterminat",
+      "savedAt": "2024-01-19T10:30:00.000Z",
+      "objType": "min",
+      "numVars": 5,
+      "numCons": 3,
+      "objCoefs": [2, 1, 3, 2, 4],
+      "constraints": [
+        {"coefs": [1, 1, 0, 0, 1], "sign": "≥", "rhs": 5},
+        {"coefs": [0, 1, 1, 1, 0], "sign": "≥", "rhs": 4},
+        {"coefs": [1, 0, 1, 0, 1], "sign": "=", "rhs": 6}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MAX seminar 2 — problema 2 (MAX)",
+      "savedAt": "2024-01-20T08:00:00.000Z",
+      "objType": "max",
+      "numVars": 3,
+      "numCons": 3,
+      "objCoefs": [4, 5, -2],
+      "constraints": [
+        {"coefs": [2, 1, 1], "sign": "≤", "rhs": 6},
+        {"coefs": [1, 3, 2], "sign": "≤", "rhs": 4},
+        {"coefs": [3, 1, -1], "sign": "≥", "rhs": 1}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MIN tema — problema 1 din seminar",
+      "savedAt": "2024-01-20T08:30:00.000Z",
+      "objType": "min",
+      "numVars": 3,
+      "numCons": 3,
+      "objCoefs": [3, -2, 7],
+      "constraints": [
+        {"coefs": [1, 3, -1], "sign": "≤", "rhs": 3},
+        {"coefs": [2, -1, 2], "sign": "≤", "rhs": 2},
+        {"coefs": [3, 2, -1], "sign": "≥", "rhs": 4}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MAX tema — problema 2",
+      "savedAt": "2024-01-20T09:00:00.000Z",
+      "objType": "max",
+      "numVars": 3,
+      "numCons": 3,
+      "objCoefs": [-6, 5, 4],
+      "constraints": [
+        {"coefs": [1, 1, 2], "sign": "≤", "rhs": 7},
+        {"coefs": [-1, 1, 3], "sign": "≥", "rhs": 5},
+        {"coefs": [2, 1, 3], "sign": "≤", "rhs": 3}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MIN tema — problema 4 (din seminar 2)",
+      "savedAt": "2024-01-20T09:30:00.000Z",
+      "objType": "min",
+      "numVars": 3,
+      "numCons": 3,
+      "objCoefs": [1, 3, -2],
+      "constraints": [
+        {"coefs": [1,  1,  1], "sign": "=", "rhs": 2},
+        {"coefs": [1,  2,  3], "sign": "≤", "rhs": 5},
+        {"coefs": [-1, 1,  2], "sign": "≥", "rhs": 1}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MAX 2x5 — 5 variabile 2 restrictii",
+      "savedAt": "2024-01-21T08:00:00.000Z",
+      "objType": "max",
+      "numVars": 5,
+      "numCons": 2,
+      "objCoefs": [1, 2, 3, 1, 2],
+      "constraints": [
+        {"coefs": [1, 1, 1, 1, 1], "sign": "≤", "rhs": 20},
+        {"coefs": [2, 1, 3, 2, 1], "sign": "≤", "rhs": 30}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MIN patrat 5x5 — mare",
+      "savedAt": "2024-01-21T09:00:00.000Z",
+      "objType": "min",
+      "numVars": 5,
+      "numCons": 5,
+      "objCoefs": [2, 3, 1, 4, 2],
+      "constraints": [
+        {"coefs": [1, 0, 0, 0, 1], "sign": "≥", "rhs": 3},
+        {"coefs": [0, 1, 0, 1, 0], "sign": "≥", "rhs": 4},
+        {"coefs": [0, 0, 1, 0, 1], "sign": "≥", "rhs": 2},
+        {"coefs": [1, 1, 0, 0, 0], "sign": "≤", "rhs": 8},
+        {"coefs": [0, 0, 1, 1, 1], "sign": "≤", "rhs": 9}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MAX 4x5 — asimetric mare",
+      "savedAt": "2024-01-21T09:30:00.000Z",
+      "objType": "max",
+      "numVars": 5,
+      "numCons": 4,
+      "objCoefs": [5, 3, 4, 2, 6],
+      "constraints": [
+        {"coefs": [2, 1, 1, 0, 1], "sign": "≤", "rhs": 20},
+        {"coefs": [1, 2, 0, 1, 1], "sign": "≤", "rhs": 18},
+        {"coefs": [1, 0, 2, 1, 0], "sign": "≤", "rhs": 15},
+        {"coefs": [0, 1, 1, 2, 1], "sign": "≤", "rhs": 16}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MIN 6x3 — restrictii mixte multe",
+      "savedAt": "2024-01-22T08:00:00.000Z",
+      "objType": "min",
+      "numVars": 3,
+      "numCons": 6,
+      "objCoefs": [3, 2, 4],
+      "constraints": [
+        {"coefs": [1, 0, 0], "sign": "≥", "rhs": 1},
+        {"coefs": [0, 1, 0], "sign": "≥", "rhs": 1},
+        {"coefs": [0, 0, 1], "sign": "≥", "rhs": 1},
+        {"coefs": [1, 1, 0], "sign": "≤", "rhs": 8},
+        {"coefs": [0, 1, 1], "sign": "≤", "rhs": 7},
+        {"coefs": [1, 1, 1], "sign": "=", "rhs": 10}
+      ],
+      "solved": false,
+      "objVal": null
+    },
+    {
+      "name": "MAX flux retea — 4 noduri",
+      "savedAt": "2024-01-22T09:00:00.000Z",
+      "objType": "max",
+      "numVars": 4,
+      "numCons": 4,
+      "objCoefs": [1, 1, 1, 1],
+      "constraints": [
+        {"coefs": [1, 1, 0, 0], "sign": "≤", "rhs": 10},
+        {"coefs": [0, 0, 1, 1], "sign": "≤", "rhs": 12},
+        {"coefs": [1, 0, 1, 0], "sign": "≤", "rhs": 8},
+        {"coefs": [0, 1, 0, 1], "sign": "≤", "rhs": 9}
+      ],
+      "solved": false,
+      "objVal": null
+    }
+  ]
+}
