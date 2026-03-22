@@ -92,9 +92,3 @@ Recommended flow:
 - it is intended for educational simplex workflows, not large-scale optimization
 - persistence is local to the browser unless the database is exported manually
 - the built-in “validation” confirms the expected LP structure in the UI; it is not a formal symbolic parser
-
-## Quick Start
-
-```text
-Open proiect_final/simplex_PL.html in your browser.
-```
