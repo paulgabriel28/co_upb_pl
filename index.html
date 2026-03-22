@@ -1,0 +1,3627 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simplex — Programare Liniară</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap');
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface2: #1a1a26;
+      --border: #2a2a3e;
+      --accent: #6c63ff;
+      --accent2: #ff6584;
+      --accent3: #43e97b;
+      --accent4: #f9ca24;
+      --text: #e8e8f0;
+      --muted: #7878a0;
+      --pivot: #ff6584;
+      --entering: #43e97b;
+      --leaving: #ffa94d;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Syne', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(rgba(108, 99, 255, .04) 1px, transparent 1px), linear-gradient(90deg, rgba(108, 99, 255, .04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      position: relative;
+      padding: 28px 48px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      z-index: 1;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      font-family: var(--mono);
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    h1 {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, var(--text), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    h1 span {
+      font-weight: 400;
+      font-size: 13px;
+      color: var(--muted);
+      display: block;
+      margin-top: 2px;
+    }
+
+    .steps-nav {
+      position: relative;
+      padding: 0 48px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      z-index: 1;
+      overflow-x: auto;
+    }
+
+    .step-tab {
+      padding: 13px 18px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .step-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .step-tab.done {
+      color: var(--accent3);
+    }
+
+    .step-tab.done .sn {
+      background: var(--accent3);
+      color: var(--bg);
+    }
+
+    .sn {
+      width: 19px;
+      height: 19px;
+      border-radius: 50%;
+      background: var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+
+    .step-tab.active .sn {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    main {
+      position: relative;
+      padding: 28px 48px 64px;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 28px;
+      margin-bottom: 18px;
+      animation: fadeIn .3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .panel-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .panel-title::before {
+      content: '';
+      width: 3px;
+      height: 13px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    label {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    input[type=number],
+    input[type=text],
+    select {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 7px 11px;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 12px;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(108, 99, 255, .15);
+    }
+
+    input[type=number] {
+      width: 75px;
+    }
+
+    input.coef {
+      width: 68px;
+      text-align: center;
+    }
+
+    select {
+      cursor: pointer;
+    }
+
+    .radio-btn {
+      padding: 6px 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .2s;
+      user-select: none;
+    }
+
+    .radio-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .radio-btn.selected {
+      background: rgba(108, 99, 255, .2);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .constraint-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 9px 12px;
+      margin-bottom: 7px;
+      flex-wrap: wrap;
+    }
+
+    .var-label {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .sign-select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 5px 8px;
+      color: var(--accent2);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .btn {
+      padding: 9px 20px;
+      border-radius: 8px;
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #8b7cf8);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(108, 99, 255, .3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(108, 99, 255, .4);
+    }
+
+    .btn-secondary {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-danger {
+      background: rgba(255, 101, 132, .15);
+      color: var(--accent2);
+      border: 1px solid rgba(255, 101, 132, .3);
+    }
+
+    .formula-display {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 12px 18px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text);
+      margin: 9px 0;
+      min-height: 40px;
+    }
+
+    .formula-display .kw {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .formula-display .var {
+      color: var(--accent4);
+    }
+
+    .formula-display .coef-d {
+      color: var(--muted);
+    }
+
+    .formula-display .sign-d {
+      color: var(--accent2);
+    }
+
+    /* SIMPLEX TABLE */
+    .simplex-wrapper {
+      overflow-x: auto;
+      border-radius: 10px;
+      position: relative;
+    }
+
+    table.simplex {
+      border-collapse: collapse;
+      font-family: var(--mono);
+      font-size: 11px;
+      width: 100%;
+      min-width: 500px;
+    }
+
+    table.simplex th {
+      background: var(--surface2);
+      padding: 8px 12px;
+      text-align: center;
+      font-weight: 600;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+    }
+
+    table.simplex td {
+      padding: 8px 12px;
+      text-align: center;
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: var(--surface);
+      transition: background .15s;
+      white-space: nowrap;
+      cursor: pointer;
+      position: relative;
+    }
+
+    table.simplex td:hover::after {
+      content: 'dbl-click';
+      position: absolute;
+      top: 0;
+      right: 2px;
+      font-size: 8px;
+      color: var(--accent);
+      opacity: .6;
+    }
+
+    table.simplex tr:hover td {
+      background: rgba(108, 99, 255, .04);
+    }
+
+    td.pivot-cell {
+      background: rgba(255, 101, 132, .22) !important;
+      color: var(--pivot) !important;
+      font-weight: 700;
+      box-shadow: inset 0 0 0 2px var(--pivot);
+    }
+
+    td.entering-col {
+      background: rgba(67, 233, 123, .08) !important;
+    }
+
+    td.leaving-row {
+      background: rgba(255, 169, 77, .08) !important;
+    }
+
+    th.entering-hdr {
+      background: rgba(67, 233, 123, .15) !important;
+      color: var(--entering) !important;
+    }
+
+    .zk-row td {
+      background: var(--surface2) !important;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .delta-row td {
+      background: var(--surface2) !important;
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .delta-row td.neg {
+      color: var(--accent2);
+    }
+
+    .delta-row td.zero {
+      color: var(--muted);
+    }
+
+    .delta-row td.pos {
+      color: var(--accent3);
+    }
+
+    .delta-row td.pivot-enter {
+      color: var(--entering) !important;
+      background: rgba(67, 233, 123, .1) !important;
+    }
+
+    td.theta-min {
+      color: var(--leaving) !important;
+      font-weight: 700;
+    }
+
+    td.theta-col {
+      color: var(--accent4);
+    }
+
+    /* POPUP */
+    .formula-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      background: #0d0d20;
+      border: 2px solid var(--accent);
+      border-radius: 14px;
+      padding: 0;
+      width: min(680px, 92vw);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .7);
+      animation: popIn .2s ease;
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(.92)
+      }
+
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1)
+      }
+    }
+
+    .popup-header {
+      background: rgba(108, 99, 255, .15);
+      padding: 14px 18px;
+      border-radius: 12px 12px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .popup-title {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .popup-close {
+      background: none;
+      border: none;
+      color: var(--accent2);
+      font-size: 18px;
+      cursor: pointer;
+      font-weight: 700;
+      padding: 0 4px;
+      line-height: 1;
+    }
+
+    .popup-close:hover {
+      color: #fff;
+    }
+
+    .popup-body {
+      padding: 18px 20px;
+    }
+
+    .popup-section {
+      margin-bottom: 14px;
+    }
+
+    .popup-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .popup-formula {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    .popup-formula.sym {
+      color: var(--accent4);
+    }
+
+    .popup-formula.num {
+      color: var(--accent3);
+    }
+
+    .popup-result {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(67, 233, 123, .1);
+      border: 1px solid rgba(67, 233, 123, .3);
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent3);
+    }
+
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .5);
+      z-index: 999;
+    }
+
+    /* ALERTS */
+    .alert {
+      padding: 11px 15px;
+      border-radius: 9px;
+      font-size: 12px;
+      margin: 9px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+    }
+
+    .alert-info {
+      background: rgba(108, 99, 255, .1);
+      border: 1px solid rgba(108, 99, 255, .25);
+      color: #b0a8ff;
+    }
+
+    .alert-success {
+      background: rgba(67, 233, 123, .1);
+      border: 1px solid rgba(67, 233, 123, .25);
+      color: var(--accent3);
+    }
+
+    .alert-warning {
+      background: rgba(249, 202, 36, .1);
+      border: 1px solid rgba(249, 202, 36, .25);
+      color: var(--accent4);
+    }
+
+    .ai {
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .result-box {
+      background: linear-gradient(135deg, rgba(67, 233, 123, .08), rgba(108, 99, 255, .08));
+      border: 1px solid rgba(67, 233, 123, .25);
+      border-radius: 12px;
+      padding: 22px 26px;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .result-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 12px 14px;
+      text-align: center;
+    }
+
+    .result-item .rl {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .result-item .rv {
+      font-family: var(--mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .step-page {
+      display: none;
+    }
+
+    .step-page.active {
+      display: block;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 22px 0 9px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 11px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      margin: 2px;
+    }
+
+    .chip.primary {
+      border-color: rgba(108, 99, 255, .4);
+      color: var(--accent);
+      background: rgba(108, 99, 255, .1);
+    }
+
+    .chip.slack {
+      border-color: rgba(67, 233, 123, .4);
+      color: var(--accent3);
+      background: rgba(67, 233, 123, .1);
+    }
+
+    .chip.artificial {
+      border-color: rgba(249, 202, 36, .4);
+      color: var(--accent4);
+      background: rgba(249, 202, 36, .1);
+    }
+
+    .transform-arrow {
+      text-align: center;
+      font-size: 22px;
+      color: var(--accent);
+      margin: 7px 0;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: .5
+      }
+
+      50% {
+        opacity: 1
+      }
+    }
+
+    .iter-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(108, 99, 255, .15);
+      border: 1px solid rgba(108, 99, 255, .3);
+      border-radius: 20px;
+      padding: 3px 12px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .verify-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 14px;
+      border-radius: 7px;
+      margin-bottom: 5px;
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .verify-ok {
+      background: rgba(67, 233, 123, .07);
+      border: 1px solid rgba(67, 233, 123, .2);
+    }
+
+    .verify-fail {
+      background: rgba(255, 101, 132, .07);
+      border: 1px solid rgba(255, 101, 132, .2);
+    }
+
+    .vi {
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--surface);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent);
+    }
+
+    .progress-bar {
+      height: 2px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 2px;
+      transition: width .5s ease;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* PDF export — ascunde elementele UI din captură */
+    .pdf-capture-mode .btn,
+    .pdf-capture-mode button,
+    .pdf-capture-mode .steps-nav,
+    .pdf-capture-mode header,
+    .pdf-capture-mode .progress-bar,
+    .pdf-capture-mode .iter-nav {
+      display: none !important;
+    }
+
+    .pdf-capture-mode .step-page {
+      display: block !important;
+    }
+
+    .mono-text {
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    pre {
+      font-family: var(--mono);
+      font-size: 11px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 12px;
+      overflow-x: auto;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* Fracții vizuale ca pe caiet */
+    .mfrac {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      vertical-align: middle;
+      font-family: var(--mono);
+      line-height: 1.1;
+      margin: 0 2px;
+    }
+
+    .mfrac .mnum {
+      border-bottom: 1.5px solid currentColor;
+      padding: 0 3px 1px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .mfrac .mden {
+      padding: 1px 3px 0;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    /* Fracție simplă: 1/2 */
+    .sfrac {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      vertical-align: middle;
+      font-family: var(--mono);
+      line-height: 1.1;
+      margin: 0 1px;
+      font-size: .9em;
+    }
+
+    .sfrac .mnum {
+      border-bottom: 1.5px solid currentColor;
+      padding: 0 2px 1px;
+      text-align: center;
+    }
+
+    .sfrac .mden {
+      padding: 1px 2px 0;
+      text-align: center;
+    }
+
+    /* ─── MODAL GENERAL ──────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .72);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn .2s ease;
+    }
+
+    .modal-box {
+      background: #0d0d1e;
+      border: 1px solid var(--accent);
+      border-radius: 16px;
+      padding: 0;
+      width: min(700px, 94vw);
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .8);
+      animation: popIn .2s ease;
+    }
+
+    .modal-header {
+      padding: 18px 22px;
+      background: rgba(108, 99, 255, .12);
+      border-radius: 16px 16px 0 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .modal-title {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--accent2);
+      font-size: 20px;
+      cursor: pointer;
+      font-weight: 700;
+      line-height: 1;
+      padding: 0 4px;
+    }
+
+    .modal-close:hover {
+      color: #fff;
+    }
+
+    .modal-body {
+      padding: 20px 22px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .modal-footer {
+      padding: 14px 22px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 9px;
+      justify-content: flex-end;
+      flex-shrink: 0;
+    }
+
+    /* ─── SAVED EXERCISE CARDS ───────────────────────────────────── */
+    .ex-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .ex-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all .2s;
+      position: relative;
+    }
+
+    .ex-card:hover {
+      border-color: var(--accent);
+      background: rgba(108, 99, 255, .07);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(108, 99, 255, .2);
+    }
+
+    .ex-card-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(108, 99, 255, .15);
+      border: 1px solid rgba(108, 99, 255, .3);
+      border-radius: 20px;
+      padding: 2px 9px;
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .ex-card-title {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .ex-card-meta {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .ex-card-formula {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent4);
+      background: var(--surface2);
+      border-radius: 6px;
+      padding: 6px 9px;
+      margin-bottom: 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .ex-card-del {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 101, 132, .15);
+      border: 1px solid rgba(255, 101, 132, .25);
+      color: var(--accent2);
+      border-radius: 6px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .ex-card-del:hover {
+      background: rgba(255, 101, 132, .35);
+    }
+
+    .ex-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .ex-empty-icon {
+      font-size: 36px;
+      margin-bottom: 10px;
+      opacity: .4;
+    }
+
+    /* ─── SAVE FORM ──────────────────────────────────────────────── */
+    .save-form {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .save-form input[type=text] {
+      width: 100%;
+      margin-top: 6px;
+      padding: 9px 13px;
+      font-size: 13px;
+    }
+
+    /* ─── DB STATUS INDICATOR ─────────────────────────────────────── */
+    .db-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: rgba(67, 233, 123, .06);
+      border: 1px solid rgba(67, 233, 123, .15);
+      border-radius: 8px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--accent3);
+    }
+
+    .db-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent3);
+      box-shadow: 0 0 6px var(--accent3);
+      flex-shrink: 0;
+    }
+
+    /* ─── SORT TAGS ───────────────────────────────────────────────── */
+    .sort-btn {
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .sort-btn.active {
+      background: rgba(108, 99, 255, .2);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .sort-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    /* ─── INFO BOX ASP ───────────────────────────────────────────── */
+    .info-matrix {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 10px 0;
+    }
+
+    .matrix-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .matrix-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .matrix-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 3px;
+    }
+
+    .matrix-bracket {
+      font-size: 36px;
+      color: var(--muted);
+      line-height: 1;
+      font-weight: 100;
+    }
+
+    .matrix-content {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .matrix-cell {
+      min-width: 36px;
+      text-align: center;
+      color: var(--text);
+      padding: 1px 4px;
+    }
+
+    .matrix-cell.art {
+      color: var(--accent4);
+    }
+
+    .matrix-cell.slack {
+      color: var(--accent3);
+    }
+
+    .matrix-cell.zero {
+      color: var(--muted);
+    }
+
+    .matrix-cell.neg {
+      color: var(--accent2);
+    }
+
+    .basis-info-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .basis-info-item {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 10px 14px;
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+
+    .basis-info-label {
+      font-size: 9px;
+      color: var(--muted);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .basis-info-val {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    /* ─── PDF EXPORT BTN ─────────────────────────────────────────── */
+    .btn-pdf {
+      background: linear-gradient(135deg, #c0392b, #e74c3c);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(192, 57, 43, .3);
+    }
+
+    .btn-pdf:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(192, 57, 43, .4);
+    }
+
+    .btn-save {
+      background: linear-gradient(135deg, #27ae60, #2ecc71);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(39, 174, 96, .3);
+    }
+
+    .btn-save:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-load {
+      background: rgba(249, 202, 36, .15);
+      color: var(--accent4);
+      border: 1px solid rgba(249, 202, 36, .3);
+    }
+
+    .btn-load:hover {
+      background: rgba(249, 202, 36, .25);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">LP</div>
+    <div style="flex:1">
+      <h1>Simplex <span>Rezolvare Programare Liniară — Metoda Simplex</span></h1>
+    </div>
+    <div style="display:flex;gap:8px;flex-shrink:0">
+      <button class="btn btn-load" onclick="openLoadModal()" title="Exerciții salvate în baza de date"
+        style="position:relative">
+        📂 Exerciții
+        <span id="exCountBadge"
+          style="display:none;position:absolute;top:-6px;right:-6px;background:var(--accent2);color:#fff;border-radius:50%;width:18px;height:18px;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:var(--mono)">0</span>
+      </button>
+      <button class="btn btn-save" onclick="openSaveModal()" title="Salvează exercițiul curent">💾 Salvează</button>
+    </div>
+  </header>
+  <nav class="steps-nav" id="stepsNav">
+    <div class="step-tab active" data-step="0" onclick="navigateTo(0)"><span class="sn">1</span> Problema PL</div>
+    <div class="step-tab" data-step="1" onclick="navigateTo(1)"><span class="sn">2</span> PL → PLS</div>
+    <div class="step-tab" data-step="2" onclick="navigateTo(2)"><span class="sn">3</span> ASP & Baza</div>
+    <div class="step-tab" data-step="3" onclick="navigateTo(3)"><span class="sn">4</span> Tabel Simplex</div>
+    <div class="step-tab" data-step="4" onclick="navigateTo(4)"><span class="sn">5</span> Verificare</div>
+  </nav>
+  <main>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width:20%"></div>
+    </div>
+
+    <!-- STEP 0 -->
+    <div class="step-page active" id="step0">
+      <div class="panel">
+        <div class="panel-title">Tipul Problemei & Funcția Obiectiv</div>
+        <div class="form-row">
+          <label>Tip:</label>
+          <div class="radio-btn selected" id="btn-min" onclick="selectObj('min')">min f(x)</div>
+          <div class="radio-btn" id="btn-max" onclick="selectObj('max')">max f(x)</div>
+        </div>
+        <div class="form-row">
+          <label>Variabile:</label>
+          <input type="number" id="numVars" value="3" min="2" max="8" onchange="buildInputs()">
+          <label>Restricții:</label>
+          <input type="number" id="numCons" value="3" min="1" max="10" onchange="buildInputs()">
+          <button class="btn btn-secondary" onclick="buildInputs()">↻</button>
+        </div>
+        <div class="section-label">Funcția Obiectiv f(x)</div>
+        <div id="objRow" class="constraint-row"></div>
+        <div class="formula-display" id="objDisplay">—</div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Sistemul de Restricții</div>
+        <div id="constraintsArea"></div>
+        <button class="btn btn-secondary" style="margin-top:7px" onclick="addCon()">+ Restricție</button>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Condiția de Nenegativitate</div>
+        <div class="alert alert-info"><span class="ai">ℹ</span><span>x₁, x₂, ..., xₙ ≥ 0 — activă implicit (formă
+            canonică)</span></div>
+        <div id="nonNegDisplay" class="formula-display">—</div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Validare</div>
+        <div id="linearityCheck">
+          <div class="alert alert-info"><span class="ai">🔍</span><span>Completează datele și apasă Validare.</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:9px;margin-top:12px;flex-wrap:wrap">
+          <button class="btn btn-secondary" onclick="validateLinearity()">🔍 Validare</button>
+          <button class="btn btn-primary" onclick="nextStep()">Continuă → PLS →</button>
+          <button class="btn btn-secondary" onclick="loadExample()">📋 Exemplu (seminar)</button>
+          <button class="btn btn-save" onclick="openSaveModal()">💾 Salvează exercițiu</button>
+          <button class="btn btn-load" onclick="openLoadModal()">📂 Exerciții salvate</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step-page" id="step1">
+      <div class="panel">
+        <div class="panel-title">Transformare PL → PLS</div>
+        <div class="alert alert-info"><span class="ai">📐</span>
+          <div>
+            <strong>Reguli:</strong><br>
+            &nbsp;• <code>=</code> → <code>+z_k</code> (artificială, c=M)<br>
+            &nbsp;• <code>≤</code> → <code>+y_k</code> (surplus, c=0)<br>
+            &nbsp;• <code>≥</code> → <code>−y_k + z_k</code> (surplus negativă + artificială)
+          </div>
+        </div>
+      </div>
+      <div id="plsTransformSteps"></div>
+      <div class="panel">
+        <div class="panel-title">PLS — Forma Standard</div>
+        <div id="plsResult"></div>
+      </div>
+      <div style="display:flex;gap:9px;margin-top:4px">
+        <button class="btn btn-secondary" onclick="goToStep(0)">← Înapoi</button>
+        <button class="btn btn-primary" onclick="buildASP()">Continuă → ASP →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-page" id="step2">
+      <div class="panel">
+        <div class="panel-title">Baza Inițială (ASP)</div>
+        <div id="aspContent"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Rezumat Variabile</div>
+        <div id="varSummary"></div>
+      </div>
+      <div style="display:flex;gap:9px;margin-top:4px">
+        <button class="btn btn-secondary" onclick="goToStep(1)">← Înapoi</button>
+        <button class="btn btn-primary" onclick="buildSimplexTable()">Continuă → Tabel Simplex →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-page" id="step3">
+      <div class="alert alert-info" style="margin-bottom:14px"><span class="ai">💡</span><span><strong>Dublu-click pe
+            orice celulă din tabel</strong> pentru a vedea formula detaliată (simbolică + numerică)</span></div>
+      <div id="simplexIterations"></div>
+      <div id="simplexResult"></div>
+      <div style="display:flex;gap:9px;margin-top:4px">
+        <button class="btn btn-secondary" onclick="goToStep(2)">← Înapoi</button>
+        <button class="btn btn-primary" onclick="buildVerification()">Continuă → Verificare →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-page" id="step4">
+      <div class="panel">
+        <div class="panel-title">Verificare în PL Original</div>
+        <div id="verificationContent"></div>
+      </div>
+      <div id="finalResult"></div>
+      <div style="display:flex;gap:9px;margin-top:18px">
+        <button class="btn btn-secondary" onclick="goToStep(3)">← Înapoi</button>
+        <button class="btn btn-primary" onclick="resetAll()">↺ Problemă Nouă</button>
+        <button class="btn btn-pdf" onclick="exportPDF()">📄 Export PDF</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ═══════ MODAL SALVARE EXERCIȚIU ═══════ -->
+  <div class="modal-overlay hidden" id="saveModalOverlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">💾 Salvează Exercițiu</div>
+        <button class="modal-close" onclick="closeSaveModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="save-form">
+          <label style="font-family:var(--mono);font-size:11px;color:var(--muted)">Denumire exercițiu
+            (opțional):</label>
+          <input type="text" id="exName" placeholder="ex: Seminar 2 - Problema 1" />
+        </div>
+        <div id="savePreview" style="font-family:var(--mono);font-size:11px;color:var(--muted)">—</div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeSaveModal()">Anulează</button>
+        <button class="btn btn-save" onclick="confirmSave()">💾 Salvează</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ MODAL EXERCIȚII SALVATE ═══════ -->
+  <div class="modal-overlay hidden" id="loadModalOverlay">
+    <div class="modal-box" style="width:min(820px,96vw)">
+      <div class="modal-header">
+        <div class="modal-title">📂 Exerciții Salvate</div>
+        <button class="modal-close" onclick="closeLoadModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex;gap:8px;margin-bottom:12px;align-items:center;flex-wrap:wrap">
+          <div style="position:relative;flex:1;min-width:180px">
+            <input type="text" id="searchEx" placeholder="🔍 Caută după nume, tip, variabile..."
+              style="width:100%;padding-left:14px" oninput="renderExercises()">
+          </div>
+          <button class="btn btn-save" onclick="exportDB()" title="Exportă baza de date — trimite-o altora"
+            style="white-space:nowrap;font-size:11px">⬇ Export DB</button>
+          <label class="btn btn-secondary" title="Importă baza de date primită de la altcineva"
+            style="cursor:pointer;white-space:nowrap;font-size:11px">
+            ⬆ Import DB
+            <input type="file" accept=".json" id="importDBFile" style="display:none" onchange="importDB(event)">
+          </label>
+          <button class="btn btn-danger" onclick="clearAllExercises()" title="Șterge toate"
+            style="padding:9px 12px">🗑</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+          <div class="db-status">
+            <div class="db-dot"></div><span>IndexedDB conectat</span>
+          </div>
+          <div id="exDbCount" style="font-family:var(--mono);font-size:10px;color:var(--muted)">—</div>
+          <div style="margin-left:auto;display:flex;gap:6px">
+            <button class="sort-btn active" id="sortNew" onclick="setSortOrder('new',this)">↓ Recente</button>
+            <button class="sort-btn" id="sortOld" onclick="setSortOrder('old',this)">↑ Vechi</button>
+            <button class="sort-btn" id="sortSolved" onclick="setSortOrder('solved',this)">✓ Rezolvate</button>
+          </div>
+        </div>
+        <div id="exGrid" class="ex-grid"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeLoadModal()">Închide</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- POPUP OVERLAY -->
+  <div class="popup-overlay hidden" id="popupOverlay" onclick="closePopup()"></div>
+  <div class="formula-popup hidden" id="formulaPopup">
+    <div class="popup-header">
+      <div class="popup-title" id="popupTitle">—</div>
+      <button class="popup-close" onclick="closePopup()">✕</button>
+    </div>
+    <div class="popup-body">
+      <div class="popup-section">
+        <div class="popup-label">Formulă Simbolică</div>
+        <div class="popup-formula sym" id="popupSym">—</div>
+      </div>
+      <div class="popup-section">
+        <div class="popup-label">Cu Valorile din Iterație</div>
+        <div class="popup-formula num" id="popupNum">—</div>
+      </div>
+      <div class="popup-section">
+        <div class="popup-label">Rezultat</div>
+        <div class="popup-result" id="popupRes">—</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ═══════════════════════ STATE ═══════════════════════
+    const S = {
+      objType: 'min', numVars: 3, numCons: 3,
+      objCoefs: [], constraints: [],
+      allVars: [], plsConstraints: [], basisInitial: [],
+      objPls: [], addedPerRow: [],
+      iterations: [], finalSolution: null, error: null,
+      M: 1e6  // M numeric mare DOAR pentru algoritmul intern; niciodată afișat ca număr
+    };
+
+    // ═══════════════════════ MATH ═══════════════════════
+    function frac(n) {
+      if (Math.abs(n) < 1e-9) return '0';
+      for (let d = 1; d <= 64; d++) {
+        let num = Math.round(n * d);
+        if (Math.abs(num / d - n) < 1e-7) {
+          let g = gcd(Math.abs(num), d);
+          return d / g === 1 ? String(num / g) : `${num / g}/${d / g}`;
+        }
+      }
+      return n.toFixed(4);
+    }
+    function gcd(a, b) { return b === 0 ? a : gcd(b, a % b); }
+    function fmt(n) { if (Math.abs(n) < 1e-9) return '0'; if (Math.abs(n - Math.round(n)) < 1e-9) return String(Math.round(n)); return frac(n); }
+    function fmtM(v) {
+      // DEPRECAT — folosim fmtZkSymbolic/fmtDelta pentru afișare simbolică
+      return fmt(v);
+    }
+    function sub(n) { return String(n).split('').map(c => '₀₁₂₃₄₅₆₇₈₉'[c] || c).join(''); }
+
+    // ═══════════════════════ BUILD PLS ═══════════════════════
+    function buildPLS() {
+      const n = S.numVars, m = S.constraints.length;
+      S.allVars = [];
+      for (let i = 0; i < n; i++) S.allVars.push({ name: `x${sub(i + 1)}`, type: 'main', coefObj: S.objCoefs[i], origIdx: i });
+
+      let slackCnt = 0, artCnt = 0;
+      S.addedPerRow = [];
+
+      for (let r = 0; r < m; r++) {
+        const { sign } = S.constraints[r];
+        const added = [];
+        if (sign === '=') {
+          artCnt++;
+          S.allVars.push({ name: `z${sub(artCnt)}`, type: 'artificial', coefObj: 0, isArtificial: true, row: r, coefInRow: +1 });
+          added.push({ vi: S.allVars.length - 1, coef: +1 });
+        } else if (sign === '≤') {
+          slackCnt++;
+          S.allVars.push({ name: `y${sub(slackCnt)}`, type: 'slack', coefObj: 0, row: r, coefInRow: +1 });
+          added.push({ vi: S.allVars.length - 1, coef: +1 });
+        } else {
+          slackCnt++;
+          S.allVars.push({ name: `y${sub(slackCnt)}`, type: 'slack', coefObj: 0, row: r, coefInRow: -1 });
+          added.push({ vi: S.allVars.length - 1, coef: -1 });
+          artCnt++;
+          S.allVars.push({ name: `z${sub(artCnt)}`, type: 'artificial', coefObj: 0, isArtificial: true, row: r, coefInRow: +1 });
+          added.push({ vi: S.allVars.length - 1, coef: +1 });
+        }
+        S.addedPerRow.push(added);
+      }
+
+      const total = S.allVars.length;
+
+      // MAX: convertim la min(-f), artificiale cu +M (penalizare min = mare)
+      // AFIȘARE: MAX → c_artificiale = -M, MIN → c_artificiale = +M
+      // Intern algoritmul lucrează tot pe minimizare; pentru MAX negăm principalele
+      if (S.objType === 'max') {
+        S.objPls = S.allVars.map(v => v.isArtificial ? S.M : (v.type === 'main' ? -v.coefObj : v.coefObj));
+      } else {
+        S.objPls = S.allVars.map(v => v.isArtificial ? S.M : v.coefObj);
+      }
+      // Semnul de afișare pentru M în funcția obiectiv
+      // MAX → -M (deoarece vrem să penalizăm maximizând, artificialele trebuie excluse)
+      // MIN → +M
+      S.mSign = S.objType === 'max' ? -1 : 1;
+
+      // ── Reordonăm variabilele: x1..xn, y1..yk, z1..zm ──────────────
+      // Creăm un index de permutare: [main vars, slack vars, artificial vars]
+      const mainIdx = S.allVars.map((_, i) => i).filter(i => S.allVars[i].type === 'main');
+      const slackIdx = S.allVars.map((_, i) => i).filter(i => S.allVars[i].type === 'slack');
+      const artIdx = S.allVars.map((_, i) => i).filter(i => S.allVars[i].isArtificial);
+      const perm = [...mainIdx, ...slackIdx, ...artIdx];  // noua ordine
+      const invPerm = new Array(total);
+      perm.forEach((oldIdx, newPos) => { invPerm[oldIdx] = newPos; });
+
+      // Aplicăm permutarea pe allVars, objPls, addedPerRow
+      S.allVars = perm.map(i => S.allVars[i]);
+      S.objPls = perm.map(i => S.objPls[i]);
+      // Actualizăm addedPerRow cu noile indecși
+      S.addedPerRow = S.addedPerRow.map(added => added.map(({ vi, coef }) => ({ vi: invPerm[vi], coef })));
+
+      // ── Construim plsConstraints și basisInitial cu noua ordine ──
+      S.plsConstraints = [];
+      S.basisInitial = [];
+      for (let r = 0; r < m; r++) {
+        const coefs = new Array(total).fill(0);
+        // Coeficienții variabilelor principale
+        for (let j = 0; j < n; j++) coefs[invPerm[j]] = S.constraints[r].coefs[j];
+        // Coeficienții variabilelor adăugate
+        for (const { vi, coef } of S.addedPerRow[r]) coefs[vi] = coef;
+        S.plsConstraints.push({ coefs, rhs: S.constraints[r].rhs });
+        const bv = S.addedPerRow[r].find(x => x.coef === +1);
+        if (bv) S.basisInitial.push(bv.vi);
+      }
+    }
+
+    // ═══════════════════════ SIMPLEX ALGORITHM ═══════════════════════
+    function runSimplex() {
+      const m = S.plsConstraints.length;
+      const total = S.allVars.length;
+      // tableau: m × (total+1)
+      let T = S.plsConstraints.map(row => [...row.coefs, row.rhs]);
+      let basis = [...S.basisInitial];
+      S.iterations = [];
+
+      for (let it = 0; it <= 50; it++) {
+        const cB = basis.map(b => S.objPls[b]);
+        const xb = T.map(row => row[total]);
+        // z_j = Σ cB_i * a_ij  per ogni colonna j
+        const zRow = Array.from({ length: total }, (_, j) => cB.reduce((s, c, i) => s + c * T[i][j], 0));
+        // delta_j = c_j - z_j  (interno, per minimizzazione)
+        const delta = S.objPls.map((c, j) => c - zRow[j]);
+        const deltaFree = delta.map((d, j) => basis.includes(j) ? 0 : d);
+
+        const snap = {
+          it, tableau: T.map(r => [...r]), basis: [...basis], cB: [...cB], xb: [...xb],
+          zRow: [...zRow], delta: [...delta], status: null, enterIdx: null, leaveRow: null, theta: null,
+          prevTableau: null
+        };  // va fi completat la iterația următoare
+
+        const negIdx = deltaFree.map((d, j) => ({ j, d })).filter(x => x.d < -1e-8);
+        if (!negIdx.length) { snap.status = 'optimal'; S.iterations.push(snap); break; }
+
+        const enterIdx = negIdx.reduce((a, b) => b.d < a.d ? b : a).j;
+        snap.enterIdx = enterIdx;
+        const col = T.map(row => row[enterIdx]);
+        const theta = col.map((a, i) => a > 1e-9 ? xb[i] / a : Infinity);
+        snap.theta = [...theta];
+        if (theta.every(t => t === Infinity)) { snap.status = 'unbounded'; S.iterations.push(snap); break; }
+
+        const leaveRow = theta.indexOf(Math.min(...theta));
+        snap.leaveRow = leaveRow; snap.status = 'pivot';
+        S.iterations.push(snap);
+
+        // Salvăm tabloul înainte de pivotare (pentru formula Gauss-Jordan la iterația următoare)
+        const preT = T.map(r => [...r]);
+        const pivRow = leaveRow, pivCol = enterIdx;
+        const pivVal = T[leaveRow][enterIdx];
+
+        // Pivot Gauss-Jordan
+        T[leaveRow] = T[leaveRow].map(v => v / pivVal);
+        for (let r = 0; r < m; r++) {
+          if (r === leaveRow) continue;
+          const f = T[r][enterIdx];
+          T[r] = T[r].map((v, j) => v - f * T[leaveRow][j]);
+        }
+        basis[leaveRow] = enterIdx;
+        // Atașăm info pivot la snap-ul următor (când va fi creat)
+        // Stocăm în snap curent ca referință pentru UI
+        snap.pivotInfo = { preT, pivRow, pivCol, pivVal };
+      }
+    }
+
+    // ═══════════════════════ POPUP FORMULA ═══════════════════════
+    function showPopup(cellInfo) {
+      const it = S.iterations[S._currentIt || 0];
+      if (!it) return;
+      const av = S.allVars;
+      const basis = it.basis;
+      const m = basis.length;
+      const tableau = it.tableau;
+      const xb = it.xb;
+      const total = av.length;
+
+      // cBOrig: artificiale = S.M pentru calcule numerice în popup
+      const cBOrig = basis.map(b => av[b].isArtificial ? S.M : av[b].coefObj);
+
+      let title = '', sym = '', num = '', res = '';
+
+      if (cellInfo.type === 'CB') {
+        const bi = basis[cellInfo.row];
+        const vn = av[bi].name; const c = av[bi].coefObj;
+        title = `C_B  [linia ${cellInfo.row + 1}]`;
+        sym = `C_B = coeficientul variabilei ${vn} în funcția obiectiv`;
+        const cStrP = fmtCj(bi);
+        num = `C_B = c(${vn}) = ${cStrP}`;
+        res = cStrP;
+      } else if (cellInfo.type === 'xb') {
+        const r2 = cellInfo.row;
+        const v = xb[r2];
+        const vName = av[basis[r2]].name;
+        title = `x_B  [linia ${r2 + 1}] — ${vName}`;
+        const itIdx3 = S._currentIt || 0;
+        const prevIt3 = itIdx3 > 0 ? S.iterations[itIdx3 - 1] : null;
+        if (prevIt3 && prevIt3.pivotInfo) {
+          const { preT, pivRow, pivCol, pivVal } = prevIt3.pivotInfo;
+          const bOld = preT[r2][total];   // x_B vechi (coloana RHS)
+          const aPivRow_rhs = preT[pivRow][total]; // x_B din linia pivot
+          const aPivRow_cur = preT[r2][pivCol];    // coef col pivot în linia r2
+          if (r2 === pivRow) {
+            sym = `Linia PIVOT: x'_B[${r2 + 1}] = x_B[${r2 + 1}] / pivot`;
+            num = `x'_B[${r2 + 1}] = ${fmtH(bOld)} / ${fmtH(pivVal)} = ${fmtH(v)}`;
+          } else {
+            const newPivXB = aPivRow_rhs / pivVal;
+            sym = `Gauss-Jordan (R${r2 + 1} ← R${r2 + 1} − a_${r2 + 1},${pivCol + 1}/pivot · R${pivRow + 1}):\nx'_B[${r2 + 1}] = x_B[${r2 + 1}] − a_${r2 + 1},${pivCol + 1} · (x_B[${pivRow + 1}] / pivot)`;
+            num = `x'_B[${r2 + 1}] = ${fmtH(bOld)} − ${fmtH(aPivRow_cur)} · ${fmtH(newPivXB)} = ${fmtH(v)}`;
+          }
+          res = fmtH(v);
+        } else {
+          sym = `x_B[${r2 + 1}] = valoarea inițială a lui ${vName} (din b vector — RHS PLS)`;
+          num = `x_B[${r2 + 1}] = ${fmtH(v)}`;
+          res = fmtH(v);
+        }
+      } else if (cellInfo.type === 'aij') {
+        const r = cellInfo.row, j = cellInfo.col;
+        const vn = av[j].name; const aNew = tableau[r][j];
+        const itIdx_aij = S._currentIt || 0;
+        const prevIt_aij = itIdx_aij > 0 ? S.iterations[itIdx_aij - 1] : null;
+        if (prevIt_aij && prevIt_aij.pivotInfo) {
+          const { preT, pivRow, pivCol, pivVal } = prevIt_aij.pivotInfo;
+          const aOld = preT[r][j];
+          const aPivRow_j = preT[pivRow][j];
+          const aI_pivCol = preT[r][pivCol];
+          const aPivNew_j = aPivRow_j / pivVal;
+          if (r === pivRow) {
+            title = `a'_${r + 1},${j + 1}  [LINIA PIVOT, col ${vn}]`;
+            sym = `Regula liniei pivot:<br>a'_${r + 1},${j + 1} = a_${r + 1},${j + 1} &divide; pivot`;
+            num = `a'_${r + 1},${j + 1} = ${fmtH(aOld)} &divide; ${fmtH(pivVal)} = ${fmtH(aNew)}`;
+          } else {
+            title = `a'_${r + 1},${j + 1}  [linia ${r + 1}, col ${vn}]`;
+            sym = `Gauss-Jordan &nbsp; R<sub>${r + 1}</sub> &larr; R<sub>${r + 1}</sub> &minus; a<sub>${r + 1},${pivCol + 1}</sub> &sdot; R'<sub>${pivRow + 1}</sub>:<br>a'_${r + 1},${j + 1} = a_${r + 1},${j + 1} &minus; a_${r + 1},${pivCol + 1} &sdot; a'_${pivRow + 1},${j + 1}`;
+            num = `a'_${r + 1},${j + 1} = ${fmtH(aOld)} &minus; ${fmtH(aI_pivCol)} &sdot; ${fmtH(aPivNew_j)} = <strong>${fmtH(aNew)}</strong>`;
+          }
+          res = fmtH(aNew);
+        } else {
+          title = `a_${r + 1},${j + 1}  [linia ${r + 1}, col ${vn}]`;
+          sym = `Valoare ini&#x21b;ial&#x103; din PLS (iterația 0 &mdash; tabloul de start)`;
+          num = `a_${r + 1},${j + 1} = ${fmtH(aNew)}`;
+          res = fmtH(aNew);
+        }
+      } else if (cellInfo.type === 'theta') {
+        const j = it.enterIdx; const r = cellInfo.row;
+        const a = tableau[r][j]; const xbv = xb[r]; const th = it.theta[r];
+        const vn = av[j].name;
+        title = `θ  [linia ${r + 1}]`;
+        sym = `θ_${r + 1} = x_B[${r + 1}] / a_${r + 1},${j + 1}\nCondiție: a_${r + 1},${j + 1} > 0\n(raport minim → variabila care iese din bază)`;
+        num = `θ_${r + 1} = ${fmtH(xbv)} / ${fmtH(a)} = ${th === Infinity ? '∞' : fmtH(th)}`;
+        res = th === Infinity ? '∞' : fmt(th);
+      } else if (cellInfo.type === 'zk') {
+        const j = cellInfo.col; const vn = av[j].name;
+        const aijVals = Array.from({ length: m }, (_, i) => tableau[i][j]);
+        const prods = cBOrig.map((c, i) => c * aijVals[i]);
+        const zj = prods.reduce((s, v) => s + v, 0);
+        const termsSym = cBOrig.map((_, i) => `C_B[${i + 1}]·a_${i + 1},${j + 1}`).join(' + ');
+        const termsValA = basis.map((b, i) => `${fmtCj(b)}·${fmt(aijVals[i])}`).join(' + ');
+        const prodStrA = basis.map((b, i) => {
+          const { km: ckm, kn: ckn } = splitM(dispCoef(b));
+          return symStr(ckm * aijVals[i], ckn * aijVals[i]);
+        }).join(' + ');
+        const zjStrA = fmtZjSym_signed(basis, tableau, j, av);
+        title = `z_j  [coloana ${vn}, auxiliar pentru Δ_${j + 1}]`;
+        sym = `z_j(${vn}) = Σᵢ C_B[i] · a_i,j  (M rămâne literă)\n     = ${termsSym}`;
+        num = `     = ${termsValA}\n     = ${prodStrA}\n     = ${zjStrA}`;
+        res = zjStrA;
+      } else if (cellInfo.type === 'delta') {
+        const j = cellInfo.col; const vn = av[j].name;
+        const cj = av[j].coefObj;
+        const aijVals = Array.from({ length: m }, (_, i) => tableau[i][j]);
+        const zj = cBOrig.reduce((s, c, i) => s + c * aijVals[i], 0);
+        const dj = cj - zj;
+        const optCrit = S.objType === 'min' ? 'Δ_j ≥ 0 → optim (min)' : 'Δ_j ≤ 0 → optim (max)';
+        const cjStr2 = fmtCj(j);
+        const zjStr2 = fmtZjSym_signed(basis, tableau, j, av);
+        const djStr2 = fmtDeltaSym(j, basis, tableau, av);
+        title = `Δ_${j + 1}  [coloana ${vn}]`;
+        sym = `Δ_${j + 1} = c_${j + 1} − z_${j + 1}\nCriteriu: ${optCrit}`;
+        num = `Δ_${j + 1} = ${cjStr2} − (${zjStr2}) = ${djStr2}`;
+        // verificăm: cjStr2 e c_j display, zjStr2 e z_j display
+        res = djStr2;
+      } else if (cellInfo.type === 'zkObj') {
+        const xbVals = xb.slice(0, m);
+        const prods = cBOrig.map((c, i) => c * xbVals[i]);
+        const zobj = prods.reduce((s, v) => s + v, 0);
+        const termsSym = cBOrig.map((_, i) => `C_B[${i + 1}]·x_B[${i + 1}]`).join(' + ');
+        const termsVal = basis.map((b, i) => `${fmtCj(b)}·${fmt(xbVals[i])}`).join(' + ');
+        const prodStr = basis.map((b, i) => {
+          const { km: ckm, kn: ckn } = splitM(dispCoef(b));
+          return symStr(ckm * xbVals[i], ckn * xbVals[i]);
+        }).join(' + ');
+        const zkSymRes = fmtZkSym_signed(basis, xbVals, m, av);
+        title = `z_${cellInfo.itIdx}  [valoarea funcției obiectiv la iterația ${cellInfo.itIdx}]`;
+        sym = `z_${cellInfo.itIdx} = Σᵢ C_B[i] · x_B[i]  (UN SINGUR număr per iterație)\n  = ${termsSym}`;
+        num = `  = ${termsVal}\n  = ${prodStr}\n  = ${zkSymRes}`;
+        res = zkSymRes;
+      }
+
+      document.getElementById('popupTitle').textContent = `📐 ${title}`;
+      // Înlocuim \n cu <br> pentru afișare corectă
+      document.getElementById('popupSym').innerHTML = sym.replace(/\n/g, '<br>');
+      document.getElementById('popupNum').innerHTML = num;  // cu valorile poate conține fracții HTML
+      document.getElementById('popupRes').innerHTML = `= ${res}`;
+      document.getElementById('formulaPopup').classList.remove('hidden');
+      document.getElementById('popupOverlay').classList.remove('hidden');
+    }
+    function closePopup() {
+      document.getElementById('formulaPopup').classList.add('hidden');
+      document.getElementById('popupOverlay').classList.add('hidden');
+    }
+
+    // ═══════════════════════ AFIȘARE SIMBOLICĂ CU M ═══════════════════════
+    // Principiu: S.objPls[j] e valoarea numerică internă corectă a algoritmului.
+    // Extragem coeficientul M separând km (multiplu de M) de kn (rest numeric).
+    // Astfel nu există nicio confuzie de semne — calculăm numeric, afișăm simbolic.
+
+    function getCj(j) {
+      // Coeficientul c_j aşa cum intră în algoritmul intern (S.objPls[j])
+      return S.objPls[j];
+    }
+    function getCB(basis) {
+      // Vectorul C_B intern (S.objPls[basis[i]])
+      return basis.map(b => S.objPls[b]);
+    }
+
+    // Desparte o valoare numerică în {km, kn} unde val = km*M + kn
+    // M = S.M (1e6)
+    // ─────────────────────────────────────────────────────────────
+    // SISTEM AFIȘARE CU M
+    // Principiu: "display coefs" = valorile cum apar în PLS pe hârtie
+    //   MAX: principale=+coefObj, slack=0, artificiale=-M
+    //   MIN: principale=+coefObj, slack=0, artificiale=+M
+    // "internal coefs" = S.objPls (pentru algoritm):
+    //   MAX: principale=-coefObj, slack=0, artificiale=+M (min(-f)+Mz)
+    //   MIN: principale=+coefObj, slack=0, artificiale=+M
+    // ─────────────────────────────────────────────────────────────
+
+    // Coeficientul de AFIȘARE pentru variabila j (cum apare în PLS pe hârtie)
+    function dispCoef(j) {
+      const v = S.allVars[j];
+      if (v.isArtificial) return S.objType === 'max' ? -S.M : S.M;  // MAX→-M, MIN→+M
+      if (v.type === 'slack') return 0;
+      return v.coefObj;  // coeficientul original (pozitiv pt max: 8,5,2)
+    }
+
+    // Desparte o valoare numerică în {km, kn} unde val ≈ km*M + kn
+    // Suportă orice km (inclusiv -42, 1/3 etc.)
+    function splitM(val) {
+      const M = S.M;
+      const rawKm = val / M;
+      let best_km = Math.round(rawKm), best_rem = val - best_km * M;
+      // Testăm fracții simple pentru km
+      for (let den = 1; den <= 12; den++) {
+        const num = Math.round(rawKm * den);
+        for (let delta = -1; delta <= 1; delta++) {
+          const kTest = (num + delta) / den;
+          const rem = val - kTest * M;
+          if (Math.abs(rem) < Math.abs(best_rem) - 0.01) {
+            best_km = kTest; best_rem = rem;
+          }
+        }
+      }
+      if (Math.abs(best_rem) < 0.5) best_rem = 0;
+      return { km: best_km, kn: best_rem };
+    }
+
+    // ── Fracție vizuală HTML ─────────────────────────────────────
+    // Afișează numărător / numitor ca fracție verticală (ca pe caiet)
+    function fracHtml(num, den, cls = 'mfrac') {
+      return `<span class="${cls}"><span class="mnum">${num}</span><span class="mden">${den}</span></span>`;
+    }
+    // Fracție simplă fără M: 1/2, 3/4 etc.
+    function simpleFracHtml(n) {
+      const f = frac(n);
+      if (!f.includes('/')) return f;
+      const [num, den] = f.split('/');
+      return fracHtml(num, den, 'sfrac');
+    }
+    // fmtH: ca fmt dar returnează fracție vizuală HTML pentru 1/2, 1/3 etc.
+    function fmtH(n) {
+      if (Math.abs(n) < 1e-9) return '0';
+      if (Math.abs(n - Math.round(n)) < 1e-9) return String(Math.round(n));
+      const f = frac(n);
+      if (!f.includes('/')) return f;
+      const [num, den] = f.split('/');
+      return fracHtml(num, den, 'sfrac');
+    }
+
+    // Construiește string-ul pentru kM (coeficientul lui M)
+    // Returnează HTML sau text simplu
+    function mCoefStr(km, asHtml) {
+      if (Math.abs(Math.abs(km) - 1) < 1e-6) return km < 0 ? '-M' : 'M';
+      const p = Math.round(km);
+      if (Math.abs(p - km) < 1e-6) return p + 'M';
+      // km e fracție: p/q → afișăm ca fracție vizuală dacă asHtml
+      const f = frac(Math.abs(km));
+      if (asHtml && f.includes('/')) {
+        const [fn, fd] = f.split('/');
+        return (km < 0 ? '-' : '') + fracHtml(fn, fd, 'sfrac') + 'M';
+      }
+      return (km < 0 ? '-' : '') + f + 'M';
+    }
+
+    // Formatează km*M + kn ca HTML cu fracții vizuale (sau text simplu dacă !asHtml)
+    function symStrRaw(km, kn, asHtml) {
+      if (Math.abs(km) < 1e-6) {
+        if (Math.abs(kn) < 1e-6) return '0';
+        return asHtml ? simpleFracHtml(kn) : fmt(kn);
+      }
+      if (Math.abs(kn) < 1e-6) {
+        return mCoefStr(km, asHtml);
+      }
+      // Ambii ≠ 0: încearcă forma (p*M ± q)/r simplificată prin GCD
+      for (let r = 1; r <= 12; r++) {
+        const p = Math.round(km * r), q = Math.round(kn * r);
+        if (Math.abs(p / r - km) < 1e-6 && Math.abs(q / r - kn) < 1e-6 && p !== 0) {
+          const g = gcd(gcd(Math.abs(p), Math.abs(q)), r);
+          const ps = p / g, qs = q / g, rs = r / g;
+          const mStr = Math.abs(ps) === 1 ? (ps < 0 ? '-' : '') + 'M' : ps + 'M';
+          const sign = qs > 0 ? '+' : '-';
+          const inner = `${mStr}${sign}${Math.abs(qs)}`;
+          if (rs === 1) return inner;
+          // Fracție vizuală: (pM±q)/r
+          if (asHtml) return fracHtml(inner, rs);
+          return `(${inner})/${rs}`;
+        }
+      }
+      // Fallback
+      const mStr = mCoefStr(km, asHtml);
+      const knStr = asHtml ? simpleFracHtml(Math.abs(kn)) : fmt(Math.abs(kn));
+      return kn > 0 ? `${mStr}+${knStr}` : `${mStr}-${knStr}`;
+    }
+
+    // API publică: symStr returnează HTML (pentru afișare în tabel/calcule)
+    function symStr(km, kn) { return symStrRaw(km, kn, true); }
+    // symStrText returnează text simplu (pentru popup textarea etc.)
+    function symStrText(km, kn) { return symStrRaw(km, kn, false); }
+
+    // Suma simbolică de termeni dispCoef[basis[i]] * a[i]
+    // returnează {km, kn} pentru sumă
+    function sumDispCoefs(basis, colVals) {
+      let km = 0, kn = 0;
+      for (let i = 0; i < basis.length; i++) {
+        const c = dispCoef(basis[i]);
+        const a = colVals[i];
+        const { km: ckm, kn: ckn } = splitM(c);
+        km += ckm * a; kn += ckn * a;
+      }
+      return { km, kn };
+    }
+
+    // z_j afișare = Σ dispCoef[basis[i]] * tableau[i][j]
+    function fmtZjSym_signed(basis, tableau, col_j, av) {
+      const vals = basis.map((_, i) => tableau[i][col_j]);
+      const { km, kn } = sumDispCoefs(basis, vals);
+      return symStr(km, kn);
+    }
+
+    // z_k afișare = Σ dispCoef[basis[i]] * xb[i]
+    function fmtZkSym_signed(basis, xb, m, av) {
+      const { km, kn } = sumDispCoefs(basis, xb.slice(0, m));
+      return symStr(km, kn);
+    }
+
+    // Δ_j afișare = dispCoef[j] - z_j_disp
+    function fmtDeltaSym(j, basis, tableau, av) {
+      const cj = dispCoef(j);
+      const { km: zjKm, kn: zjKn } = sumDispCoefs(basis, basis.map((_, i) => tableau[i][j]));
+      const { km: cjKm, kn: cjKn } = splitM(cj);
+      return symStr(cjKm - zjKm, cjKn - zjKn);
+    }
+
+    // Afișează c_j aşa cum apare în PLS (pe hârtie)
+    function fmtCj(j) {
+      const { km, kn } = splitM(dispCoef(j));
+      return symStr(km, kn);
+    }
+
+    // Valoarea numerică pentru Δ_j (pentru colorare și algoritm) — din S.objPls
+    function deltaNum(j, basis, tableau) {
+      const cj = S.objPls[j];
+      let zj = 0;
+      for (let i = 0; i < basis.length; i++) zj += S.objPls[basis[i]] * tableau[i][j];
+      return cj - zj;
+    }
+
+    // Valoarea numerică a obiectivului curent (pentru algoritm)
+    function fmtInternal(val) { const { km, kn } = splitM(val); return symStr(km, kn); }
+
+    // STUBS compatibilitate
+    function fmtZkSym(b, x, m, av) { return fmtZkSym_signed(b, x, m, av); }
+    function fmtZjSym(b, t, ri, cj, av) { return fmtZjSym_signed(b, t, cj, av); }
+
+    // ═══════════════════════ RENDER SIMPLEX TABLE ═══════════════════════
+    function renderIteration(it, container) {
+      const av = S.allVars, total = av.length, m = it.basis.length;
+      const itIdx = S.iterations.indexOf(it);
+      const hasEnter = it.enterIdx !== null;
+      const hasLeave = it.leaveRow !== null;
+
+      // Calcule simbolice (M rămâne literă)
+      // cBOrig numeric: artificiale = S.M (pt colorare delta), principale = coefObj real
+      const cBOrig = it.basis.map(b => av[b].isArtificial ? S.M : av[b].coefObj);
+      // zkRow numeric (pentru algoritmul intern de colorare Δ_j)
+      const zkRow = Array.from({ length: total }, (_, j) => cBOrig.reduce((s, c, i) => s + c * it.tableau[i][j], 0));
+      // cj numeric pentru colorare: artificiale = S.M
+      const deltaRow = av.map((v, j) => (v.isArtificial ? S.M : v.coefObj) - zkRow[j]);
+      const zkObj = cBOrig.reduce((s, c, i) => s + c * it.xb[i], 0);
+      // Afișare simbolică z_k
+      const zkSymStr = fmtZkSym_signed(it.basis, it.xb, m, av);
+
+      let statusBadge = '';
+      if (it.status === 'optimal') statusBadge = `<span style="color:var(--accent3);font-weight:700">✓ OPTIM</span>`;
+      else if (it.status === 'unbounded') statusBadge = `<span style="color:var(--accent2);font-weight:700">⚠ NEMĂRGINIT</span>`;
+      else statusBadge = `<span style="color:var(--accent4)">↻ Pivotare</span>`;
+
+      let infoHtml = '';
+      if (hasEnter) {
+        const dDisp = deltaRow[it.enterIdx];
+        infoHtml += `<div class="alert alert-info" style="margin-bottom:10px"><span class="ai">🔄</span><div>
+      ${hasEnter ? `<div>Intră în bază: <strong style="color:var(--entering)">${av[it.enterIdx].name}</strong> — Δ=${fmtDeltaSym(it.enterIdx, it.basis, it.tableau, av)} (cel mai ${S.objType === 'min' ? 'negativ' : 'pozitiv'})</div>` : ''}
+      ${hasLeave ? `<div>Iese din bază: <strong style="color:var(--leaving)">${av[it.basis[it.leaveRow]].name}</strong> — θ=${fmt(it.theta[it.leaveRow])} (raport minim)</div>` : ''}
+      ${hasLeave ? `<div>Element pivot: <strong style="color:var(--pivot)">${fmt(it.tableau[it.leaveRow][it.enterIdx])}</strong> (linia ${it.leaveRow + 1}, coloana ${av[it.enterIdx].name})</div>` : ''}
+    </div></div>`;
+      }
+
+      // Build table
+      let thead1 = '<tr>';
+      thead1 += `<th class="cb-col" rowspan="2" style="color:var(--accent)">C<sub>B</sub></th>`;
+      thead1 += `<th rowspan="2" style="color:var(--accent2)">Bază</th>`;
+      thead1 += `<th rowspan="2" style="color:var(--accent3)">x<sub>B</sub></th>`;
+      for (let j = 0; j < total; j++) {
+        const ent = hasEnter && j === it.enterIdx;
+        const cjLbl = fmtCj(j);  // afișăm c_j exact ca în algoritmul intern
+        thead1 += `<th${ent ? ' class="entering-hdr"' : ''}>c<sub>${j + 1}</sub>=${cjLbl}</th>`;
+      }
+      if (hasLeave) thead1 += `<th style="color:var(--accent4)">θ</th>`;
+      thead1 += '</tr>';
+
+      let thead2 = '<tr>';
+      for (let j = 0; j < total; j++) {
+        const ent = hasEnter && j === it.enterIdx;
+        thead2 += `<th${ent ? ' class="entering-hdr"' : ''}>${av[j].name}</th>`;
+      }
+      if (hasLeave) thead2 += `<th></th>`;
+      thead2 += '</tr>';
+
+      let tbody = '';
+      for (let r = 0; r < m; r++) {
+        const isLv = hasLeave && r === it.leaveRow;
+        const bi = it.basis[r];
+        tbody += `<tr>`;
+        // CB
+        const cbLbl = fmtCj(bi);  // C_B = S.objPls[bi] afișat simbolic
+        tbody += `<td class="${isLv ? 'leaving-row' : ''}" ondblclick="showPopup({type:'CB',row:${r},itIdx:${itIdx}})" style="color:var(--accent)">${cbLbl}</td>`;
+        // Baza
+        tbody += `<td style="font-weight:700;color:${isLv ? 'var(--leaving)' : 'var(--accent2)'}">${av[bi].name}</td>`;
+        // xB
+        tbody += `<td class="${isLv ? 'leaving-row' : ''}" ondblclick="showPopup({type:'xb',row:${r},itIdx:${itIdx}})" style="color:var(--accent3);font-weight:600">${fmtH(it.xb[r])}</td>`;
+        // coefficients
+        for (let j = 0; j < total; j++) {
+          const ent = hasEnter && j === it.enterIdx;
+          const piv = ent && isLv;
+          let cls = piv ? 'pivot-cell' : (ent ? 'entering-col' : (isLv ? 'leaving-row' : ''));
+          const cellType = `{type:'aij',row:${r},col:${j},itIdx:${itIdx}}`;
+          tbody += `<td class="${cls}" ondblclick="showPopup(${cellType})">${fmtH(it.tableau[r][j])}</td>`;
+        }
+        // theta
+        if (hasLeave) {
+          const th = it.theta[r];
+          const isMin = r === it.leaveRow;
+          tbody += `<td class="theta-col${isMin ? ' theta-min' : ''}" ondblclick="showPopup({type:'theta',row:${r},itIdx:${itIdx}})">${th === Infinity ? '∞' : fmtH(th)}</td>`;
+        }
+        tbody += '</tr>';
+      }
+
+
+      // ── RÂNDUL Δ_j = c_j - z_j cu afișare simbolică (M rămâne literă)
+      let dkTr = `<tr class="delta-row">`;
+      dkTr += `<td colspan="2" style="text-align:right;color:var(--muted);font-size:10px;font-weight:700">Δ<sub>j</sub> =</td>`;
+      dkTr += `<td style="color:var(--muted)">—</td>`;
+      for (let j = 0; j < total; j++) {
+        const d = deltaRow[j];
+        const ent = hasEnter && j === it.enterIdx;
+        const isNeg = d < -1e-9; const isPos = d > 1e-9;
+        let cls = ent ? 'pivot-enter' : (isNeg ? 'neg' : (isPos ? 'pos' : 'zero'));
+        const dStr = fmtDeltaSym(j, it.basis, it.tableau, av);
+        dkTr += `<td class="${cls}" ondblclick="showPopup({type:'delta',col:${j},itIdx:${itIdx}})" style="cursor:pointer">${dStr}</td>`;
+      }
+      if (hasLeave) dkTr += `<td></td>`;
+      dkTr += '</tr>';
+
+      // ── Bloc calcule detaliate (ca în seminar): z^k, z_j, Δ_j, TO ──
+      const mSign = S.mSign || 1;
+      const isMax = S.objType === 'max';
+
+      // z^k = Σ cB_i * xB_i  — folosim S.objPls direct pentru valori corecte
+      const zkTerms = it.basis.map((b, i) => {
+        return `${fmtCj(b)}·${fmtH(it.xb[i])}`;
+      }).join(' + ');
+      const zkProds = it.basis.map((b, i) => {
+        // produs dispCoef[b] * xb[i] simbolic
+        const { km: ckm, kn: ckn } = splitM(dispCoef(b));
+        return symStr(ckm * it.xb[i], ckn * it.xb[i]);
+      }).join(' + ');
+
+      // Δ_j pentru variabilele NON-baza (afișate complet)
+      const nonBasisDeltas = [];
+      for (let j = 0; j < total; j++) {
+        if (it.basis.includes(j)) continue;
+        const dj_num = deltaNum(j, it.basis, it.tableau);  // numeric intern pt colorare
+        const cjStr = fmtCj(j);                            // c_j afișare (display coef)
+        const zjStr = fmtZjSym_signed(it.basis, it.tableau, j, av); // z_j afișare
+        const djStr = fmtDeltaSym(j, it.basis, it.tableau, av);     // Δ_j afișare
+        // Colorare: pentru MAX vrem Δ > 0 = pozitiv (poate intra); pentru MIN vrem Δ < 0 (poate intra)
+        const dColor = isMax ?
+          (dj_num > 1e-9 ? 'var(--accent3)' : (Math.abs(dj_num) < 1e-9 ? 'var(--muted)' : 'var(--accent2)')) :
+          (dj_num < -1e-9 ? 'var(--accent2)' : (Math.abs(dj_num) < 1e-9 ? 'var(--muted)' : 'var(--accent3)'));
+        nonBasisDeltas.push({ j, vn: av[j].name, zj: zjStr, cj: cjStr, dj: djStr, dColor, dNum: dj_num });
+      }
+
+      // TO(I_k): testul de optimalitate
+      const toLines = nonBasisDeltas.map(({ vn, dj, dColor, sign }) => {
+        const sym = isMax ? (sign === '+' ? '|+' : '|' + sign) : (sign === '-' ? '|-' : '|' + sign);
+        return `<div style="display:flex;gap:8px;align-items:center;font-family:var(--mono);font-size:11px">
+      <span style="color:var(--muted);width:20px">Δ(${vn})</span>
+      <span style="color:${dColor};font-weight:600">=</span>
+      <span style="color:${dColor}">${dj}</span>
+      <span style="color:${dColor};font-weight:700">${sym}</span>
+    </div>`;
+      }).join('');
+
+      const allOptimal = isMax ?
+        nonBasisDeltas.every(d => d.dNum <= 1e-9) :
+        nonBasisDeltas.every(d => d.dNum >= -1e-9);
+      const toDecision = allOptimal
+        ? `<span style="color:var(--accent3);font-weight:700">✓ ∀Δ_j ≤ 0 → STOP → I_STOP = I${sub(itIdx)}</span>`
+        : `<span style="color:var(--accent4)">∃Δ_j > 0 → NU → continuăm cu I${sub(itIdx + 1)}</span>`;
+
+      // Variabila care intră (CVB) și care iese (CΛB)
+      let cvbHtml = '', cabHtml = '';
+      if (hasEnter) {
+        const enterDelta = fmtDeltaSym(it.enterIdx, it.basis, it.tableau, av);
+        cvbHtml = `<div style="padding:10px 16px;border-top:1px solid var(--border);background:rgba(67,233,123,.05)">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--accent3);font-weight:700;margin-bottom:4px">
+        CVB — Coloana care intră (${isMax ? 'max{Δ_j > 0}' : 'min{Δ_j < 0}'})
+      </div>
+      <div style="font-family:var(--mono);font-size:12px">
+        <span style="color:var(--entering);font-weight:700">${av[it.enterIdx].name} ↓ B</span>
+        <span style="color:var(--muted)"> — Δ = </span>
+        <span style="color:var(--entering);font-weight:700">${enterDelta}</span>
+      </div>
+    </div>`;
+      }
+      if (hasLeave) {
+        const minTheta = fmt(it.theta[it.leaveRow]);
+        const pivVal = fmt(it.tableau[it.leaveRow][it.enterIdx]);
+        const thetaChips = it.basis.map((b, r) => {
+          const a = it.tableau[r][it.enterIdx];
+          const th = it.theta[r];
+          const isMinRow = r === it.leaveRow;
+          const thStr = th === Infinity ? '∞' : fmt(th);
+          return `<span style="padding:2px 7px;border-radius:4px;background:${isMinRow ? 'rgba(255,169,77,.2)' : 'var(--surface)'};border:1px solid ${isMinRow ? 'var(--leaving)' : 'var(--border)'};color:${isMinRow ? 'var(--leaving)' : 'var(--muted)'};white-space:nowrap">
+        ${av[b].name}: ${fmt(it.xb[r])}/${fmt(a)}=${thStr}${isMinRow ? ' ←min' : ''}
+      </span>`;
+        }).join('');
+        cabHtml = `<div style="padding:10px 16px;border-top:1px solid var(--border);background:rgba(255,169,77,.04)">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--leaving);font-weight:700;margin-bottom:4px">
+        CΛB — Linia care iese (min θ = x_B/a, a > 0)
+      </div>
+      <div style="font-family:var(--mono);font-size:12px;margin-bottom:6px">
+        <span style="color:var(--leaving);font-weight:700">${av[it.basis[it.leaveRow]].name} ↑ B</span>
+        <span style="color:var(--muted)"> — θ_min = </span>
+        <span style="color:var(--leaving);font-weight:700">${minTheta}</span>
+        <span style="color:var(--muted)">  |  element pivot = </span>
+        <span style="color:var(--pivot);font-weight:700">${pivVal}</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;font-family:var(--mono);font-size:11px">${thetaChips}</div>
+    </div>`;
+      }
+
+      const calcBlock = `
+  <div style="margin-top:16px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+
+    <!-- Header -->
+    <div style="padding:10px 16px;background:rgba(108,99,255,.12);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+      <span style="font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1px;color:var(--accent)">
+        📊 CALCULE — Iterația ${itIdx} &nbsp;|&nbsp; I${sub(itIdx)}
+      </span>
+      <span style="font-family:var(--mono);font-size:10px;color:var(--muted)">${S.objType.toUpperCase()} f(x)</span>
+    </div>
+
+    <!-- z^k -->
+    <div style="padding:12px 16px;border-bottom:1px solid var(--border)">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+        <span style="font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap">
+          z<sup>${itIdx}</sup> = Σ C<sub>B</sub>·x<sub>B</sub> =
+        </span>
+        <div style="font-family:var(--mono);font-size:12px;cursor:pointer"
+             ondblclick="showPopup({type:'zkObj',itIdx:${itIdx}})" title="dublu-click → formulă">
+          <span style="color:var(--text)">${zkTerms}</span>
+          <span style="color:var(--muted)"> = </span>
+          <span style="color:var(--text)">${zkProds}</span>
+          <span style="color:var(--muted)"> = </span>
+          <strong style="color:var(--accent);font-size:13px">${zkSymStr}</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Δ_j -->
+    <div style="padding:12px 16px;border-bottom:1px solid var(--border)">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:8px;letter-spacing:.5px">
+        Δ<sub>j</sub> = c<sub>j</sub> − z<sub>j</sub> &nbsp;(variabile non-baza)
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        ${nonBasisDeltas.map(nd => `
+        <div style="padding:6px 10px;background:var(--surface);border:1px solid var(--border);border-radius:7px;
+                    font-family:var(--mono);font-size:11px;cursor:pointer;display:flex;align-items:center;gap:4px"
+             ondblclick="showPopup({type:'delta',col:${nd.j},itIdx:${itIdx}})" title="dublu-click → formulă">
+          <span style="color:var(--muted)">Δ(${nd.vn})</span>
+          <span style="color:var(--muted)">=</span>
+          <span style="color:var(--text)">${nd.cj}</span>
+          <span style="color:var(--muted)">−</span>
+          <span style="color:var(--text)">(${nd.zj})</span>
+          <span style="color:var(--muted)">=</span>
+          <strong style="color:${nd.dColor}">${nd.dj}</strong>
+        </div>`).join('')}
+      </div>
+    </div>
+
+    <!-- TO Test Optimalitate -->
+    <div style="padding:12px 16px;${allOptimal ? 'background:rgba(67,233,123,.05)' : 'background:rgba(249,202,36,.04)'}">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent4)">
+          TO(I${sub(itIdx)}, ${S.objType.toUpperCase()})
+        </span>
+        <span style="font-family:var(--mono);font-size:10px;color:var(--muted)">
+          — ∀Δ_j ${isMax ? '≤ 0' : '≥ 0'} ?
+        </span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+        ${nonBasisDeltas.map(nd => {
+        const isGood = isMax ? nd.dNum <= 1e-9 : nd.dNum >= -1e-9;
+        const sym = isGood ? '✓' : (isMax ? (nd.dNum > 0 ? '↑' : '?') : (nd.dNum < 0 ? '↓' : '?'));
+        return `<span style="font-family:var(--mono);font-size:11px">
+            <span style="color:var(--muted)">Δ(${nd.vn})</span>
+            <span style="color:var(--muted)">=</span>
+            <span style="color:${nd.dColor};font-weight:700">${nd.dj}</span>
+            <span style="color:${isGood ? 'var(--accent3)' : 'var(--accent2)'};font-size:12px">&nbsp;${sym}</span>
+          </span>`;
+      }).join('')}
+      </div>
+      <div style="font-family:var(--mono);font-size:12px;font-weight:600">
+        ${toDecision}
+      </div>
+    </div>
+
+    ${cvbHtml}${cabHtml}
+  </div>`;
+
+      const zkBox = calcBlock;
+      if (it.status === 'optimal') {
+        infoHtml += `<div class="alert alert-success" style="margin-top:10px"><span class="ai">✓</span>
+      <span>∀Δ_j ${isMax ? '≤' : '≥'} 0 → <strong>STOP → Soluție optimă! z<sub>${it.it}</sub> = ${zkSymStr}</strong></span></div>`;
+      }
+      container.innerHTML += `
+  <div class="panel" style="margin-bottom:14px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+      <div class="iter-badge">Iterația ${it.it} ${it.it === 0 ? '(Inițial)' : ''}</div>
+      ${statusBadge}
+    </div>
+    ${infoHtml}
+    <div class="simplex-wrapper">
+      <table class="simplex">
+        <thead>${thead1}${thead2}</thead>
+        <tbody>${tbody}${dkTr}</tbody>
+      </table>
+    </div>
+    ${zkBox}
+  </div>`;
+    }
+
+    // Overwrite showPopup to use iteration index
+    const _origShowPopup = showPopup;
+    window.showPopup = function (cellInfo) {
+      S._currentIt = cellInfo.itIdx;
+      _origShowPopup(cellInfo);
+    };
+
+    // ═══════════════════════ UI INPUTS ═══════════════════════
+    function buildInputs() {
+      S.numVars = parseInt(document.getElementById('numVars').value) || 3;
+      S.numCons = parseInt(document.getElementById('numCons').value) || 3;
+      // Adjust constraints array if size changed
+      if (S.constraints.length !== S.numCons) {
+        const old = S.constraints || [];
+        S.constraints = Array.from({ length: S.numCons }, (_, r) => old[r] || { coefs: new Array(S.numVars).fill(0), sign: '≤', rhs: 0 });
+      }
+      // Adjust coef arrays
+      S.constraints = S.constraints.map(c => ({ ...c, coefs: Array.from({ length: S.numVars }, (_, j) => c.coefs[j] !== undefined ? c.coefs[j] : 0) }));
+      if (!S.objCoefs || S.objCoefs.length !== S.numVars) S.objCoefs = new Array(S.numVars).fill(0);
+      const objRow = document.getElementById('objRow');
+      objRow.innerHTML = '<span class="var-label" style="color:var(--accent);font-weight:700">f(x) =</span>';
+      for (let i = 0; i < S.numVars; i++) {
+        if (i > 0) objRow.innerHTML += '<span class="var-label">+</span>';
+        objRow.innerHTML += `<input type="number" class="coef" id="oc${i}" value="${S.objCoefs[i] !== undefined ? S.objCoefs[i] : 0}" oninput="updateDisplays()">`;
+        objRow.innerHTML += `<span class="var-label">x${sub(i + 1)}</span>`;
+      }
+      const ca = document.getElementById('constraintsArea');
+      ca.innerHTML = '';
+      const defS = ['=', '≤', '≥'], defR = [2, 5, 1], defC = [[1, 1, 1], [1, 2, 3], [-1, 1, 2]];
+      for (let r = 0; r < S.numCons; r++) {
+        const row = document.createElement('div');
+        row.className = 'constraint-row'; row.id = `cr${r}`;
+        let h = `<span class="var-label" style="color:var(--muted)">R${sub(r + 1)}:</span>`;
+        for (let j = 0; j < S.numVars; j++) {
+          if (j > 0) h += '<span class="var-label">+</span>';
+          const dv = S.constraints[r]?.coefs[j] !== undefined ? S.constraints[r].coefs[j] : 0;
+          h += `<input type="number" class="coef" id="a${r}_${j}" value="${dv}" oninput="updateDisplays()">`;
+          h += `<span class="var-label">x${sub(j + 1)}</span>`;
+        }
+        const ds = S.constraints[r]?.sign || '≤';
+        h += `<select class="sign-select" id="s${r}" onchange="updateDisplays()">
+      <option value="="${ds === '=' ? ' selected' : ''}>  =  </option>
+      <option value="≤"${ds === '≤' ? ' selected' : ''}>  ≤  </option>
+      <option value="≥"${ds === '≥' ? ' selected' : ''}>  ≥  </option>
+    </select>`;
+        const dr = S.constraints[r]?.rhs !== undefined ? S.constraints[r].rhs : 0;
+        h += `<input type="number" class="coef" id="rhs${r}" value="${dr}" style="width:68px" oninput="updateDisplays()">`;
+        h += `<button class="btn btn-danger" style="padding:4px 9px;font-size:10px" onclick="removeCon(${r})">✕</button>`;
+        row.innerHTML = h; ca.appendChild(row);
+      }
+      updateDisplays();
+    }
+    function removeCon(r) { S.numCons--; document.getElementById('numCons').value = S.numCons; buildInputs(); }
+    function addCon() { S.numCons++; document.getElementById('numCons').value = S.numCons; buildInputs(); }
+    function selectObj(t) {
+      S.objType = t;
+      document.getElementById('btn-min').classList.toggle('selected', t === 'min');
+      document.getElementById('btn-max').classList.toggle('selected', t === 'max');
+      updateDisplays();
+    }
+    function updateDisplays() {
+      S.numVars = parseInt(document.getElementById('numVars').value) || 3;
+      let terms = [];
+      for (let i = 0; i < S.numVars; i++) {
+        const c = parseFloat(document.getElementById(`oc${i}`)?.value) || 0;
+        terms.push({ c, v: `x${sub(i + 1)}` });
+      }
+      document.getElementById('objDisplay').innerHTML = renderTerms(terms, `${S.objType} f(x) = `);
+      const vns = Array.from({ length: S.numVars }, (_, i) => `x${sub(i + 1)}`).join(', ');
+      document.getElementById('nonNegDisplay').innerHTML = `<span style="color:var(--accent4)">${vns}</span> <span style="color:var(--accent2)">≥</span> <span style="color:var(--muted)">0</span>`;
+    }
+    function renderTerms(terms, prefix = '') {
+      let h = prefix ? `<span class="kw">${prefix}</span>` : '';
+      let first = true;
+      for (const { c, v } of terms) {
+        if (c === 0) continue;
+        if (!first) h += c >= 0 ? ' <span class="sign-d">+</span> ' : ' <span class="sign-d">−</span> ';
+        else if (c < 0) h += '<span class="sign-d">−</span> ';
+        const a = Math.abs(c);
+        if (a !== 1) h += `<span class="coef-d">${fmt(a)}</span>`;
+        h += `<span class="var">${v}</span>`;
+        first = false;
+      }
+      if (first) h += '<span class="coef-d">0</span>';
+      return h;
+    }
+    function loadExample() {
+      document.getElementById('numVars').value = 3;
+      document.getElementById('numCons').value = 3;
+      selectObj('min');
+      buildInputs();
+      setTimeout(() => {
+        document.getElementById('oc0').value = 1; document.getElementById('oc1').value = 3; document.getElementById('oc2').value = -2;
+        document.getElementById('a0_0').value = 1; document.getElementById('a0_1').value = 1; document.getElementById('a0_2').value = 1;
+        document.getElementById('s0').value = '='; document.getElementById('rhs0').value = 2;
+        document.getElementById('a1_0').value = 1; document.getElementById('a1_1').value = 2; document.getElementById('a1_2').value = 3;
+        document.getElementById('s1').value = '≤'; document.getElementById('rhs1').value = 5;
+        document.getElementById('a2_0').value = -1; document.getElementById('a2_1').value = 1; document.getElementById('a2_2').value = 2;
+        document.getElementById('s2').value = '≥'; document.getElementById('rhs2').value = 1;
+        updateDisplays();
+      }, 50);
+    }
+    function validateLinearity() {
+      document.getElementById('linearityCheck').innerHTML = `
+    <div class="alert alert-success"><span class="ai">✓</span><span>Funcția obiectiv este <strong>liniară</strong>.</span></div>
+    <div class="alert alert-success"><span class="ai">✓</span><span>Toate restricțiile sunt <strong>liniare</strong>.</span></div>
+    <div class="alert alert-success"><span class="ai">✓</span><span>Condiția nenegativitate este <strong>activă</strong>.</span></div>
+    <div class="alert alert-info"><span class="ai">🎯</span><span>Programă Liniară validă — se poate aplica algoritmul Simplex.</span></div>`;
+    }
+
+    // ═══════════════════════ STEP NAVIGATION ═══════════════════════
+    let currentStep = 0;
+    const stepProg = [20, 40, 60, 80, 100];
+    // goToStep: navigare pură (fără calcule)
+    function goToStep(n) {
+      document.querySelectorAll('.step-page').forEach(p => p.classList.remove('active'));
+      document.getElementById(`step${n}`).classList.add('active');
+      document.querySelectorAll('.step-tab').forEach(t => {
+        const s = parseInt(t.dataset.step);
+        t.classList.remove('active', 'done');
+        if (s === n) t.classList.add('active');
+        else if (s < n) t.classList.add('done');
+      });
+      document.getElementById('progressFill').style.width = stepProg[n] + '%';
+      currentStep = n; window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // navigateTo: click din meniu — calculează automat toți pașii intermediari
+    function navigateTo(n) {
+      collectData();
+
+      if (n >= 1) {
+        buildPLS();
+        renderPLSPage();
+      }
+      if (n >= 2) {
+        buildASP(true);       // true = skipNav
+      }
+      if (n >= 3) {
+        buildSimplexTable(true);  // true = skipNav (include runSimplex intern)
+      }
+      if (n >= 4) {
+        buildVerification(true);  // true = skipNav
+      }
+
+      goToStep(n);  // navigăm o singură dată la destinație
+    }
+
+    function nextStep() { collectData(); buildPLS(); renderPLSPage(); goToStep(1); }
+
+    // ═══════════════════════ COLLECT DATA ═══════════════════════
+    function collectData() {
+      S.numVars = parseInt(document.getElementById('numVars').value) || 3;
+      S.numCons = parseInt(document.getElementById('numCons').value) || 3;
+      S.objCoefs = [];
+      for (let i = 0; i < S.numVars; i++) S.objCoefs.push(parseFloat(document.getElementById(`oc${i}`)?.value) || 0);
+      S.constraints = [];
+      for (let r = 0; r < S.numCons; r++) {
+        const coefs = [];
+        for (let j = 0; j < S.numVars; j++) coefs.push(parseFloat(document.getElementById(`a${r}_${j}`)?.value) || 0);
+        S.constraints.push({ coefs, sign: document.getElementById(`s${r}`)?.value || '=', rhs: parseFloat(document.getElementById(`rhs${r}`)?.value) || 0 });
+      }
+    }
+
+    // ═══════════════════════ RENDER PLS ═══════════════════════
+    function renderPLSPage() {
+      const n = S.numVars, m = S.constraints.length;
+      let stepsHtml = '';
+      const signColors = { '=': 'var(--accent4)', '≤': 'var(--accent3)', '≥': 'var(--accent2)' };
+      const signLabels = { '=': 'EGALITATE (=)', '≤': 'MAI MIC SAU EGAL (≤)', '≥': 'MAI MARE SAU EGAL (≥)' };
+      for (let r = 0; r < m; r++) {
+        const con = S.constraints[r]; const col = signColors[con.sign] || 'var(--muted)';
+        const added = S.addedPerRow[r];
+        const addedStr = added.map(({ vi, coef }) => { const v = S.allVars[vi]; return `${coef > 0 ? '+' : '-'}${v.name}`; }).join(' ');
+        let termsBefore = con.coefs.map((c, i) => ({ c, v: `x${sub(i + 1)}` }));
+        stepsHtml += `<div class="panel" style="margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px">
+        <span style="font-family:var(--mono);font-size:10px;background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:2px 9px">R${sub(r + 1)}</span>
+        <span style="font-size:11px;color:${col};font-weight:600">${signLabels[con.sign] || con.sign}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:9px;color:var(--muted);margin-bottom:3px">ORIGINAL</div>
+          <div class="formula-display">${renderTerms(termsBefore)} <span style="color:var(--accent2)">${con.sign}</span> <span>${fmt(con.rhs)}</span></div>
+        </div>
+        <div class="transform-arrow">→</div>
+        <div>
+          <div style="font-size:9px;color:var(--muted);margin-bottom:3px">STANDARD</div>
+          <div class="formula-display">${renderTerms(termsBefore)} <span style="color:${col};font-weight:700"> ${addedStr}</span> <span style="color:var(--accent2)"> =</span> <span>${fmt(con.rhs)}</span></div>
+        </div>
+      </div>
+    </div>`;
+      }
+      document.getElementById('plsTransformSteps').innerHTML = stepsHtml;
+
+      // PLS result
+      // Obj: show original coefs (not negated)
+      // Termenii funcției obiectiv PLS: artificiale au c=M (simbolic)
+      // Le afișăm separat cu 'M' ca string
+      const objPartsArr = S.allVars.map(v => {
+        if (v.isArtificial) return `+M·${v.name}`;
+        if (Math.abs(v.coefObj) < 1e-9) return '';
+        const sign = v.coefObj > 0 ? '+' : '-';
+        const ab = Math.abs(v.coefObj);
+        return `${sign}${ab === 1 ? '' : fmt(ab)}·${v.name}`;
+      }).filter(s => s !== '');
+      const objPartsStr = objPartsArr.join(' ').replace(/^\+/, '');
+      let plsHtml = `<div class="section-label">Funcția Obiectiv PLS</div>
+    <div class="formula-display"><span class="kw">${S.objType} f = </span><span style="color:var(--accent4)">${objPartsStr}</span></div>
+    <div class="alert alert-warning" style="margin-top:8px"><span class="ai">ℹ</span><span>Variabilele artificiale (z<sub>k</sub>) au coeficient <strong>+M</strong> în funcția obiectiv — penalizare Big-M. Algoritmul intern le tratează ca <strong>${S.objType === 'max' ? '+M (pentru min intern = -f)' : '+M'}</strong>.</span></div>
+    <div class="section-label">Ecuații</div>`;
+      for (let r = 0; r < m; r++) {
+        const pc = S.plsConstraints[r];
+        let terms = S.allVars.map((v, i) => ({ c: pc.coefs[i], v: v.name }));
+        plsHtml += `<div class="formula-display" style="margin-bottom:5px">${renderTerms(terms)} <span style="color:var(--accent2)"> = </span> <span>${fmt(pc.rhs)}</span></div>`;
+      }
+      const allN = S.allVars.map(v => v.name).join(', ');
+      plsHtml += `<div class="section-label">Nenegativitate</div><div class="formula-display">${allN} ≥ 0</div>`;
+      document.getElementById('plsResult').innerHTML = plsHtml;
+    }
+
+    // ═══════════════════════ ASP ═══════════════════════
+    function buildASP(skipNav) {
+      if (!skipNav) goToStep(2);
+      const m = S.plsConstraints.length;
+      const n = S.allVars.length;
+      const bNames = S.basisInitial.map(i => S.allVars[i].name);
+      const mainV = S.allVars.filter(v => v.type === 'main');
+      const slackV = S.allVars.filter(v => v.type === 'slack');
+      const artV = S.allVars.filter(v => v.type === 'artificial');
+
+      // ─── SECȚIUNEA 1: Parametrii problemei n, m, c, A, b ────────
+      const cVec = S.allVars.map((v, i) => {
+        const cl = v.isArtificial ? 'art' : (v.type === 'slack' ? 'slack' : '');
+        const lbl = v.isArtificial ? fmtCj(i) : (v.type === 'slack' ? '0' : fmtH(v.coefObj));
+        return `<span class="matrix-cell ${cl}" style="min-width:40px">${lbl}</span>`;
+      }).join('');
+
+      // Matricea A (PLS) ca tabel
+      let aRows = '';
+      for (let r = 0; r < m; r++) {
+        const cells = S.plsConstraints[r].coefs.map((c, j) => {
+          const cl = S.allVars[j].isArtificial ? 'art' : (S.allVars[j].type === 'slack' ? 'slack' : (Math.abs(c) < 1e-9 ? 'zero' : (c < 0 ? 'neg' : '')));
+          return `<td style="padding:3px 8px;text-align:center;font-family:var(--mono);font-size:11px;border:1px solid var(--border)" class="${cl}">${fmtH(c)}</td>`;
+        }).join('');
+        aRows += `<tr>${cells}</tr>`;
+      }
+
+      const aTableHtml = `<table style="border-collapse:collapse;background:var(--surface)">${aRows}</table>`;
+
+      // Vector b
+      const bCells = S.plsConstraints.map(row => `<tr><td style="padding:3px 12px;font-family:var(--mono);font-size:11px;text-align:center;border:1px solid var(--border)">${fmtH(row.rhs)}</td></tr>`).join('');
+      const bTableHtml = `<table style="border-collapse:collapse;background:var(--surface)">${bCells}</table>`;
+
+      // Vector C_B și x_B inițiale
+      const cbInit = S.basisInitial.map(bi => {
+        const v = S.allVars[bi];
+        return `<tr><td style="padding:3px 12px;font-family:var(--mono);font-size:11px;text-align:center;border:1px solid var(--border);color:${v.isArtificial ? 'var(--accent4)' : 'var(--accent3)'}">${fmtCj(bi)}</td></tr>`;
+      }).join('');
+      const xbInit = S.basisInitial.map((bi, r) => {
+        return `<tr><td style="padding:3px 12px;font-family:var(--mono);font-size:11px;text-align:center;border:1px solid var(--border);color:var(--accent3)">${fmtH(S.plsConstraints[r].rhs)}</td></tr>`;
+      }).join('');
+
+      let paramHtml = `
+  <div style="background:rgba(108,99,255,.06);border:1px solid rgba(108,99,255,.2);border-radius:12px;padding:18px 22px;margin-bottom:18px">
+    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--accent);margin-bottom:14px">PARAMETRII PLS — [n, m, c, A, b]</div>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;font-family:var(--mono);font-size:12px;margin-bottom:16px">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 16px">
+        <div style="font-size:9px;color:var(--muted);margin-bottom:4px">DIMENSIUNI</div>
+        <div><span style="color:var(--accent)">n</span> = ${n} variabile</div>
+        <div><span style="color:var(--accent)">m</span> = ${m} ecuații</div>
+      </div>
+      <div>
+        <div style="font-size:9px;color:var(--muted);margin-bottom:6px">c = (coef. funcție obiectiv)</div>
+        <div style="display:flex;align-items:center;gap:4px">
+          <span style="font-size:28px;color:var(--muted);line-height:1;font-weight:100">(</span>
+          <div style="display:flex;gap:2px">${cVec}</div>
+          <span style="font-size:28px;color:var(--muted);line-height:1;font-weight:100">)</span>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:4px">
+          ${S.allVars.map(v => `<span style="min-width:40px;text-align:center;font-size:10px;color:var(--muted)">${v.name}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start">
+      <div>
+        <div style="font-size:9px;color:var(--muted);margin-bottom:6px">A = (matricea coeficienților)</div>
+        <div style="display:flex;align-items:center;gap:2px">
+          <span style="font-size:${m * 20}px;color:var(--muted);line-height:1;font-weight:100">(</span>
+          <div>
+            <table style="border-collapse:collapse;background:var(--surface)">
+              ${S.plsConstraints.map(row => `<tr>${S.allVars.map((v, j) => { const c = row.coefs[j]; const cl = v.isArtificial ? 'art' : (v.type === 'slack' ? 'slack' : (Math.abs(c) < 1e-9 ? 'zero' : (c < 0 ? 'neg' : ''))); return '<td style="padding:2px 0;text-align:center;font-family:var(--mono);font-size:' + Math.max(9, 12 - Math.floor(n / 3)) + 'px;border:1px solid var(--border);min-width:' + Math.max(22, 36 - Math.floor(n / 2)) + 'px" class="' + cl + '">' + fmtH(c) + '</td>'; }).join('')}</tr>`).join('')}
+            </table>
+            <div style="display:flex;margin-top:2px">
+              ${S.allVars.map(v => `<span style="flex:1;min-width:${Math.max(22, 36 - Math.floor(n / 2))}px;text-align:center;font-size:8px;color:var(--muted);overflow:hidden;text-overflow:ellipsis">${v.name}</span>`).join('')}
+            </div>
+          </div>
+          <span style="font-size:${m * 20}px;color:var(--muted);line-height:1;font-weight:100">)</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:9px;color:var(--muted);margin-bottom:6px">b = (termeni liberi)</div>
+        <div style="display:flex;align-items:center;gap:4px">
+          <span style="font-size:${m * 22}px;color:var(--muted);line-height:1;font-weight:100">(</span>
+          ${bTableHtml}
+          <span style="font-size:${m * 22}px;color:var(--muted);line-height:1;font-weight:100">)</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:9px;color:var(--muted);margin-bottom:6px">C<sub>B</sub> (inițial)</div>
+        <div style="display:flex;align-items:center;gap:4px">
+          <span style="font-size:${m * 22}px;color:var(--muted);line-height:1;font-weight:100">(</span>
+          <table style="border-collapse:collapse;background:var(--surface)">${cbInit}</table>
+          <span style="font-size:${m * 22}px;color:var(--muted);line-height:1;font-weight:100">)</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:9px;color:var(--muted);margin-bottom:6px">x<sub>B</sub> (inițial = b)</div>
+        <div style="display:flex;align-items:center;gap:4px">
+          <span style="font-size:${m * 22}px;color:var(--muted);line-height:1;font-weight:100">(</span>
+          <table style="border-collapse:collapse;background:var(--surface)">${xbInit}</table>
+          <span style="font-size:${m * 22}px;color:var(--muted);line-height:1;font-weight:100">)</span>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+      // ─── SECȚIUNEA 2: Baza inițiala I₀ ─────────────────────────
+      let h = paramHtml;
+      h += `<div style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent4);margin-bottom:10px">BAZA INIȚIALĂ I₀ = {${bNames.join(', ')}}</div>`;
+
+      // Tabel baza cu coloanele identitate
+      let basisTableHtml = `<table style="border-collapse:collapse;font-family:var(--mono);font-size:11px;margin-bottom:14px">
+    <thead><tr>
+      <th style="padding:7px 12px;background:var(--surface2);border:1px solid var(--border);color:var(--muted)">Ecuația</th>
+      <th style="padding:7px 12px;background:var(--surface2);border:1px solid var(--border);color:var(--accent2)">Variabilă Baza</th>
+      <th style="padding:7px 12px;background:var(--surface2);border:1px solid var(--border);color:var(--accent)">Tip</th>
+      <th style="padding:7px 12px;background:var(--surface2);border:1px solid var(--border);color:var(--accent4)">C<sub>B</sub></th>
+      <th style="padding:7px 12px;background:var(--surface2);border:1px solid var(--border);color:var(--accent3)">x<sub>B</sub> = b</th>
+      <th style="padding:7px 12px;background:var(--surface2);border:1px solid var(--border);color:var(--muted)">Coloana din A</th>
+    </tr></thead>
+    <tbody>`;
+      for (let r = 0; r < m; r++) {
+        const bIdx = S.basisInitial[r]; const bv = S.allVars[bIdx];
+        const type = bv.isArtificial ? `<span style="color:var(--accent4)">artificială z<sub>${bv.name.slice(1)}</sub></span>` : `<span style="color:var(--accent3)">surplus y<sub>${bv.name.slice(1)}</sub></span>`;
+        const cbDisp = fmtCj(bIdx);
+        // coloana din A (identitate)
+        const colCells = Array.from({ length: m }, (_, i) => i === r ? '<span style="color:var(--accent3);font-weight:700">1</span>' : '<span style="color:var(--muted)">0</span>').join(' ');
+        basisTableHtml += `<tr>
+      <td style="padding:7px 12px;border:1px solid var(--border);text-align:center;color:var(--muted)">R<sub>${r + 1}</sub></td>
+      <td style="padding:7px 12px;border:1px solid var(--border);font-weight:700;color:${bv.isArtificial ? 'var(--accent4)' : 'var(--accent3)'}">a<sub>${S.allVars.indexOf(bv) + 1}</sub> = ${bv.name}</td>
+      <td style="padding:7px 12px;border:1px solid var(--border)">${type}</td>
+      <td style="padding:7px 12px;border:1px solid var(--border);text-align:center;color:${bv.isArtificial ? 'var(--accent4)' : 'var(--accent3)'}">${cbDisp}</td>
+      <td style="padding:7px 12px;border:1px solid var(--border);text-align:center;color:var(--accent3);font-weight:700">${fmtH(S.plsConstraints[r].rhs)}</td>
+      <td style="padding:7px 12px;border:1px solid var(--border);text-align:center">(${colCells})<sup>T</sup></td>
+    </tr>`;
+      }
+      basisTableHtml += `</tbody></table>`;
+      h += basisTableHtml;
+
+      // Matricea identitate I_m
+      let idRows = '';
+      for (let r = 0; r < m; r++) {
+        const cells = Array.from({ length: m }, (_, c) => `<td style="padding:4px 10px;border:1px solid var(--border);text-align:center;font-family:var(--mono);font-size:11px;color:${r === c ? 'var(--accent3)' : 'var(--muted)'};font-weight:${r === c ? '700' : '400'}">${r === c ? '1' : '0'}</td>`).join('');
+        idRows += `<tr>${cells}</tr>`;
+      }
+      h += `<div style="margin-bottom:14px">
+    <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:8px">Coloanele bazei inițiale formează matricea identitate I<sub>m</sub>:</div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <span style="font-family:var(--mono);font-size:10px;color:var(--accent)">B₀ = [a<sub>${S.basisInitial.map(i => i + 1).join('</sub>, a<sub>')}</sub>] = I<sub>${m}</sub> =</span>
+      <span style="font-size:${m * 20}px;color:var(--muted);line-height:1;font-weight:100">(</span>
+      <table style="border-collapse:collapse">${idRows}</table>
+      <span style="font-size:${m * 20}px;color:var(--muted);line-height:1;font-weight:100">)</span>
+    </div>
+  </div>`;
+
+      h += `<div class="alert alert-success" style="margin-top:12px"><span class="ai">✓</span>
+    <span>Baza inițială I₀ = {${bNames.join(', ')}} este <strong>soluție de bază admisibilă</strong> — toate x<sub>B</sub> = b ≥ 0</span></div>`;
+      document.getElementById('aspContent').innerHTML = h;
+
+      let sh = `
+    <div style="margin-bottom:10px">
+      <div style="font-size:10px;color:var(--muted);margin-bottom:7px">PRINCIPALE (PL original)</div>
+      ${mainV.map(v => `<span class="chip primary">${v.name} (c=${fmt(v.coefObj)})</span>`).join('')}
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="font-size:10px;color:var(--muted);margin-bottom:7px">SURPLUS / SLACK (y<sub>k</sub>)</div>
+      ${slackV.length ? slackV.map(v => `<span class="chip slack">${v.name} (c=0)</span>`).join('') : '<span style="color:var(--muted);font-size:11px">—</span>'}
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="font-size:10px;color:var(--muted);margin-bottom:7px">ARTIFICIALE (z<sub>k</sub>, Big-M)</div>
+      ${artV.length ? artV.map(v => `<span class="chip artificial">${v.name} (c=${S.objType === 'max' ? '-M' : '+M'})</span>`).join('') : '<span style="color:var(--muted);font-size:11px">—</span>'}
+    </div>
+    <div class="alert alert-warning"><span class="ai">📊</span><span>Total: <strong>${S.allVars.length} variabile</strong> = ${mainV.length} principale + ${slackV.length} surplus + ${artV.length} artificiale → <strong>${m} ecuații</strong></span></div>`;
+      document.getElementById('varSummary').innerHTML = sh;
+    }
+
+    // ═══════════════════════ SIMPLEX TABLE ═══════════════════════
+    function buildSimplexTable(skipNav) {
+      if (!skipNav) goToStep(3);
+      runSimplex();
+      const container = document.getElementById('simplexIterations');
+      container.innerHTML = '';
+      for (const it of S.iterations) renderIteration(it, container);
+
+      // Final result
+      const last = S.iterations[S.iterations.length - 1];
+      const total = S.allVars.length;
+      const sol = new Array(total).fill(0);
+      for (let r = 0; r < last.basis.length; r++) sol[last.basis[r]] = last.xb[r];
+      const cBOrig = last.basis.map(b => S.allVars[b].isArtificial ? S.M : S.allVars[b].coefObj);
+      const objVal = cBOrig.reduce((s, c, i) => s + c * last.xb[i], 0);
+      S.finalSolution = { sol, objVal, status: last.status };
+
+      if (last.status === 'optimal') {
+        let rh = `<div class="result-box"><h3 style="color:var(--accent3);margin-bottom:12px">🎯 Soluția Optimă</h3>
+      <div class="alert alert-success"><span class="ai">✓</span><span>Valoarea optimă: <strong style="color:var(--accent3);font-size:15px"> f* = ${fmt(objVal)}</strong></span></div>
+      <div class="result-grid">`;
+        for (let i = 0; i < S.numVars; i++) rh += `<div class="result-item"><div class="rl">x${sub(i + 1)}</div><div class="rv">${fmtH(sol[i])}</div></div>`;
+        rh += `<div class="result-item"><div class="rl">${S.objType} f*</div><div class="rv" style="color:var(--accent3)">${fmtH(objVal)}</div></div>`;
+        rh += '</div></div>';
+        document.getElementById('simplexResult').innerHTML = rh;
+      }
+    }
+
+    // ═══════════════════════ VERIFICATION ═══════════════════════
+    function buildVerification(skipNav) {
+      if (!skipNav) goToStep(4);
+      const sol = S.finalSolution; const n = S.numVars;
+      const xV = sol.sol.slice(0, n); let allOk = true;
+      const m = S.constraints.length;
+      const last = S.iterations[S.iterations.length - 1];
+
+      // ── Extrage matricea S (coloanele bazei finale din tabloul de start) ──
+      // S = [a_{basis[0]}, a_{basis[1]}, ...] coloane din matricea originală A
+      // Echivalent: inversul bazei aplicat pe b trebuie să dea x_B
+      const finalBasis = last.basis;
+      const initT = S.plsConstraints.map(row => [...row.coefs, row.rhs]);
+
+      // ══ Soluția principală cu fracții vizuale ══
+      const xVhtml = xV.map((v, i) => `
+    <div style="text-align:center;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:4px">x${sub(i + 1)}</div>
+      <div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--accent)">${fmtH(v)}</div>
+    </div>`).join('');
+      const objValH = fmtH(sol.objVal);
+
+      // ══ Pasul b = S · x_B  (verificare matriceală ca în seminar) ══
+      // Calculăm produsul S · x_B_final
+      // S are coloanele corespunzătoare bazei finale din A originală
+      const xBfinal = finalBasis.map((_, i) => last.xb[i]);
+      // Matricea S: pentru fiecare restricție r, coloana j din A originală (doar principalele)
+      // Luăm coloanele variabilelor din baza finală din tabloul INIȚIAL
+      const Smat = finalBasis.map(bj => {
+        // coloana bj din PLS inițial
+        return S.plsConstraints.map(row => row.coefs[bj]);
+      }); // Smat[j][r] = coef variabila j din baza în ecuatia r
+      // b_calc[r] = Σ_j Smat[j][r] * xBfinal[j]
+      const bCalc = S.plsConstraints.map((_, r) =>
+        finalBasis.reduce((s, bj, j) => s + S.plsConstraints[r].coefs[bj] * xBfinal[j], 0)
+      );
+      const bOrig = S.plsConstraints.map(row => row.rhs);
+
+      // Afișăm matricea S · x_B
+      const basisNames = finalBasis.map(b => S.allVars[b].name);
+      const matRows = S.plsConstraints.length;
+
+      // Construim HTML pentru matricea S (coloane = variabilele din baza finală)
+      const Shtml = `<table style="border-collapse:collapse;font-family:var(--mono);font-size:11px;margin:0 auto">
+    ${S.plsConstraints.map((row, r) => `
+    <tr>
+      <td style="padding:3px 2px;color:var(--muted);text-align:right">${r === 0 ? '(' : r === matRows - 1 ? '(' : '|'}</td>
+      ${finalBasis.map(bj => `<td style="padding:3px 8px;text-align:center;color:var(--text)">${fmtH(row.coefs[bj])}</td>`).join('')}
+      <td style="padding:3px 2px;color:var(--muted)">${r === 0 ? ')' : r === matRows - 1 ? ')' : '|'}</td>
+    </tr>`).join('')}
+  </table>`;
+
+      const xBhtml = `<table style="border-collapse:collapse;font-family:var(--mono);font-size:11px;margin:0 auto">
+    ${xBfinal.map((v, i) => `
+    <tr>
+      <td style="padding:3px 2px;color:var(--muted)">${i === 0 ? '(' : i === xBfinal.length - 1 ? '(' : '|'}</td>
+      <td style="padding:3px 10px;text-align:center;color:var(--accent3);font-weight:600">${fmtH(v)}</td>
+      <td style="padding:3px 2px;color:var(--muted)">${i === 0 ? ')' : i === xBfinal.length - 1 ? ')' : '|'}</td>
+    </tr>`).join('')}
+  </table>`;
+
+      const bCalcHtml = `<table style="border-collapse:collapse;font-family:var(--mono);font-size:11px;margin:0 auto">
+    ${bCalc.map((v, i) => `
+    <tr>
+      <td style="padding:3px 2px;color:var(--muted)">${i === 0 ? '(' : i === bCalc.length - 1 ? '(' : '|'}</td>
+      <td style="padding:3px 10px;text-align:center;color:var(--accent4);font-weight:600">${fmtH(v)}</td>
+      <td style="padding:3px 2px;color:var(--muted)">${i === 0 ? ')' : i === bCalc.length - 1 ? ')' : '|'}</td>
+    </tr>`).join('')}
+  </table>`;
+
+      const bOrigHtml = `<table style="border-collapse:collapse;font-family:var(--mono);font-size:11px;margin:0 auto">
+    ${bOrig.map((v, i) => `
+    <tr>
+      <td style="padding:3px 2px;color:var(--muted)">${i === 0 ? '(' : i === bOrig.length - 1 ? '(' : '|'}</td>
+      <td style="padding:3px 10px;text-align:center;color:var(--accent3);font-weight:600">${fmtH(v)}</td>
+      <td style="padding:3px 2px;color:var(--muted)">${i === 0 ? ')' : i === bOrig.length - 1 ? ')' : '|'}</td>
+    </tr>`).join('')}
+  </table>`;
+
+      const matrixOk = bCalc.every((v, r) => Math.abs(v - bOrig[r]) < 1e-4);
+
+      // Detalii per restricție: calcul produs + verificare
+      const restrictiiHtml = S.constraints.map((con, r) => {
+        let lhs = 0; for (let j = 0; j < n; j++) lhs += con.coefs[j] * xV[j];
+        const ok = con.sign === '=' ? Math.abs(lhs - con.rhs) < 1e-6 : (con.sign === '≤' ? lhs <= con.rhs + 1e-6 : lhs >= con.rhs - 1e-6);
+        if (!ok) allOk = false;
+        // Termeni cu fracții vizuale: c_j · x_j
+        const termsHtml = con.coefs.map((c, j) => {
+          if (Math.abs(c) < 1e-9) return null;
+          const prod = c * xV[j];
+          return `<span style="white-space:nowrap">${fmtH(c)}·${fmtH(xV[j])}</span>`;
+        }).filter(Boolean).join('<span style="color:var(--muted);margin:0 4px">+</span>');
+        const col = ok ? 'var(--accent3)' : 'var(--accent2)';
+        const bg = ok ? 'rgba(67,233,123,.06)' : 'rgba(255,101,132,.06)';
+        const border = ok ? 'rgba(67,233,123,.2)' : 'rgba(255,101,132,.2)';
+        return `<div style="background:${bg};border:1px solid ${border};border-radius:10px;padding:14px 18px;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span style="font-size:18px;color:${col}">${ok ? '✓' : '✗'}</span>
+        <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">R${sub(r + 1)}</span>
+        <span style="font-family:var(--mono);font-size:11px;color:var(--accent4)">${fmtH(con.coefs.filter(c => c !== 0).length > 0 ? con.coefs[0] : 0)}x${sub(1)}... ${con.sign} ${fmtH(con.rhs)}</span>
+        <span style="margin-left:auto;font-family:var(--mono);font-size:10px;font-weight:700;
+              background:${ok ? 'rgba(67,233,123,.15)' : 'rgba(255,101,132,.15)'};
+              border:1px solid ${border};border-radius:4px;padding:2px 8px;color:${col}">
+          ${ok ? '✓ OK' : '✗ FAIL'}
+        </span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-size:12px">
+        <span style="color:var(--muted)">${termsHtml}</span>
+        <span style="color:var(--muted)">=</span>
+        <strong style="color:${col}">${fmtH(lhs)}</strong>
+        <span style="color:var(--accent2)">${con.sign}</span>
+        <span style="color:var(--text)">${fmtH(con.rhs)}</span>
+        <span style="color:${col};font-size:10px">${ok ? '✓ satisfăcută' : '✗ nesatisfăcută'}</span>
+      </div>
+    </div>`;
+      }).join('');
+
+      // Nenegativitate
+      const nnHtml = xV.map((v, j) => {
+        const ok = v >= -1e-9; if (!ok) allOk = false;
+        const col = ok ? 'var(--accent3)' : 'var(--accent2)';
+        return `<div style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
+                  background:${ok ? 'rgba(67,233,123,.06)' : 'rgba(255,101,132,.06)'};
+                  border:1px solid ${ok ? 'rgba(67,233,123,.2)' : 'rgba(255,101,132,.2)'};
+                  border-radius:7px;font-family:var(--mono);font-size:11px;margin:3px">
+      <span style="color:${col}">${ok ? '✓' : '✗'}</span>
+      <span style="color:var(--muted)">x${sub(j + 1)}</span>
+      <span style="color:var(--muted)">=</span>
+      <strong style="color:${col}">${fmtH(v)}</strong>
+      <span style="color:var(--muted)">≥ 0</span>
+    </div>`;
+      }).join('');
+
+      // Funcție obiectiv
+      let objCalc = 0; for (let j = 0; j < n; j++) objCalc += S.objCoefs[j] * xV[j];
+      const objOk = Math.abs(objCalc - sol.objVal) < 1e-4;
+      if (!objOk) allOk = false;
+      const objTermsHtml = S.objCoefs.map((c, j) => {
+        if (Math.abs(c) < 1e-9 && Math.abs(xV[j]) < 1e-9) return null;
+        return `<span>${fmtH(c)}·${fmtH(xV[j])}</span>`;
+      }).filter(Boolean).join('<span style="color:var(--muted);margin:0 3px">+</span>');
+      const objCol = objOk ? 'var(--accent3)' : 'var(--accent2)';
+
+      const verifyHtml = `
+  <!-- ══ SOLUȚIA OPTIMĂ ══ -->
+  <div style="background:rgba(108,99,255,.08);border:1px solid rgba(108,99,255,.25);
+              border-radius:12px;padding:20px 24px;margin-bottom:20px">
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--accent);
+                font-weight:700;margin-bottom:14px">SOLUȚIA OPTIMĂ x*</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">${xVhtml}</div>
+    <div style="font-family:var(--mono);font-size:12px;color:var(--muted)">
+      <span style="color:var(--accent4);font-weight:600">${S.objType} f* =</span>
+      <strong style="color:var(--accent3);font-size:16px;margin-left:8px">${objValH}</strong>
+    </div>
+  </div>
+
+  <!-- ══ PAS 1: Verificare matriceală b = S · x_B ══ -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;
+              padding:20px 24px;margin-bottom:20px">
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted);
+                font-weight:700;margin-bottom:4px">PAS 1 — VERIFICARE MATRICEALĂ</div>
+    <div style="font-family:var(--mono);font-size:12px;color:var(--accent4);margin-bottom:16px">
+      b <span style="color:var(--muted)">= S · x<sub>B</sub></span>
+      &nbsp;?&nbsp;
+      <span style="font-size:10px;color:var(--muted)">(baza finală: {${basisNames.join(', ')}})</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:16px">
+      <div style="text-align:center">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:4px">S (coloane baza)</div>
+        ${Shtml}
+      </div>
+      <div style="font-family:var(--mono);font-size:20px;color:var(--muted)">·</div>
+      <div style="text-align:center">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--accent3);margin-bottom:4px">x<sub>B</sub></div>
+        ${xBhtml}
+      </div>
+      <div style="font-family:var(--mono);font-size:16px;color:var(--muted)">=</div>
+      <div style="text-align:center">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--accent4);margin-bottom:4px">rezultat</div>
+        ${bCalcHtml}
+      </div>
+      <div style="font-family:var(--mono);font-size:20px;color:${matrixOk ? 'var(--accent3)' : 'var(--accent2)'}">${matrixOk ? '=' : '≠'}</div>
+      <div style="text-align:center">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--accent3);margin-bottom:4px">b (RHS original)</div>
+        ${bOrigHtml}
+      </div>
+      <div style="font-family:var(--mono);font-size:24px;color:${matrixOk ? 'var(--accent3)' : 'var(--accent2)'}">${matrixOk ? '✓' : '✗'}</div>
+    </div>
+    ${matrixOk ?
+          '<div style="font-family:var(--mono);font-size:11px;color:var(--accent3);text-align:center">b = S·x<sub>B</sub> ✓ — soluția verificată matriceal</div>' :
+          '<div style="font-family:var(--mono);font-size:11px;color:var(--accent2);text-align:center">✗ Discrepanță la verificarea matriceală</div>'
+        }
+  </div>
+
+  <!-- ══ PAS 2: Verificare restricții ══ -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;
+              padding:20px 24px;margin-bottom:20px">
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted);
+                font-weight:700;margin-bottom:4px">PAS 2 — VERIFICARE RESTRICȚII</div>
+    <div style="font-family:var(--mono);font-size:12px;color:var(--accent4);margin-bottom:14px">
+      Substituim x* în fiecare restricție a PL original
+    </div>
+    ${restrictiiHtml}
+  </div>
+
+  <!-- ══ PAS 3: Nenegativitate ══ -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;
+              padding:16px 24px;margin-bottom:20px">
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted);
+                font-weight:700;margin-bottom:10px">PAS 3 — NENEGATIVITATE x* ≥ 0</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">${nnHtml}</div>
+  </div>
+
+  <!-- ══ PAS 4: Valoarea funcției obiectiv ══ -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;
+              padding:16px 24px;margin-bottom:20px">
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted);
+                font-weight:700;margin-bottom:10px">PAS 4 — VALOAREA FUNCȚIEI OBIECTIV</div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-size:12px">
+      <span style="color:var(--muted)">f(x*) =</span>
+      <span>${objTermsHtml}</span>
+      <span style="color:var(--muted)">=</span>
+      <strong style="color:${objCol};font-size:15px">${fmtH(objCalc)}</strong>
+      <span style="color:var(--muted)">= f* Simplex ✓</span>
+    </div>
+  </div>`;
+
+      document.getElementById('verificationContent').innerHTML = verifyHtml;
+
+      // Concluzie finală
+      const fc = allOk ? 'var(--accent3)' : 'var(--accent2)';
+      let fr = `<div style="background:${allOk ? 'rgba(67,233,123,.08)' : 'rgba(255,101,132,.08)'};
+                border:2px solid ${fc};border-radius:14px;padding:24px 28px;margin-top:4px">
+    <div style="font-family:var(--mono);font-size:14px;font-weight:800;color:${fc};margin-bottom:16px">
+      ${allOk ? '✅  VERIFICARE COMPLETĂ — Soluția este VALIDĂ și OPTIMĂ!' : '⚠️  Verificare cu erori.'}
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px">`;
+      for (let j = 0; j < n; j++) fr += `
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:9px;
+                  padding:12px 14px;text-align:center">
+        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px">x${sub(j + 1)}</div>
+        <div style="font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent)">${fmtH(xV[j])}</div>
+      </div>`;
+      fr += `
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:9px;
+                  padding:12px 14px;text-align:center">
+        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px">${S.objType} f*</div>
+        <div style="font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent3)">${objValH}</div>
+      </div>
+    </div>`;
+      if (allOk) fr += `<div style="font-family:var(--mono);font-size:11px;color:var(--accent3)">
+    Toate restricțiile sunt satisfăcute · nenegativitate OK · f* confirmată · b = S·x_B ✓</div>`;
+      fr += '</div>';
+      document.getElementById('finalResult').innerHTML = fr;
+    }
+
+    function resetAll() {
+      S.iterations = []; S.finalSolution = null;
+      document.getElementById('simplexIterations').innerHTML = '';
+      document.getElementById('simplexResult').innerHTML = '';
+      document.getElementById('verificationContent').innerHTML = '';
+      document.getElementById('finalResult').innerHTML = '';
+      document.getElementById('linearityCheck').innerHTML = '<div class="alert alert-info"><span class="ai">🔍</span><span>Completează datele și apasă Validare.</span></div>';
+      goToStep(0);
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // BAZA DE DATE — IndexedDB (persistentă, structurată, fără limite)
+    // ══════════════════════════════════════════════════════════════
+    const DB_NAME = 'SimplexSolverDB';
+    const DB_VERSION = 1;
+    const STORE = 'exercises';
+    let _db = null;
+
+    function openDB() {
+      return new Promise((resolve, reject) => {
+        if (_db) { resolve(_db); return; }
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = e => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE)) {
+            const store = db.createObjectStore(STORE, { keyPath: 'id', autoIncrement: true });
+            store.createIndex('savedAt', 'savedAt', { unique: false });
+            store.createIndex('name', 'name', { unique: false });
+          }
+        };
+        req.onsuccess = e => { _db = e.target.result; resolve(_db); };
+        req.onerror = e => reject(e.target.error);
+      });
+    }
+
+    async function dbGetAll() {
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE, 'readonly');
+        const store = tx.objectStore(STORE);
+        const index = store.index('savedAt');
+        const req = index.openCursor(null, 'prev'); // newest first
+        const results = [];
+        req.onsuccess = e => {
+          const cursor = e.target.result;
+          if (cursor) { results.push(cursor.value); cursor.continue(); }
+          else resolve(results);
+        };
+        req.onerror = e => reject(e.target.error);
+      });
+    }
+
+    async function dbAdd(record) {
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE, 'readwrite');
+        const req = tx.objectStore(STORE).add(record);
+        req.onsuccess = e => resolve(e.target.result); // returns new id
+        req.onerror = e => reject(e.target.error);
+      });
+    }
+
+    async function dbPut(record) {
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE, 'readwrite');
+        const req = tx.objectStore(STORE).put(record);
+        req.onsuccess = () => resolve();
+        req.onerror = e => reject(e.target.error);
+      });
+    }
+
+    async function dbDelete(id) {
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE, 'readwrite');
+        const req = tx.objectStore(STORE).delete(id);
+        req.onsuccess = () => resolve();
+        req.onerror = e => reject(e.target.error);
+      });
+    }
+
+    let _sortOrder = 'new'; // 'new' | 'old' | 'solved'
+    function setSortOrder(order, btn) {
+      _sortOrder = order;
+      document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderExercises();
+    }
+
+    async function dbCount() {
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE, 'readonly');
+        const req = tx.objectStore(STORE).count();
+        req.onsuccess = e => resolve(e.target.result);
+        req.onerror = e => reject(e.target.error);
+      });
+    }
+
+    // ── UI Save ────────────────────────────────────────────────────
+    async function openSaveModal() {
+      const n = S.numVars || 3, m = S.numCons || 3;
+      const obj = S.objCoefs && S.objCoefs.length
+        ? `${S.objType} f = ${S.objCoefs.map((c, i) => `${c >= 0 && i > 0 ? '+' : ''}${c}x${i + 1}`).join('')}`
+        : '(completează problema mai întâi)';
+      // Verificăm live dacă există deja în DB
+      const fp2 = problemFingerprint(S.objType, S.objCoefs, S.constraints);
+      const existing2 = await dbGetAll();
+      const dup2 = existing2.find(e =>
+        problemFingerprint(e.objType, e.objCoefs, e.constraints) === fp2
+      );
+
+      if (dup2) {
+        const dupDate2 = new Date(dup2.savedAt).toLocaleDateString('ro', { day: '2-digit', month: 'short', year: 'numeric' });
+        document.getElementById('savePreview').innerHTML = `
+      <div style="background:rgba(255,101,132,.1);border:1px solid rgba(255,101,132,.3);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:11px">
+        <div style="color:var(--accent2);font-weight:700;margin-bottom:6px">⚠ Problema există deja în baza de date</div>
+        <div style="color:var(--muted)">Denumire: <span style="color:var(--text)">${escHtml(dup2.name)}</span></div>
+        <div style="color:var(--muted)">Data: <span style="color:var(--text)">${dupDate2}</span></div>
+        <div style="color:var(--muted);margin-top:8px;font-size:10px">Poți salva oricum cu un alt nume, sau închide.</div>
+      </div>`;
+      } else {
+        document.getElementById('savePreview').innerHTML = `
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:8px;letter-spacing:1px">PREVIEW EXERCIȚIU</div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-family:var(--mono);font-size:12px;color:var(--accent4)">${obj}</div>
+      <div style="margin-top:8px;display:flex;gap:10px;flex-wrap:wrap">
+        <span style="background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:20px;padding:2px 9px;font-family:var(--mono);font-size:10px;color:var(--accent)">${n} var.</span>
+        <span style="background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:20px;padding:2px 9px;font-family:var(--mono);font-size:10px;color:var(--accent)">${m} restricții</span>
+        <span style="background:rgba(249,202,36,.1);border:1px solid rgba(249,202,36,.25);border-radius:20px;padding:2px 9px;font-family:var(--mono);font-size:10px;color:var(--accent4)">${S.objType.toUpperCase()}</span>
+        ${S.finalSolution ? `<span style="background:rgba(67,233,123,.1);border:1px solid rgba(67,233,123,.25);border-radius:20px;padding:2px 9px;font-family:var(--mono);font-size:10px;color:var(--accent3)">✓ Rezolvat</span>` : ''}
+        <span style="background:rgba(67,233,123,.08);border:1px solid rgba(67,233,123,.2);border-radius:20px;padding:2px 9px;font-family:var(--mono);font-size:10px;color:var(--accent3)">✓ Problemă nouă</span>
+      </div>`;
+      }
+      document.getElementById('exName').value = '';
+      document.getElementById('saveModalOverlay').classList.remove('hidden');
+      setTimeout(() => document.getElementById('exName').focus(), 100);
+    }
+    function closeSaveModal() {
+      document.getElementById('saveModalOverlay').classList.add('hidden');
+    }
+    // Generează o amprentă unică pentru o problemă (independentă de nume/dată)
+    function problemFingerprint(objType, objCoefs, constraints) {
+      const coefStr = (objCoefs || []).map(c => Number(c).toFixed(6)).join(',');
+      const conStr = (constraints || []).map(c =>
+        c.coefs.map(x => Number(x).toFixed(6)).join(',') + c.sign + Number(c.rhs).toFixed(6)
+      ).join('|');
+      return objType + '::' + coefStr + '::' + conStr;
+    }
+
+    async function confirmSave() {
+      if (!S.objCoefs || !S.objCoefs.length) { showToast('⚠ Completează problema înainte de salvare!'); return; }
+
+      // ── Verificare duplicate ──────────────────────────────────
+      const fp = problemFingerprint(S.objType, S.objCoefs, S.constraints);
+      const existing = await dbGetAll();
+      const dup = existing.find(e =>
+        problemFingerprint(e.objType, e.objCoefs, e.constraints) === fp
+      );
+      if (dup) {
+        // Există deja — afișăm un mesaj clar cu detalii
+        const dupDate = new Date(dup.savedAt).toLocaleDateString('ro', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        showToast(`⚠ Această problemă există deja: „${dup.name}" (salvată ${dupDate})`);
+        // Actualizăm preview-ul din modal cu avertisment
+        const prev = document.getElementById('savePreview');
+        if (prev) {
+          prev.innerHTML = `
+        <div style="background:rgba(255,101,132,.1);border:1px solid rgba(255,101,132,.3);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:11px">
+          <div style="color:var(--accent2);font-weight:700;margin-bottom:6px">⚠ Problemă deja salvată</div>
+          <div style="color:var(--muted)">Denumire: <span style="color:var(--text)">${escHtml(dup.name)}</span></div>
+          <div style="color:var(--muted)">Salvată la: <span style="color:var(--text)">${dupDate}</span></div>
+          <div style="color:var(--muted);margin-top:8px;font-size:10px">Aceeași funcție obiectiv și restricții sunt deja în baza de date.</div>
+        </div>`;
+        }
+        return;
+      }
+
+      const name = document.getElementById('exName').value.trim() ||
+        `Exercițiu ${new Date().toLocaleDateString('ro')} ${new Date().toLocaleTimeString('ro', { hour: '2-digit', minute: '2-digit' })}`;
+      const record = {
+        name,
+        savedAt: new Date().toISOString(),
+        objType: S.objType,
+        numVars: S.numVars,
+        numCons: S.numCons,
+        objCoefs: [...(S.objCoefs || [])],
+        constraints: (S.constraints || []).map(c => ({ coefs: [...c.coefs], sign: c.sign, rhs: c.rhs })),
+        solved: !!(S.iterations && S.iterations.length > 0 && S.finalSolution),
+        objVal: S.finalSolution ? S.finalSolution.objVal : null
+      };
+      try {
+        await dbAdd(record);
+        closeSaveModal();
+        showToast('💾 Exercițiu salvat în baza de date!');
+        updateExBadge();
+      } catch (err) { showToast('⚠ Eroare la salvare: ' + err.message); }
+    }
+
+    // ── UI Load ────────────────────────────────────────────────────
+    async function openLoadModal() {
+      document.getElementById('loadModalOverlay').classList.remove('hidden');
+      await renderExercises();
+    }
+    function closeLoadModal() {
+      document.getElementById('loadModalOverlay').classList.add('hidden');
+    }
+
+    async function renderExercises() {
+      const grid = document.getElementById('exGrid');
+      grid.innerHTML = `<div style="text-align:center;padding:30px;color:var(--muted);font-family:var(--mono);font-size:11px">Se încarcă...</div>`;
+      try {
+        const q = (document.getElementById('searchEx')?.value || '').toLowerCase().trim();
+        let arr = await dbGetAll();
+        if (q) arr = arr.filter(e =>
+          e.name.toLowerCase().includes(q) ||
+          e.objType.includes(q) ||
+          String(e.numVars).includes(q) ||
+          String(e.numCons).includes(q) ||
+          (e.objCoefs || []).join(',').includes(q)
+        );
+        // Aplicăm sortarea
+        if (_sortOrder === 'old') arr = arr.slice().reverse();
+        else if (_sortOrder === 'solved') arr = [...arr.filter(e => e.solved), ...arr.filter(e => !e.solved)];
+        // Update count
+        const total = await dbCount();
+        const countEl = document.getElementById('exDbCount');
+        if (countEl) countEl.textContent = total + ' exerciții în baza de date';
+
+        if (!arr.length) {
+          grid.innerHTML = q
+            ? `<div class="ex-empty"><div class="ex-empty-icon">🔍</div><div>Niciun rezultat pentru „${q}"</div></div>`
+            : `<div class="ex-empty"><div class="ex-empty-icon">📭</div><div>Baza de date este goală</div><div style="margin-top:6px;font-size:10px;color:var(--muted)">Salvează o problemă completată cu butonul 💾</div></div>`;
+          return;
+        }
+        grid.innerHTML = arr.map(ex => {
+          const d = new Date(ex.savedAt);
+          const dateStr = d.toLocaleDateString('ro', { day: '2-digit', month: 'short', year: 'numeric' });
+          const timeStr = d.toLocaleTimeString('ro', { hour: '2-digit', minute: '2-digit' });
+          const objStr = (ex.objCoefs || []).map((c, i) => `${c >= 0 && i > 0 ? '+' : ''}${c}x${i + 1}`).join('');
+          return `<div class="ex-card" onclick="loadExercise(${ex.id})">
+        <button class="ex-card-del" onclick="event.stopPropagation();deleteExercise(${ex.id})" title="Șterge din baza de date">✕</button>
+        <div class="ex-card-badge">📋 ${ex.numVars} var × ${ex.numCons} rest.</div>
+        <div class="ex-card-title">${escHtml(ex.name)}</div>
+        <div class="ex-card-meta">${dateStr} ${timeStr} · ${ex.objType.toUpperCase()}</div>
+        <div class="ex-card-formula">${ex.objType} f = ${objStr || '—'}</div>
+        <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+          ${ex.solved
+              ? `<span style="color:var(--accent3);font-size:10px;font-family:var(--mono)">✓ f* = ${ex.objVal !== null ? fmtH(ex.objVal) : '—'}</span>`
+              : `<span style="color:var(--muted);font-size:10px;font-family:var(--mono)">○ Nerezolvat</span>`}
+        </div>
+      </div>`;
+        }).join('');
+      } catch (err) {
+        grid.innerHTML = `<div class="ex-empty"><div class="ex-empty-icon">⚠</div><div>Eroare baza de date</div></div>`;
+      }
+    }
+
+    async function loadExercise(id) {
+      try {
+        const db = await openDB();
+        const ex = await new Promise((res, rej) => {
+          const tx = db.transaction(STORE, 'readonly');
+          const req = tx.objectStore(STORE).get(id);
+          req.onsuccess = e => res(e.target.result);
+          req.onerror = e => rej(e.target.error);
+        });
+        if (!ex) { showToast('⚠ Exercițiu negăsit!'); return; }
+        // Load into state
+        S.objType = ex.objType;
+        S.numVars = ex.numVars;
+        S.numCons = ex.numCons;
+        S.objCoefs = [...(ex.objCoefs || [])];
+        S.constraints = (ex.constraints || []).map(c => ({ coefs: [...c.coefs], sign: c.sign, rhs: c.rhs }));
+        // Reset solved state
+        S.iterations = []; S.finalSolution = null; S.error = null;
+        // Rebuild UI
+        document.getElementById('numVars').value = S.numVars;
+        document.getElementById('numCons').value = S.numCons;
+        selectObj(S.objType);
+        buildInputs();
+        updateDisplays();
+        closeLoadModal();
+        goToStep(0);
+        showToast('📂 Exercițiu încărcat din baza de date!');
+      } catch (err) { showToast('⚠ Eroare la încărcare: ' + err.message); }
+    }
+
+    async function deleteExercise(id) {
+      if (!confirm('Ștergi exercițiul din baza de date?')) return;
+      try {
+        await dbDelete(id);
+        await renderExercises();
+        updateExBadge();
+        showToast('🗑 Exercițiu șters!');
+      } catch (err) { showToast('⚠ Eroare la ștergere: ' + err.message); }
+    }
+
+    async function updateExBadge() {
+      try {
+        const count = await dbCount();
+        const badge = document.getElementById('exCountBadge');
+        if (badge) badge.textContent = count > 0 ? count : '';
+        badge && (badge.style.display = count > 0 ? 'flex' : 'none');
+      } catch (e) { }
+    }
+
+    // ─── Export / Import baza de date (fișier portabil) ───────────
+    async function exportDB() {
+      try {
+        const arr = await dbGetAll();
+        if (!arr.length) { showToast('⚠ Baza de date este goală!'); return; }
+        const payload = {
+          _version: 1,
+          _app: 'SimplexSolverDB',
+          _exportedAt: new Date().toISOString(),
+          _count: arr.length,
+          exercises: arr
+        };
+        const json = JSON.stringify(payload, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `simplex_db_${arr.length}ex_${new Date().toISOString().slice(0, 10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast(`⬇ Exportat ${arr.length} exerciții — trimite fișierul altora!`);
+      } catch (err) { showToast('⚠ Eroare export: ' + err.message); }
+    }
+
+    async function importDB(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      event.target.value = '';
+      const reader = new FileReader();
+      reader.onload = async e => {
+        try {
+          const data = JSON.parse(e.target.result);
+          const exercises = Array.isArray(data) ? data : (data.exercises || []);
+          if (!exercises.length) { showToast('⚠ Fișier gol sau invalid!'); return; }
+          if (!confirm(`Importi ${exercises.length} exerciții în baza de date?\nExercițiile existente se păstrează. Cele noi primesc ID-uri noi.`)) return;
+
+          // Găsim cel mai mare ID existent → noile exerciții vor continua de acolo
+          const existing = await dbGetAll();
+          const maxExistingId = existing.reduce((mx, ex) => Math.max(mx, ex.id || 0), 0);
+
+          let added = 0, skipped = 0;
+          for (let i = 0; i < exercises.length; i++) {
+            const exSrc = exercises[i];
+
+            // Verificare duplicat: același name + savedAt = același exercițiu
+            const isDup = existing.some(e =>
+              e.savedAt === exSrc.savedAt && e.name === exSrc.name
+            );
+            if (isDup) { skipped++; continue; }
+
+            // Construim înregistrarea fără id → IndexedDB autoincrement dă id nou
+            // Garantat mai mare decât maxExistingId deoarece store-ul e autoincrement
+            const { id: _drop, ...exWithoutId } = exSrc;
+            await dbAdd(exWithoutId);
+            added++;
+          }
+
+          await renderExercises();
+          updateExBadge();
+          const total = existing.length + added;
+          showToast(`⬆ Import complet: ${added} adăugate, ${skipped} duplicate ignorate. Total: ${total} exerciții.`);
+        } catch (err) { showToast('⚠ Fișier JSON invalid: ' + err.message); }
+      };
+      reader.readAsText(file);
+    }
+
+    function escHtml(s) {
+      return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    async function clearAllExercises() {
+      const count = await dbCount();
+      if (!count) { showToast('Baza de date este deja goală!'); return; }
+      if (!confirm(`Ștergi toate cele ${count} exerciții din baza de date?
+Această acțiune nu poate fi anulată.`)) return;
+      try {
+        const db = await openDB();
+        await new Promise((res, rej) => {
+          const tx = db.transaction(STORE, 'readwrite');
+          const req = tx.objectStore(STORE).clear();
+          req.onsuccess = res; req.onerror = e => rej(e.target.error);
+        });
+        await renderExercises();
+        updateExBadge();
+        showToast('🗑 Baza de date golită!');
+      } catch (err) { showToast('⚠ Eroare: ' + err.message); }
+    }
+
+    function showToast(msg) {
+      const t = document.createElement('div');
+      t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#1a1a2e;border:1px solid var(--accent3);border-radius:10px;padding:12px 20px;font-family:var(--mono);font-size:12px;color:var(--accent3);z-index:9999;animation:fadeIn .3s ease;box-shadow:0 8px 24px rgba(0,0,0,.5)';
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 2800);
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // EXPORT PDF cu jsPDF
+    // ══════════════════════════════════════════════════════════════
+    async function exportPDF() {
+      if (!S.finalSolution) { showToast('⚠ Rezolvă problema înainte de export!'); return; }
+
+      // ─── Progress bar ────────────────────────────────────────
+      const prog = document.createElement('div');
+      prog.id = 'pdfProgress';
+      prog.style.cssText = 'position:fixed;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#6c63ff,#ff6584,#43e97b);z-index:99999;';
+      prog.innerHTML = '<style>@keyframes pgAnim{0%{width:0%}100%{width:100%}}</style>';
+      document.body.appendChild(prog);
+      showToast('⏳ Se încarcă bibliotecile...');
+
+      // ─── Biblioteci ──────────────────────────────────────────
+      const loadScript = url => new Promise((res, rej) => {
+        if (document.querySelector(`script[src="${url}"]`)) { res(); return; }
+        const s = document.createElement('script'); s.src = url; s.onload = res; s.onerror = rej;
+        document.head.appendChild(s);
+      });
+      try {
+        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+      } catch (e) { prog.remove(); showToast('⚠ Eroare încărcare biblioteci. Verifică conexiunea.'); return; }
+
+      const { jsPDF } = window.jspdf;
+      // A4 la 96dpi: 794×1123px, noi folosim 1.8x scale → 1429×2021px per pagină
+      const SCALE = 1.8;
+      const A4_PX_W = 794;
+      const A4_PX_H = 1123;  // înălțimea exactă A4 la 96dpi
+      const A4_MM_W = 210, A4_MM_H = 297;
+
+      // ─── Asigurăm că toate secțiunile au conținut generat ────
+      const origStep = currentStep;
+      if (!document.getElementById('plsResult').textContent.trim()) {
+        collectData(); buildPLS(); renderPLSPage();
+      }
+      if (!document.getElementById('aspContent').textContent.trim()) {
+        collectData(); buildPLS(); buildASP();
+      }
+      if (!document.getElementById('simplexIterations').textContent.trim()) {
+        collectData(); buildPLS(); buildSimplexTable();
+      }
+      if (!document.getElementById('verificationContent').textContent.trim()) {
+        buildVerification();
+      }
+
+      // ─── Construim paginile ca elemente DOM separate ─────────
+      // Fiecare "pagină logică" = un div de exact A4_PX_W lățime
+      // Conținutul care depășește înălțimea este tăiat natural de browser
+      // Trucul: adăugăm elemente unul câte unul și verificăm overflow → noua pagină
+
+      showToast('⏳ Se construiesc paginile...');
+
+      const objStr = S.objCoefs.map((c, i) => `${c >= 0 && i > 0 ? '+' : ''}${c}x${i + 1}`).join(' ');
+
+      // Helper: creează o pagina goală
+      function newPage() {
+        const pg = document.createElement('div');
+        pg.style.cssText = [
+          'width:' + A4_PX_W + 'px',
+          'min-height:' + A4_PX_H + 'px',
+          'background:#0a0a0f',
+          'box-sizing:border-box',
+          'padding:24px 24px 40px',
+          'overflow:hidden',
+          'position:relative',
+        ].join(';');
+        return pg;
+      }
+
+      // Wrapper invizibil
+      const wrap = document.createElement('div');
+      wrap.style.cssText = 'position:fixed;top:-99999px;left:0;z-index:-1;';
+      document.body.appendChild(wrap);
+
+      const pages = [];
+      let curPage = newPage();
+      pages.push(curPage);
+      wrap.appendChild(curPage);
+
+      // Helper: verifică dacă elementul se încadrează în pagina curentă
+      function fitsInPage(page, el) {
+        page.appendChild(el);
+        const fits = el.getBoundingClientRect().bottom - page.getBoundingClientRect().top <= A4_PX_H - 40;
+        page.removeChild(el);
+        return fits;
+      }
+
+      // Helper: adaugă element la pagina curentă sau face pagină nouă
+      function addEl(el, forceSinglePage = false) {
+        if (forceSinglePage) {
+          // Verifică dacă se încadrează, dacă nu → pagină nouă
+          curPage.appendChild(el);
+          wrap.appendChild(curPage); // re-attach pentru calcul
+          const elBottom = el.offsetTop + el.offsetHeight;
+          if (elBottom > A4_PX_H - 40) {
+            curPage.removeChild(el);
+            curPage = newPage();
+            pages.push(curPage);
+            wrap.appendChild(curPage);
+            curPage.appendChild(el);
+          }
+        } else {
+          curPage.appendChild(el);
+        }
+      }
+
+      function makeSectionHeader(txt) {
+        const h = document.createElement('div');
+        h.style.cssText = 'background:#1a1a26;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;letter-spacing:2px;color:#6c63ff;text-transform:uppercase;border-left:3px solid #6c63ff';
+        h.textContent = txt;
+        return h;
+      }
+      function makeDivider() {
+        const d = document.createElement('div');
+        d.style.cssText = 'height:1px;background:linear-gradient(90deg,#2a2a3e,transparent);margin:16px 0';
+        return d;
+      }
+
+      // ════════════ COPERTĂ ════════════
+      const cover = document.createElement('div');
+      cover.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:' + A4_PX_H + 'px;text-align:center;';
+      const conStrHTML = S.constraints.map((con, r) => {
+        const row = con.coefs.map((c, j) => `${c >= 0 && j > 0 ? '+' : ''}${c}x${j + 1}`).join('');
+        return `<div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#b0a8ff;padding:3px 0">R${r + 1}: ${row} ${con.sign} ${con.rhs}</div>`;
+      }).join('');
+      cover.innerHTML = `
+    <div style="font-family:sans-serif;font-size:32px;font-weight:800;color:#6c63ff;margin-bottom:8px;letter-spacing:-1px">SIMPLEX</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7878a0;margin-bottom:40px;letter-spacing:3px">METODA BIG-M — REZOLVARE COMPLETĂ</div>
+    <div style="background:#12121a;border:2px solid #2a2a3e;border-radius:14px;padding:28px 40px;min-width:360px;max-width:560px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#43e97b;letter-spacing:2px;margin-bottom:12px">${S.objType.toUpperCase()} f(x)</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:18px;color:#f9ca24;font-weight:700;margin-bottom:16px">${S.objType} f = ${objStr}</div>
+      ${conStrHTML}
+    </div>
+    <div style="margin-top:32px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#7878a0">${S.numVars} variabile &nbsp;·&nbsp; ${S.constraints.length} restricții &nbsp;·&nbsp; ${new Date().toLocaleDateString('ro', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+  `;
+      curPage.appendChild(cover);
+
+      // ════════════ SECȚIUNILE REZOLVĂRII ════════════
+      // Strategia: clonăm fiecare PANEL individual și îl adăugăm,
+      // verificând înălțimea după fiecare adăugare
+
+      const stepIds = ['step1', 'step2', 'step3', 'step4'];
+      const stepLabels = {
+        step1: 'PL → PLS (Forma Standard)',
+        step2: 'Baza Inițiala I₀ (ASP)',
+        step3: 'Tabelul Simplex — Iterații',
+        step4: 'Verificare Soluție Optimă'
+      };
+
+      for (const stepId of stepIds) {
+        const stepEl = document.getElementById(stepId);
+        if (!stepEl) continue;
+
+        // Pagina nouă pentru fiecare secțiune majoră
+        curPage = newPage();
+        pages.push(curPage);
+        wrap.appendChild(curPage);
+
+        // Header secțiune
+        curPage.appendChild(makeSectionHeader(stepLabels[stepId]));
+
+        // Clonăm fiecare panel din secțiune separat
+        const panels = stepEl.querySelectorAll('.panel, .alert, [style*="border-radius:12px"], [style*="border-radius:14px"]');
+        const children = panels.length > 0 ? Array.from(panels) : [stepEl];
+
+        for (const child of children) {
+          const clone = child.cloneNode(true);
+          // Ascundem butoanele din clone
+          clone.querySelectorAll('button,.btn').forEach(b => b.style.display = 'none');
+          clone.style.marginBottom = '14px';
+          clone.style.pageBreakInside = 'avoid';
+          clone.style.breakInside = 'avoid';
+
+          // Verificăm dacă se încadrează în pagina curentă
+          curPage.appendChild(clone);
+          const usedH = clone.offsetTop + clone.offsetHeight + 40; // 40px footer
+          if (usedH > A4_PX_H - 24) {
+            // Nu se încape — facem pagina nouă
+            curPage.removeChild(clone);
+            curPage = newPage();
+            pages.push(curPage);
+            wrap.appendChild(curPage);
+            // Re-adăugăm header-ul pe noua pagina
+            curPage.appendChild(makeSectionHeader(stepLabels[stepId] + ' (continuare)'));
+            curPage.appendChild(clone);
+          }
+        }
+      }
+
+      // ─── Adăugăm footer pe fiecare pagina ────────────────────
+      pages.forEach((pg, i) => {
+        const footer = document.createElement('div');
+        footer.style.cssText = 'position:absolute;bottom:12px;left:24px;right:24px;display:flex;justify-content:space-between;font-family:"JetBrains Mono",monospace;font-size:9px;color:#4a4a6a;border-top:1px solid #2a2a3e;padding-top:6px';
+        footer.innerHTML = `<span>Simplex Solver — Metoda Big-M &nbsp;|&nbsp; ${new Date().toLocaleDateString('ro')}</span><span>${i + 1} / ${pages.length}</span>`;
+        pg.style.position = 'relative';
+        pg.appendChild(footer);
+      });
+
+      showToast('⏳ Se capturează paginile (' + pages.length + ')...');
+      await new Promise(r => setTimeout(r, 300));
+
+      // ─── Captură fiecare pagina individual ──────────────────
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const PX_TO_MM = A4_MM_W / A4_PX_W;
+
+      for (let i = 0; i < pages.length; i++) {
+        if (i > 0) doc.addPage();
+        showToast(`⏳ Randează pagina ${i + 1}/${pages.length}...`);
+
+        let pageCanvas;
+        try {
+          pageCanvas = await html2canvas(pages[i], {
+            scale: SCALE,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: '#0a0a0f',
+            width: A4_PX_W,
+            height: A4_PX_H,
+            windowWidth: A4_PX_W,
+            logging: false,
+            onclone: cloneDoc => {
+              cloneDoc.querySelectorAll('button,.btn,.popup-overlay,.formula-popup,.modal-overlay,.iter-nav').forEach(e => e.style.display = 'none');
+            }
+          });
+        } catch (err) {
+          wrap.remove(); prog.remove();
+          showToast('⚠ Eroare pagina ' + (i + 1) + ': ' + err.message);
+          return;
+        }
+
+        const imgData = pageCanvas.toDataURL('image/jpeg', 0.93);
+        const rendH = pageCanvas.height / (SCALE * A4_PX_W / A4_MM_W);
+        doc.addImage(imgData, 'JPEG', 0, 0, A4_MM_W, Math.min(rendH, A4_MM_H), undefined, 'FAST');
+      }
+
+      wrap.remove();
+      prog.remove();
+
+      const filename = `simplex_${S.objType}_${S.numVars}x${S.constraints.length}_${new Date().toISOString().slice(0, 10)}.pdf`;
+      doc.save(filename);
+      showToast('📄 PDF exportat — ' + pages.length + ' pagini!');
+    }
+
+    function stripHtml(s) {
+      if (!s) return '';
+      const d = document.createElement('div'); d.innerHTML = s; return d.textContent || d.innerText || '';
+    }
+    function sub2(n) { return String(n); }
+
+    // Init
+    buildInputs();
+    // Inițializare baza de date și badge
+    openDB().then(() => updateExBadge()).catch(() => { });
+  </script>
+</body>
+
+</html>
