@@ -1,94 +1,107 @@
-# Simplex PL
+# Proiect Final: Simplex - Programare Liniara
 
-`simplex_PL.html` is a single-file interactive solver for Linear Programming problems using the Simplex method with Big-M handling for artificial variables.
+Aplicatia din `index.html` este un solver educational pentru probleme de Programare Liniara, construit integral in HTML, CSS si JavaScript. Proiectul ghideaza utilizatorul pas cu pas prin formularea problemei, transformarea in forma standard, construirea bazei initiale si aplicarea metodei Simplex cu tratamentul variabilelor artificiale prin Big-M.
 
-The page is written in Romanian and is designed as a step-by-step teaching tool, not just a calculator. It guides the user from the original LP model to the standard form, initial basis, simplex iterations, and final verification in the original problem.
+Interfata este gandita pentru invatare si verificare, nu doar pentru calcul numeric. Utilizatorul poate introduce propria problema, poate urmari fiecare etapa a rezolvarii si poate salva exercitii local in browser.
 
-## What It Does
+## Functionalitati principale
 
-- defines a linear objective function for `max` or `min`
-- accepts multiple linear constraints with `=`, `<=`, and `>=`
-- automatically transforms the LP problem into `PLS` (standard form)
-- adds slack/surplus and artificial variables using the Big-M method
-- builds the initial basis (`ASP`)
-- runs the simplex iterations and highlights:
-  - entering variable
-  - leaving variable
-  - pivot element
-  - `zj`, `Δj`, `θ`, and objective value at each iteration
-- shows symbolic and numeric formulas when a simplex-table cell is double-clicked
-- verifies the final solution back in the original LP
-- exports the solved workflow to PDF
-- saves and reloads exercises locally with IndexedDB
-- exports/imports the local exercise database as JSON
+- definirea unei probleme de tip `min` sau `max`
+- introducerea unui numar variabil de variabile si restrictii
+- suport pentru restrictii de tip `=`, `<=` si `>=`
+- validarea structurii problemei de Programare Liniara
+- transformarea automata din `PL` in `PLS`
+- introducerea variabilelor de adaos/surplus si artificiale
+- construirea bazei initiale `ASP`
+- generarea tabelului Simplex cu iteratii complete
+- evidentierea variabilei care intra in baza, a variabilei care iese si a pivotului
+- afisarea indicatorilor specifici: `zj`, `Delta j`, `theta`
+- verificarea solutiei finale in problema initiala
+- exportul rezolvarii in format PDF
+- salvarea exercitiilor in `IndexedDB`
+- exportul si importul bazei de date locale in format JSON
 
-## Workflow
+## Etapele aplicatiei
 
-The interface is split into 5 stages:
+Aplicatia este impartita in 5 pasi principali:
 
-1. `PL Input`
-   Enter the objective, constraints, and non-negativity condition.
+1. `Problema PL`
+   Se introduc functia obiectiv, numarul de variabile, numarul de restrictii si coeficientii problemei.
 2. `PL -> PLS`
-   Transform the original LP into standard form.
-3. `ASP`
-   Build the initial basis and display the matrices/vectors used by the algorithm.
-4. `Simplex Table`
-   Inspect every iteration of the simplex method.
-5. `Verification`
-   Check the computed solution in the original model and export the result.
+   Problema este transformata in forma standard.
+3. `ASP & Baza`
+   Se construieste baza initiala si se afiseaza rezumatul variabilelor.
+4. `Tabel Simplex`
+   Sunt generate iteratiile algoritmului Simplex.
+5. `Verificare`
+   Solutia optima este verificata in problema initiala si poate fi exportata in PDF.
 
-## Constraint Conversion Rules
+## Reguli de transformare folosite
 
-The file applies the following conversion rules:
+Pentru fiecare restrictie, aplicatia foloseste urmatoarele reguli:
 
 - `=` -> `+z_k`
 - `<=` -> `+y_k`
 - `>=` -> `-y_k + z_k`
 
-where:
+Unde:
 
-- `y_k` = slack/surplus variable
-- `z_k` = artificial variable
+- `y_k` este variabila de adaos/surplus
+- `z_k` este variabila artificiala
 
-Artificial variables receive coefficient `+M` in the objective function.
+Variabilele artificiale primesc coeficient `+M` in functia obiectiv, conform metodei Big-M.
 
-## How To Use
+## Cum se foloseste
 
-Open `simplex_PL.html` in a modern browser and follow the on-screen steps.
+1. Deschide `index.html` intr-un browser modern.
+2. Alege tipul problemei: `min` sau `max`.
+3. Completeaza numarul de variabile si restrictii.
+4. Introdu coeficientii functiei obiectiv.
+5. Completeaza sistemul de restrictii.
+6. Apasa `Validare`.
+7. Parcurge etapele `PL -> PLS`, `ASP & Baza`, `Tabel Simplex` si `Verificare`.
+8. Optional, salveaza exercitiul in baza locala sau exporta rezolvarea in PDF.
 
-Recommended flow:
+## Salvare si baza de date locala
 
-1. set the number of variables and constraints
-2. choose `max` or `min`
-3. fill in objective coefficients
-4. fill in each constraint
-5. click `Validare`
-6. continue through `PLS`, `ASP`, `Tabel Simplex`, and `Verificare`
-7. optionally save the exercise or export the solved result to PDF
+Aplicatia foloseste `IndexedDB` pentru a salva exercitiile direct in browser. Din interfata pot fi facute urmatoarele operatii:
 
-## Files
+- salvare exercitiu curent
+- cautare in exercitiile salvate
+- sortare dupa recente, vechi sau rezolvate
+- incarcare exercitiu salvat
+- stergere exercitii
+- export baza de date in fisier JSON
+- import baza de date din fisier JSON
 
-- `simplex_PL.html` - the full application in one HTML file
-- `README.md` - documentation for the page
+Fisierul `simplex_exercitii_db.json` este un exemplu de baza de date exportata.
 
-## Technical Notes
+## Fisierele proiectului
 
-- no build step is required
-- the application is client-side only
-- saved exercises are stored in the browser with IndexedDB
-- PDF export depends on browser-side libraries loaded at runtime
-- the page also loads Google Fonts from the web
+- `index.html` - aplicatia completa, implementata intr-un singur fisier
+- `README.md` - documentatia proiectului
+- `simplex_exercitii_db.json` - exemplu de exercitii exportate din baza de date locala
 
-## Best Used For
+## Aspecte tehnice
 
-- Operations Research / Linear Programming coursework
-- simplex demonstrations in class or seminar
-- step-by-step verification of LP exercises
-- learning how Big-M affects the initial simplex basis
+- proiectul nu necesita build sau instalare
+- ruleaza exclusiv client-side
+- persistenta locala este realizata prin `IndexedDB`
+- exportul PDF incarca biblioteci din CDN la runtime
+- interfata este in limba romana
 
-## Limitations
+## Scopul proiectului
 
-- the page assumes a standard non-negativity condition
-- it is intended for educational simplex workflows, not large-scale optimization
-- persistence is local to the browser unless the database is exported manually
-- the built-in “validation” confirms the expected LP structure in the UI; it is not a formal symbolic parser
+Acest proiect este potrivit pentru:
+
+- laborator sau seminar la Cercetari Operationale
+- invatarea metodei Simplex pas cu pas
+- verificarea exercitiilor de Programare Liniara
+- demonstratii didactice pentru forma standard, baza initiala si Big-M
+
+## Limitari
+
+- aplicatia presupune conditia de nenegativitate pentru variabile
+- este orientata spre uz didactic, nu spre optimizare la scara mare
+- exercitiile salvate raman locale in browser pana la export manual
+- pentru export PDF este necesara conexiune la internet pentru incarcarea bibliotecilor externe
