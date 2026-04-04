@@ -76,14 +76,14 @@
     }
 
     h1 {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  background: linear-gradient(90deg, var(--text), var(--accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, var(--text), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
     h1 span {
       font-weight: 400;
@@ -1282,6 +1282,7 @@
       padding: 3px;
       flex-shrink: 0;
     }
+
     .mode-btn {
       padding: 7px 16px;
       border-radius: 8px;
@@ -1295,18 +1296,33 @@
       transition: all .2s;
       white-space: nowrap;
     }
+
     .mode-btn.active {
       background: linear-gradient(135deg, var(--accent), #8b7cf8);
       color: #fff;
-      box-shadow: 0 2px 8px rgba(108,99,255,.3);
+      box-shadow: 0 2px 8px rgba(108, 99, 255, .3);
     }
-    .mode-btn:not(.active):hover { color: var(--text); }
+
+    .mode-btn:not(.active):hover {
+      color: var(--text);
+    }
 
     /* ─── GAME THEORY STYLES ─────────────────────────────────────── */
-    .gt-container { display: none; }
-    .gt-container.active { display: block; }
-    .lp-container { display: block; }
-    .lp-container.hidden-mode { display: none; }
+    .gt-container {
+      display: none;
+    }
+
+    .gt-container.active {
+      display: block;
+    }
+
+    .lp-container {
+      display: block;
+    }
+
+    .lp-container.hidden-mode {
+      display: none;
+    }
 
     .game-cell {
       background: var(--surface2);
@@ -1321,10 +1337,12 @@
       outline: none;
       transition: border-color .2s;
     }
+
     .game-cell:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(108,99,255,.15);
+      box-shadow: 0 0 0 3px rgba(108, 99, 255, .15);
     }
+
     .matrix-value-cell {
       font-family: var(--mono);
       font-size: 12px;
@@ -1336,66 +1354,139 @@
       border-radius: 6px;
       min-width: 38px;
     }
+
     .matrix-value-cell.highlight-min {
       color: var(--accent2);
-      background: rgba(255,101,132,.1);
-      border-color: rgba(255,101,132,.3);
+      background: rgba(255, 101, 132, .1);
+      border-color: rgba(255, 101, 132, .3);
       font-weight: 700;
     }
+
     .matrix-value-cell.highlight-max {
       color: var(--accent3);
-      background: rgba(67,233,123,.08);
-      border-color: rgba(67,233,123,.25);
+      background: rgba(67, 233, 123, .08);
+      border-color: rgba(67, 233, 123, .25);
       font-weight: 700;
     }
+
     .matrix-value-cell.saddle-point {
       color: var(--accent4);
-      background: rgba(249,202,36,.15);
+      background: rgba(249, 202, 36, .15);
       border-color: var(--accent4);
       font-weight: 700;
       box-shadow: 0 0 0 2px var(--accent4);
     }
-    .gt-step-page { display: none; }
-    .gt-step-page.active { display: block; }
+
+    .gt-step-page {
+      display: none;
+    }
+
+    .gt-step-page.active {
+      display: block;
+    }
+
     .saddle-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(249,202,36,.15); border: 1px solid rgba(249,202,36,.35);
-      border-radius: 20px; padding: 4px 14px;
-      font-family: var(--mono); font-size: 11px; font-weight: 700;
-      color: var(--accent4); margin-bottom: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(249, 202, 36, .15);
+      border: 1px solid rgba(249, 202, 36, .35);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent4);
+      margin-bottom: 12px;
     }
+
     .no-saddle-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(255,101,132,.12); border: 1px solid rgba(255,101,132,.3);
-      border-radius: 20px; padding: 4px 14px;
-      font-family: var(--mono); font-size: 11px; font-weight: 700;
-      color: var(--accent2); margin-bottom: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 101, 132, .12);
+      border: 1px solid rgba(255, 101, 132, .3);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent2);
+      margin-bottom: 12px;
     }
+
     .pl-formulation {
-      background: var(--surface2); border: 1px solid var(--border);
-      border-radius: 10px; padding: 16px 20px;
-      font-family: var(--mono); font-size: 12px; line-height: 1.9; margin: 10px 0;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.9;
+      margin: 10px 0;
     }
-    .pl-formulation .kw { color: var(--accent); font-weight: 700; }
-    .pl-formulation .ineq { color: var(--accent2); font-weight: 700; }
-    .pl-formulation .var { color: var(--accent4); }
-    .pl-cols { display: flex; gap: 14px; flex-wrap: wrap; margin: 10px 0; }
-    .pl-side { flex: 1; min-width: 260px; }
+
+    .pl-formulation .kw {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .pl-formulation .ineq {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .pl-formulation .var {
+      color: var(--accent4);
+    }
+
+    .pl-cols {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 10px 0;
+    }
+
+    .pl-side {
+      flex: 1;
+      min-width: 260px;
+    }
+
     .verify-check {
-      display: flex; align-items: center; gap: 10px;
-      padding: 8px 14px; border-radius: 8px;
-      font-family: var(--mono); font-size: 12px; margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-family: var(--mono);
+      font-size: 12px;
+      margin-bottom: 6px;
     }
-    .verify-check.ok { background: rgba(67,233,123,.08); border: 1px solid rgba(67,233,123,.2); }
-    .verify-check.fail { background: rgba(255,101,132,.08); border: 1px solid rgba(255,101,132,.2); }
+
+    .verify-check.ok {
+      background: rgba(67, 233, 123, .08);
+      border: 1px solid rgba(67, 233, 123, .2);
+    }
+
+    .verify-check.fail {
+      background: rgba(255, 101, 132, .08);
+      border: 1px solid rgba(255, 101, 132, .2);
+    }
+
     .prob-track {
-      flex: 1; height: 12px; background: var(--surface2);
-      border: 1px solid var(--border); border-radius: 3px; overflow: hidden;
+      flex: 1;
+      height: 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
     }
+
     .prob-fill {
       height: 100%;
       background: linear-gradient(90deg, var(--accent), var(--accent2));
-      border-radius: 3px; transition: width .5s;
+      border-radius: 3px;
+      transition: width .5s;
     }
   </style>
 </head>
@@ -1404,7 +1495,8 @@
   <header>
     <div class="logo">LP</div>
     <div style="flex:1">
-      <h1>Simplex & Teoria Jocurilor <span>Programare Liniară — Metoda Simplex · Jocuri Matriceale cu Sumă Nulă</span></h1>
+      <h1>Simplex & Teoria Jocurilor <span>Programare Liniară — Metoda Simplex · Jocuri Matriceale cu Sumă Nulă</span>
+      </h1>
     </div>
     <div class="mode-switcher">
       <button class="mode-btn active" id="modeLpBtn" onclick="switchMode('lp')">📐 Prog. Liniară</button>
@@ -1417,135 +1509,136 @@
         <span id="exCountBadge"
           style="display:none;position:absolute;top:-6px;right:-6px;background:var(--accent2);color:#fff;border-radius:50%;width:18px;height:18px;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:var(--mono)">0</span>
       </button>
-      <button class="btn btn-save" onclick="currentMode==='lp'?openSaveModal():gtOpenSaveModal()" title="Salvează exercițiul curent">💾 Salvează</button>
+      <button class="btn btn-save" onclick="currentMode==='lp'?openSaveModal():gtOpenSaveModal()"
+        title="Salvează exercițiul curent">💾 Salvează</button>
     </div>
   </header>
   <div class="lp-container" id="lpContainer">
-  <nav class="steps-nav" id="stepsNav">
-    <div class="step-tab active" data-step="0" onclick="navigateTo(0)"><span class="sn">1</span> Problema PL</div>
-    <div class="step-tab" data-step="1" onclick="navigateTo(1)"><span class="sn">2</span> PL → PLS</div>
-    <div class="step-tab" data-step="2" onclick="navigateTo(2)"><span class="sn">3</span> ASP & Baza</div>
-    <div class="step-tab" data-step="3" onclick="navigateTo(3)"><span class="sn">4</span> Tabel Simplex</div>
-    <div class="step-tab" data-step="4" onclick="navigateTo(4)"><span class="sn">5</span> Verificare</div>
-  </nav>
-  <main>
-    <div class="progress-bar">
-      <div class="progress-fill" id="progressFill" style="width:20%"></div>
-    </div>
+    <nav class="steps-nav" id="stepsNav">
+      <div class="step-tab active" data-step="0" onclick="navigateTo(0)"><span class="sn">1</span> Problema PL</div>
+      <div class="step-tab" data-step="1" onclick="navigateTo(1)"><span class="sn">2</span> PL → PLS</div>
+      <div class="step-tab" data-step="2" onclick="navigateTo(2)"><span class="sn">3</span> ASP & Baza</div>
+      <div class="step-tab" data-step="3" onclick="navigateTo(3)"><span class="sn">4</span> Tabel Simplex</div>
+      <div class="step-tab" data-step="4" onclick="navigateTo(4)"><span class="sn">5</span> Verificare</div>
+    </nav>
+    <main>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width:20%"></div>
+      </div>
 
-    <!-- STEP 0 -->
-    <div class="step-page active" id="step0">
-      <div class="panel">
-        <div class="panel-title">Tipul Problemei & Funcția Obiectiv</div>
-        <div class="form-row">
-          <label>Tip:</label>
-          <div class="radio-btn selected" id="btn-min" onclick="selectObj('min')">min f(x)</div>
-          <div class="radio-btn" id="btn-max" onclick="selectObj('max')">max f(x)</div>
-        </div>
-        <div class="form-row">
-          <label>Variabile:</label>
-          <input type="number" id="numVars" value="3" min="2" max="8" onchange="buildInputs()">
-          <label>Restricții:</label>
-          <input type="number" id="numCons" value="3" min="1" max="10" onchange="buildInputs()">
-          <button class="btn btn-secondary" onclick="buildInputs()">↻</button>
-        </div>
-        <div class="section-label">Funcția Obiectiv f(x)</div>
-        <div id="objRow" class="constraint-row"></div>
-        <div class="formula-display" id="objDisplay">—</div>
-      </div>
-      <div class="panel">
-        <div class="panel-title">Sistemul de Restricții</div>
-        <div id="constraintsArea"></div>
-        <button class="btn btn-secondary" style="margin-top:7px" onclick="addCon()">+ Restricție</button>
-      </div>
-      <div class="panel">
-        <div class="panel-title">Condiția de Nenegativitate</div>
-        <div class="alert alert-info"><span class="ai">ℹ</span><span>x₁, x₂, ..., xₙ ≥ 0 — activă implicit (formă
-            canonică)</span></div>
-        <div id="nonNegDisplay" class="formula-display">—</div>
-      </div>
-      <div class="panel">
-        <div class="panel-title">Validare</div>
-        <div id="linearityCheck">
-          <div class="alert alert-info"><span class="ai">🔍</span><span>Completează datele și apasă Validare.</span>
+      <!-- STEP 0 -->
+      <div class="step-page active" id="step0">
+        <div class="panel">
+          <div class="panel-title">Tipul Problemei & Funcția Obiectiv</div>
+          <div class="form-row">
+            <label>Tip:</label>
+            <div class="radio-btn selected" id="btn-min" onclick="selectObj('min')">min f(x)</div>
+            <div class="radio-btn" id="btn-max" onclick="selectObj('max')">max f(x)</div>
           </div>
+          <div class="form-row">
+            <label>Variabile:</label>
+            <input type="number" id="numVars" value="3" min="2" max="8" onchange="buildInputs()">
+            <label>Restricții:</label>
+            <input type="number" id="numCons" value="3" min="1" max="10" onchange="buildInputs()">
+            <button class="btn btn-secondary" onclick="buildInputs()">↻</button>
+          </div>
+          <div class="section-label">Funcția Obiectiv f(x)</div>
+          <div id="objRow" class="constraint-row"></div>
+          <div class="formula-display" id="objDisplay">—</div>
         </div>
-        <div style="display:flex;gap:9px;margin-top:12px;flex-wrap:wrap">
-          <button class="btn btn-secondary" onclick="validateLinearity()">🔍 Validare</button>
-          <button class="btn btn-primary" onclick="nextStep()">Continuă → PLS →</button>
-          <button class="btn btn-secondary" onclick="loadExample()">📋 Exemplu (seminar)</button>
-          <button class="btn btn-save" onclick="openSaveModal()">💾 Salvează exercițiu</button>
-          <button class="btn btn-load" onclick="openLoadModal()">📂 Exerciții salvate</button>
+        <div class="panel">
+          <div class="panel-title">Sistemul de Restricții</div>
+          <div id="constraintsArea"></div>
+          <button class="btn btn-secondary" style="margin-top:7px" onclick="addCon()">+ Restricție</button>
         </div>
-      </div>
-    </div>
-
-    <!-- STEP 1 -->
-    <div class="step-page" id="step1">
-      <div class="panel">
-        <div class="panel-title">Transformare PL → PLS</div>
-        <div class="alert alert-info"><span class="ai">📐</span>
-          <div>
-            <strong>Reguli:</strong><br>
-            &nbsp;• <code>=</code> → <code>+z_k</code> (artificială, c=M)<br>
-            &nbsp;• <code>≤</code> → <code>+y_k</code> (surplus, c=0)<br>
-            &nbsp;• <code>≥</code> → <code>−y_k + z_k</code> (surplus negativă + artificială)
+        <div class="panel">
+          <div class="panel-title">Condiția de Nenegativitate</div>
+          <div class="alert alert-info"><span class="ai">ℹ</span><span>x₁, x₂, ..., xₙ ≥ 0 — activă implicit (formă
+              canonică)</span></div>
+          <div id="nonNegDisplay" class="formula-display">—</div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Validare</div>
+          <div id="linearityCheck">
+            <div class="alert alert-info"><span class="ai">🔍</span><span>Completează datele și apasă Validare.</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:9px;margin-top:12px;flex-wrap:wrap">
+            <button class="btn btn-secondary" onclick="validateLinearity()">🔍 Validare</button>
+            <button class="btn btn-primary" onclick="nextStep()">Continuă → PLS →</button>
+            <button class="btn btn-secondary" onclick="loadExample()">📋 Exemplu (seminar)</button>
+            <button class="btn btn-save" onclick="openSaveModal()">💾 Salvează exercițiu</button>
+            <button class="btn btn-load" onclick="openLoadModal()">📂 Exerciții salvate</button>
           </div>
         </div>
       </div>
-      <div id="plsTransformSteps"></div>
-      <div class="panel">
-        <div class="panel-title">PLS — Forma Standard</div>
-        <div id="plsResult"></div>
-      </div>
-      <div style="display:flex;gap:9px;margin-top:4px">
-        <button class="btn btn-secondary" onclick="goToStep(0)">← Înapoi</button>
-        <button class="btn btn-primary" onclick="buildASP()">Continuă → ASP →</button>
-      </div>
-    </div>
 
-    <!-- STEP 2 -->
-    <div class="step-page" id="step2">
-      <div class="panel">
-        <div class="panel-title">Baza Inițială (ASP)</div>
-        <div id="aspContent"></div>
+      <!-- STEP 1 -->
+      <div class="step-page" id="step1">
+        <div class="panel">
+          <div class="panel-title">Transformare PL → PLS</div>
+          <div class="alert alert-info"><span class="ai">📐</span>
+            <div>
+              <strong>Reguli:</strong><br>
+              &nbsp;• <code>=</code> → <code>+z_k</code> (artificială, c=M)<br>
+              &nbsp;• <code>≤</code> → <code>+y_k</code> (surplus, c=0)<br>
+              &nbsp;• <code>≥</code> → <code>−y_k + z_k</code> (surplus negativă + artificială)
+            </div>
+          </div>
+        </div>
+        <div id="plsTransformSteps"></div>
+        <div class="panel">
+          <div class="panel-title">PLS — Forma Standard</div>
+          <div id="plsResult"></div>
+        </div>
+        <div style="display:flex;gap:9px;margin-top:4px">
+          <button class="btn btn-secondary" onclick="goToStep(0)">← Înapoi</button>
+          <button class="btn btn-primary" onclick="buildASP()">Continuă → ASP →</button>
+        </div>
       </div>
-      <div class="panel">
-        <div class="panel-title">Rezumat Variabile</div>
-        <div id="varSummary"></div>
-      </div>
-      <div style="display:flex;gap:9px;margin-top:4px">
-        <button class="btn btn-secondary" onclick="goToStep(1)">← Înapoi</button>
-        <button class="btn btn-primary" onclick="buildSimplexTable()">Continuă → Tabel Simplex →</button>
-      </div>
-    </div>
 
-    <!-- STEP 3 -->
-    <div class="step-page" id="step3">
-      <div class="alert alert-info" style="margin-bottom:14px"><span class="ai">💡</span><span><strong>Dublu-click pe
-            orice celulă din tabel</strong> pentru a vedea formula detaliată (simbolică + numerică)</span></div>
-      <div id="simplexIterations"></div>
-      <div id="simplexResult"></div>
-      <div style="display:flex;gap:9px;margin-top:4px">
-        <button class="btn btn-secondary" onclick="goToStep(2)">← Înapoi</button>
-        <button class="btn btn-primary" onclick="buildVerification()">Continuă → Verificare →</button>
+      <!-- STEP 2 -->
+      <div class="step-page" id="step2">
+        <div class="panel">
+          <div class="panel-title">Baza Inițială (ASP)</div>
+          <div id="aspContent"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Rezumat Variabile</div>
+          <div id="varSummary"></div>
+        </div>
+        <div style="display:flex;gap:9px;margin-top:4px">
+          <button class="btn btn-secondary" onclick="goToStep(1)">← Înapoi</button>
+          <button class="btn btn-primary" onclick="buildSimplexTable()">Continuă → Tabel Simplex →</button>
+        </div>
       </div>
-    </div>
 
-    <!-- STEP 4 -->
-    <div class="step-page" id="step4">
-      <div class="panel">
-        <div class="panel-title">Verificare în PL Original</div>
-        <div id="verificationContent"></div>
+      <!-- STEP 3 -->
+      <div class="step-page" id="step3">
+        <div class="alert alert-info" style="margin-bottom:14px"><span class="ai">💡</span><span><strong>Dublu-click pe
+              orice celulă din tabel</strong> pentru a vedea formula detaliată (simbolică + numerică)</span></div>
+        <div id="simplexIterations"></div>
+        <div id="simplexResult"></div>
+        <div style="display:flex;gap:9px;margin-top:4px">
+          <button class="btn btn-secondary" onclick="goToStep(2)">← Înapoi</button>
+          <button class="btn btn-primary" onclick="buildVerification()">Continuă → Verificare →</button>
+        </div>
       </div>
-      <div id="finalResult"></div>
-      <div style="display:flex;gap:9px;margin-top:18px">
-        <button class="btn btn-secondary" onclick="goToStep(3)">← Înapoi</button>
-        <button class="btn btn-primary" onclick="resetAll()">↺ Problemă Nouă</button>
-        <button class="btn btn-pdf" onclick="exportPDF()">📄 Export PDF</button>
+
+      <!-- STEP 4 -->
+      <div class="step-page" id="step4">
+        <div class="panel">
+          <div class="panel-title">Verificare în PL Original</div>
+          <div id="verificationContent"></div>
+        </div>
+        <div id="finalResult"></div>
+        <div style="display:flex;gap:9px;margin-top:18px">
+          <button class="btn btn-secondary" onclick="goToStep(3)">← Înapoi</button>
+          <button class="btn btn-primary" onclick="resetAll()">↺ Problemă Nouă</button>
+          <button class="btn btn-pdf" onclick="exportPDF()">📄 Export PDF</button>
+        </div>
       </div>
-    </div>
-  </main>
+    </main>
   </div><!-- end lp-container -->
 
   <!-- ═══════════════════════════════════════════════════════════
@@ -1554,17 +1647,20 @@
   <div class="gt-container" id="gtContainer">
     <!-- GT Step Tabs -->
     <nav class="steps-nav" id="gtStepsNav" style="padding:0 48px">
-      <div class="step-tab active" data-gtstep="0" onclick="gtNavigateTo(0)"><span class="sn">1</span> Matricea Jocului</div>
+      <div class="step-tab active" data-gtstep="0" onclick="gtNavigateTo(0)"><span class="sn">1</span> Matricea Jocului
+      </div>
       <div class="step-tab" data-gtstep="1" onclick="gtNavigateTo(1)"><span class="sn">2</span> Analiza α/β</div>
       <div class="step-tab" data-gtstep="2" onclick="gtNavigateTo(2)"><span class="sn">3</span> Decizie v₁/v₂</div>
       <div class="step-tab" data-gtstep="3" onclick="gtNavigateTo(3)"><span class="sn">4</span> Transformare PL</div>
       <div class="step-tab" data-gtstep="4" onclick="gtNavigateTo(4)"><span class="sn">5</span> Tabel Simplex</div>
       <div class="step-tab" data-gtstep="5" onclick="gtNavigateTo(5)"><span class="sn">6</span> Soluția Jocului</div>
-      <div class="step-tab" data-gtstep="6" onclick="gtNavigateTo(6)"><span class="sn">7</span> Verificare & Rezumat</div>
+      <div class="step-tab" data-gtstep="6" onclick="gtNavigateTo(6)"><span class="sn">7</span> Verificare & Rezumat
+      </div>
     </nav>
     <main style="position:relative;padding:28px 48px 64px;z-index:1;max-width:1400px;margin:0 auto">
       <div class="progress-bar">
-        <div class="progress-fill" id="gtProgressFill" style="width:14%;background:linear-gradient(90deg,var(--accent2),var(--accent))"></div>
+        <div class="progress-fill" id="gtProgressFill"
+          style="width:14%;background:linear-gradient(90deg,var(--accent2),var(--accent))"></div>
       </div>
 
       <!-- GT STEP 0 — Input -->
@@ -1572,8 +1668,10 @@
         <div class="panel">
           <div class="panel-title" style="--accent:var(--accent2)">Matricea Jocului Q</div>
           <div class="alert alert-info" style="margin-bottom:14px"><span class="ai">♟</span>
-            <div>Introduceți dimensiunea matricei jocului și valorile q<sub>ij</sub> (câștigul jucătorului A, pierderea lui B).<br>
-            <strong>Liniile</strong> = strategiile lui A &nbsp;·&nbsp; <strong>Coloanele</strong> = strategiile lui B</div>
+            <div>Introduceți dimensiunea matricei jocului și valorile q<sub>ij</sub> (câștigul jucătorului A, pierderea
+              lui B).<br>
+              <strong>Liniile</strong> = strategiile lui A &nbsp;·&nbsp; <strong>Coloanele</strong> = strategiile lui B
+            </div>
           </div>
           <div class="form-row">
             <label>Strategii A (linii):</label>
@@ -1598,7 +1696,8 @@
         <div class="panel">
           <div class="panel-title">Pas 1 — Calculul α_i și β_j</div>
           <div id="gt-analysis-content">
-            <div class="alert alert-info"><span class="ai">ℹ</span><span>Rulați analiza mai întâi din Pasul 1.</span></div>
+            <div class="alert alert-info"><span class="ai">ℹ</span><span>Rulați analiza mai întâi din Pasul 1.</span>
+            </div>
           </div>
         </div>
         <div style="display:flex;gap:9px;margin-top:4px">
@@ -1617,7 +1716,8 @@
         </div>
         <div style="display:flex;gap:9px;margin-top:4px">
           <button class="btn btn-secondary" onclick="gtNavigateTo(1)">← Înapoi</button>
-          <button class="btn btn-primary" id="gtStep2NextBtn" onclick="gtNavigateTo(3)">Continuă → Transformare PL →</button>
+          <button class="btn btn-primary" id="gtStep2NextBtn" onclick="gtNavigateTo(3)">Continuă → Transformare PL
+            →</button>
         </div>
       </div>
 
@@ -1637,7 +1737,8 @@
 
       <!-- GT STEP 4 — Tabel Simplex -->
       <div class="gt-step-page" id="gt-step4">
-        <div class="alert alert-info" style="margin-bottom:14px"><span class="ai">💡</span><span><strong>Dublu-click pe orice celulă</strong> pentru formula detaliată</span></div>
+        <div class="alert alert-info" style="margin-bottom:14px"><span class="ai">💡</span><span><strong>Dublu-click pe
+              orice celulă</strong> pentru formula detaliată</span></div>
         <div id="gt-simplex-content"></div>
         <div style="display:flex;gap:9px;margin-top:4px">
           <button class="btn btn-secondary" onclick="gtNavigateTo(3)">← Înapoi</button>
@@ -1659,7 +1760,8 @@
       <!-- GT STEP 6 — Verificare & Rezumat -->
       <div class="gt-step-page" id="gt-step6">
         <div id="gt-verification-content">
-          <div class="alert alert-info"><span class="ai">ℹ</span><span>Rulați toți pașii anteriori mai întâi.</span></div>
+          <div class="alert alert-info"><span class="ai">ℹ</span><span>Rulați toți pașii anteriori mai întâi.</span>
+          </div>
         </div>
         <div style="display:flex;gap:9px;margin-top:18px">
           <button class="btn btn-secondary" onclick="gtNavigateTo(5)">← Înapoi</button>
@@ -1810,6 +1912,13 @@
       return fmt(v);
     }
     function sub(n) { return String(n).split('').map(c => '₀₁₂₃₄₅₆₇₈₉'[c] || c).join(''); }
+
+    function lpDisplayVarName(v, idx) {
+      return v.type === 'main' ? v.name : `a${sub(idx - S.numVars + 1)}`;
+    }
+    function gtDisplayVarName(v, idx) {
+      return `a${sub(idx + 1)}`;
+    }
 
     // ═══════════════════════ BUILD PLS ═══════════════════════
     function buildPLS() {
@@ -1962,7 +2071,7 @@
 
       if (cellInfo.type === 'CB') {
         const bi = basis[cellInfo.row];
-        const vn = av[bi].name; const c = av[bi].coefObj;
+        const vn = lpDisplayVarName(av[bi], bi); const c = av[bi].coefObj;
         title = `C_B  [linia ${cellInfo.row + 1}]`;
         sym = `C_B = coeficientul variabilei ${vn} în funcția obiectiv`;
         const cStrP = fmtCj(bi);
@@ -1996,7 +2105,7 @@
         }
       } else if (cellInfo.type === 'aij') {
         const r = cellInfo.row, j = cellInfo.col;
-        const vn = av[j].name; const aNew = tableau[r][j];
+        const vn = lpDisplayVarName(av[j], j); const aNew = tableau[r][j];
         const itIdx_aij = S._currentIt || 0;
         const prevIt_aij = itIdx_aij > 0 ? S.iterations[itIdx_aij - 1] : null;
         if (prevIt_aij && prevIt_aij.pivotInfo) {
@@ -2030,7 +2139,7 @@
         num = `θ_${r + 1} = ${fmtH(xbv)} / ${fmtH(a)} = ${th === Infinity ? '∞' : fmtH(th)}`;
         res = th === Infinity ? '∞' : fmt(th);
       } else if (cellInfo.type === 'zk') {
-        const j = cellInfo.col; const vn = av[j].name;
+        const j = cellInfo.col; const vn = lpDisplayVarName(av[j], j);
         const aijVals = Array.from({ length: m }, (_, i) => tableau[i][j]);
         const prods = cBOrig.map((c, i) => c * aijVals[i]);
         const zj = prods.reduce((s, v) => s + v, 0);
@@ -2046,7 +2155,7 @@
         num = `     = ${termsValA}\n     = ${prodStrA}\n     = ${zjStrA}`;
         res = zjStrA;
       } else if (cellInfo.type === 'delta') {
-        const j = cellInfo.col; const vn = av[j].name;
+        const j = cellInfo.col; const vn = lpDisplayVarName(av[j], j);
         const cj = av[j].coefObj;
         const aijVals = Array.from({ length: m }, (_, i) => tableau[i][j]);
         const zj = cBOrig.reduce((s, c, i) => s + c * aijVals[i], 0);
@@ -2299,9 +2408,9 @@
       if (hasEnter) {
         const dDisp = deltaRow[it.enterIdx];
         infoHtml += `<div class="alert alert-info" style="margin-bottom:10px"><span class="ai">🔄</span><div>
-      ${hasEnter ? `<div>Intră în bază: <strong style="color:var(--entering)">${av[it.enterIdx].name}</strong> — Δ=${fmtDeltaSym(it.enterIdx, it.basis, it.tableau, av)} (cel mai ${S.objType === 'min' ? 'negativ' : 'pozitiv'})</div>` : ''}
-      ${hasLeave ? `<div>Iese din bază: <strong style="color:var(--leaving)">${av[it.basis[it.leaveRow]].name}</strong> — θ=${fmt(it.theta[it.leaveRow])} (raport minim)</div>` : ''}
-      ${hasLeave ? `<div>Element pivot: <strong style="color:var(--pivot)">${fmt(it.tableau[it.leaveRow][it.enterIdx])}</strong> (linia ${it.leaveRow + 1}, coloana ${av[it.enterIdx].name})</div>` : ''}
+      ${hasEnter ? `<div>Intră în bază: <strong style="color:var(--entering)">${lpDisplayVarName(av[it.enterIdx], it.enterIdx)}</strong> — Δ=${fmtDeltaSym(it.enterIdx, it.basis, it.tableau, av)} (cel mai ${S.objType === 'min' ? 'negativ' : 'pozitiv'})</div>` : ''}
+      ${hasLeave ? `<div>Iese din bază: <strong style="color:var(--leaving)">${lpDisplayVarName(av[it.basis[it.leaveRow]], it.basis[it.leaveRow])}</strong> — θ=${fmt(it.theta[it.leaveRow])} (raport minim)</div>` : ''}
+      ${hasLeave ? `<div>Element pivot: <strong style="color:var(--pivot)">${fmt(it.tableau[it.leaveRow][it.enterIdx])}</strong> (linia ${it.leaveRow + 1}, coloana ${lpDisplayVarName(av[it.enterIdx], it.enterIdx)})</div>` : ''}
     </div></div>`;
       }
 
@@ -2321,7 +2430,7 @@
       let thead2 = '<tr>';
       for (let j = 0; j < total; j++) {
         const ent = hasEnter && j === it.enterIdx;
-        thead2 += `<th${ent ? ' class="entering-hdr"' : ''}>${av[j].name}</th>`;
+        thead2 += `<th${ent ? ' class="entering-hdr"' : ''}>${lpDisplayVarName(av[j], j)}</th>`;
       }
       if (hasLeave) thead2 += `<th></th>`;
       thead2 += '</tr>';
@@ -2335,7 +2444,7 @@
         const cbLbl = fmtCj(bi);  // C_B = S.objPls[bi] afișat simbolic
         tbody += `<td class="${isLv ? 'leaving-row' : ''}" ondblclick="showPopup({type:'CB',row:${r},itIdx:${itIdx}})" style="color:var(--accent)">${cbLbl}</td>`;
         // Baza
-        tbody += `<td style="font-weight:700;color:${isLv ? 'var(--leaving)' : 'var(--accent2)'}">${av[bi].name}</td>`;
+        tbody += `<td style="font-weight:700;color:${isLv ? 'var(--leaving)' : 'var(--accent2)'}">${lpDisplayVarName(av[bi], bi)}</td>`;
         // xB
         tbody += `<td class="${isLv ? 'leaving-row' : ''}" ondblclick="showPopup({type:'xb',row:${r},itIdx:${itIdx}})" style="color:var(--accent3);font-weight:600">${fmtH(it.xb[r])}</td>`;
         // coefficients
@@ -2427,7 +2536,7 @@
         CVB — Coloana care intră (${isMax ? 'max{Δ_j > 0}' : 'min{Δ_j < 0}'})
       </div>
       <div style="font-family:var(--mono);font-size:12px">
-        <span style="color:var(--entering);font-weight:700">${av[it.enterIdx].name} ↓ B</span>
+        <span style="color:var(--entering);font-weight:700">${lpDisplayVarName(av[it.enterIdx], it.enterIdx)} ↓ B</span>
         <span style="color:var(--muted)"> — Δ = </span>
         <span style="color:var(--entering);font-weight:700">${enterDelta}</span>
       </div>
@@ -2450,7 +2559,7 @@
         CΛB — Linia care iese (min θ = x_B/a, a > 0)
       </div>
       <div style="font-family:var(--mono);font-size:12px;margin-bottom:6px">
-        <span style="color:var(--leaving);font-weight:700">${av[it.basis[it.leaveRow]].name} ↑ B</span>
+        <span style="color:var(--leaving);font-weight:700">${lpDisplayVarName(av[it.basis[it.leaveRow]], it.basis[it.leaveRow])} ↑ B</span>
         <span style="color:var(--muted)"> — θ_min = </span>
         <span style="color:var(--leaving);font-weight:700">${minTheta}</span>
         <span style="color:var(--muted)">  |  element pivot = </span>
@@ -3529,7 +3638,7 @@
         // Handle game-theory exercises
         if (ex.type === 'game-theory') {
           GT.rows = ex.gtRows; GT.cols = ex.gtCols;
-          GT.matrix = ex.gtMatrix ? ex.gtMatrix.map(r=>[...r]) : null;
+          GT.matrix = ex.gtMatrix ? ex.gtMatrix.map(r => [...r]) : null;
           GT.hasSaddle = ex.gtHasSaddle ?? null;
           GT.gameValue = ex.gtGameValue ?? null;
           GT.x0 = ex.gtX0 ?? null;
@@ -4018,14 +4127,14 @@ Această acțiune nu poate fi anulată.`)) return;
       let html = '<table style="border-collapse:separate;border-spacing:5px">';
       // Header row
       html += '<tr><th style="width:60px"></th>';
-      for (let j = 0; j < n; j++) html += `<th style="font-family:var(--mono);font-size:10px;color:var(--accent);text-align:center;padding:3px 5px">b${sub(j+1)}</th>`;
+      for (let j = 0; j < n; j++) html += `<th style="font-family:var(--mono);font-size:10px;color:var(--accent);text-align:center;padding:3px 5px">b${sub(j + 1)}</th>`;
       html += '</tr>';
       for (let i = 0; i < m; i++) {
-        html += `<tr><td style="font-family:var(--mono);font-size:10px;color:var(--accent2);text-align:right;padding-right:8px;vertical-align:middle">a${sub(i+1)}</td>`;
+        html += `<tr><td style="font-family:var(--mono);font-size:10px;color:var(--accent2);text-align:right;padding-right:8px;vertical-align:middle">a${sub(i + 1)}</td>`;
         for (let j = 0; j < n; j++) {
           const val = (oldMatrix && oldMatrix[i] && oldMatrix[i][j] !== undefined)
             ? oldMatrix[i][j] : '';
-          html += `<td><input class="game-cell" type="number" step="0.1" id="q_${i}_${j}" value="${val}" placeholder="q${sub(i+1)}${sub(j+1)}"></td>`;
+          html += `<td><input class="game-cell" type="number" step="0.1" id="q_${i}_${j}" value="${val}" placeholder="q${sub(i + 1)}${sub(j + 1)}"></td>`;
         }
         html += '</tr>';
       }
@@ -4042,7 +4151,7 @@ Această acțiune nu poate fi anulată.`)) return;
         for (let j = 0; j < n; j++) {
           const el = document.getElementById(`q_${i}_${j}`);
           const v = parseFloat(el?.value);
-          if (isNaN(v)) { showToast(`⚠ Valoare invalidă la q(${i+1},${j+1})`); return null; }
+          if (isNaN(v)) { showToast(`⚠ Valoare invalidă la q(${i + 1},${j + 1})`); return null; }
           row.push(v);
         }
         matrix.push(row);
@@ -4058,7 +4167,7 @@ Această acțiune nu poate fi anulată.`)) return;
     // ── Compute column maxima β_j ────────────────────────────────
     function computeColumnMaxima(Q) {
       const m = Q.length, n = Q[0].length;
-      return Array.from({length: n}, (_, j) => Math.max(...Q.map(row => row[j])));
+      return Array.from({ length: n }, (_, j) => Math.max(...Q.map(row => row[j])));
     }
 
     // ── Detect saddle point ──────────────────────────────────────
@@ -4071,7 +4180,7 @@ Această acțiune nu poate fi anulată.`)) return;
             // Check: minimum on its row AND maximum on its column
             const isRowMin = Math.abs(Q[i][j] - rowMinima[i]) < 1e-9;
             const isColMax = Math.abs(Q[i][j] - colMaxima[j]) < 1e-9;
-            if (isRowMin && isColMax) return {row: i, col: j, val: Q[i][j]};
+            if (isRowMin && isColMax) return { row: i, col: j, val: Q[i][j] };
           }
         }
       }
@@ -4110,11 +4219,11 @@ Această acțiune nu poate fi anulată.`)) return;
       let tbl = `<div style="overflow-x:auto"><table style="border-collapse:separate;border-spacing:4px;margin:0 auto">`;
       // Header
       tbl += `<tr><th style="font-family:var(--mono);font-size:10px;color:var(--accent);padding:4px 8px;text-align:right">A \\ B</th>`;
-      for (let j = 0; j < n; j++) tbl += `<th style="font-family:var(--mono);font-size:10px;color:var(--accent);text-align:center;padding:4px 8px">b${sub(j+1)}</th>`;
+      for (let j = 0; j < n; j++) tbl += `<th style="font-family:var(--mono);font-size:10px;color:var(--accent);text-align:center;padding:4px 8px">b${sub(j + 1)}</th>`;
       tbl += `<th style="font-family:var(--mono);font-size:10px;color:var(--accent2);padding:4px 8px">α_i = min</th></tr>`;
       // Rows
       for (let i = 0; i < m; i++) {
-        tbl += `<tr><td style="font-family:var(--mono);font-size:10px;color:var(--accent2);padding:4px 8px;text-align:right">a${sub(i+1)}</td>`;
+        tbl += `<tr><td style="font-family:var(--mono);font-size:10px;color:var(--accent2);padding:4px 8px;text-align:right">a${sub(i + 1)}</td>`;
         for (let j = 0; j < n; j++) {
           const isMin = Math.abs(Q[i][j] - rowMinima[i]) < 1e-9;
           const isMax = Math.abs(Q[i][j] - colMaxima[j]) < 1e-9;
@@ -4127,16 +4236,16 @@ Această acțiune nu poate fi anulată.`)) return;
           tbl += `<td><div class="${cls}">${fmt(Q[i][j])}</div></td>`;
         }
         const isV1 = Math.abs(rowMinima[i] - v1) < 1e-9;
-        tbl += `<td style="font-family:var(--mono);font-size:12px;font-weight:700;text-align:center;color:${isV1?'var(--accent4)':'var(--accent2)'}">
-          ${isV1?'<span style="background:rgba(249,202,36,.15);border:1px solid rgba(249,202,36,.35);border-radius:5px;padding:2px 8px">'+fmt(rowMinima[i])+'</span>':fmt(rowMinima[i])}
+        tbl += `<td style="font-family:var(--mono);font-size:12px;font-weight:700;text-align:center;color:${isV1 ? 'var(--accent4)' : 'var(--accent2)'}">
+          ${isV1 ? '<span style="background:rgba(249,202,36,.15);border:1px solid rgba(249,202,36,.35);border-radius:5px;padding:2px 8px">' + fmt(rowMinima[i]) + '</span>' : fmt(rowMinima[i])}
         </td></tr>`;
       }
       // β row
       tbl += `<tr><td style="font-family:var(--mono);font-size:10px;color:var(--accent3);padding:4px 8px;text-align:right">β_j = max</td>`;
       for (let j = 0; j < n; j++) {
         const isV2 = Math.abs(colMaxima[j] - v2) < 1e-9;
-        tbl += `<td style="font-family:var(--mono);font-size:12px;font-weight:700;text-align:center;color:${isV2?'var(--accent4)':'var(--accent3)'}">
-          ${isV2?'<span style="background:rgba(249,202,36,.15);border:1px solid rgba(249,202,36,.35);border-radius:5px;padding:2px 8px">'+fmt(colMaxima[j])+'</span>':fmt(colMaxima[j])}
+        tbl += `<td style="font-family:var(--mono);font-size:12px;font-weight:700;text-align:center;color:${isV2 ? 'var(--accent4)' : 'var(--accent3)'}">
+          ${isV2 ? '<span style="background:rgba(249,202,36,.15);border:1px solid rgba(249,202,36,.35);border-radius:5px;padding:2px 8px">' + fmt(colMaxima[j]) + '</span>' : fmt(colMaxima[j])}
         </td>`;
       }
       tbl += `<td></td></tr></table></div>`;
@@ -4157,13 +4266,13 @@ Această acțiune nu poate fi anulată.`)) return;
           <div style="font-size:10px;color:var(--muted);margin-top:4px">B garantează pierderea cel mult v₂</div>
         </div>
       </div>
-      <div class="alert ${sp?'alert-warning':'alert-info'}" style="margin-top:12px">
-        <span class="ai">${sp?'⭐':'🔢'}</span>
+      <div class="alert ${sp ? 'alert-warning' : 'alert-info'}" style="margin-top:12px">
+        <span class="ai">${sp ? '⭐' : '🔢'}</span>
         <span>
           <strong>Legendă:</strong>
           <span style="color:var(--accent2)">■ roșu</span> = minimum pe linie (α_i) &nbsp;·&nbsp;
           <span style="color:var(--accent3)">■ verde</span> = maximum pe coloană (β_j) &nbsp;·&nbsp;
-          <span style="color:var(--accent4)">■ galben</span> = punct de șa ${sp?`(a${sub(sp.row+1)}, b${sub(sp.col+1)}) = ${fmt(sp.val)}`:'(absent)'}
+          <span style="color:var(--accent4)">■ galben</span> = punct de șa ${sp ? `(a${sub(sp.row + 1)}, b${sub(sp.col + 1)}) = ${fmt(sp.val)}` : '(absent)'}
         </span>
       </div>`;
       document.getElementById('gt-analysis-content').innerHTML = html;
@@ -4185,29 +4294,29 @@ Această acțiune nu poate fi anulată.`)) return;
           </div>
           <div style="background:rgba(67,233,123,.07);border:1px solid rgba(67,233,123,.2);border-radius:10px;padding:16px 22px;font-family:var(--mono);font-size:12px;flex:1;min-width:220px">
             <div style="font-size:10px;color:var(--muted);margin-bottom:6px">PUNCT DE ECHILIBRU (ȘA)</div>
-            <div>q<sub>${sp.row+1}${sp.col+1}</sub> = f(a${sub(sp.row+1)}, b${sub(sp.col+1)}) = <strong style="color:var(--accent4)">${fmt(sp.val)}</strong></div>
+            <div>q<sub>${sp.row + 1}${sp.col + 1}</sub> = f(a${sub(sp.row + 1)}, b${sub(sp.col + 1)}) = <strong style="color:var(--accent4)">${fmt(sp.val)}</strong></div>
             <div style="margin-top:8px">Este simultan:<br>
-              • minim pe linia sa (R${sp.row+1})<br>
-              • maxim pe coloana sa (C${sp.col+1})
+              • minim pe linia sa (R${sp.row + 1})<br>
+              • maxim pe coloana sa (C${sp.col + 1})
             </div>
           </div>
         </div>
         <div style="background:rgba(67,233,123,.07);border:1px solid rgba(67,233,123,.2);border-radius:12px;padding:16px 20px;font-family:var(--mono);font-size:13px;margin-top:12px">
           <div style="font-size:10px;color:var(--muted);margin-bottom:8px">SOLUȚIA OPTIMĂ ÎN STRATEGII PURE</div>
-          <div>v = q<sub>${sp.row+1}${sp.col+1}</sub> = <strong style="color:var(--accent3);font-size:16px">${fmt(sp.val)}</strong></div>
+          <div>v = q<sub>${sp.row + 1}${sp.col + 1}</sub> = <strong style="color:var(--accent3);font-size:16px">${fmt(sp.val)}</strong></div>
           <div style="margin-top:8px">
-            x₀(A) = (${Array.from({length:m},(_,i)=>i===sp.row?'1':'0').join(', ')})
-            &nbsp;→ A joacă <strong>a${sub(sp.row+1)}</strong> cu probabilitate 1
+            x₀(A) = (${Array.from({ length: m }, (_, i) => i === sp.row ? '1' : '0').join(', ')})
+            &nbsp;→ A joacă <strong>a${sub(sp.row + 1)}</strong> cu probabilitate 1
           </div>
           <div style="margin-top:4px">
-            y₀(B) = (${Array.from({length:n},(_,j)=>j===sp.col?'1':'0').join(', ')})
-            &nbsp;→ B joacă <strong>b${sub(sp.col+1)}</strong> cu probabilitate 1
+            y₀(B) = (${Array.from({ length: n }, (_, j) => j === sp.col ? '1' : '0').join(', ')})
+            &nbsp;→ B joacă <strong>b${sub(sp.col + 1)}</strong> cu probabilitate 1
           </div>
         </div>
         <div class="alert alert-success" style="margin-top:12px">
           <span class="ai">✓</span>
-          <span><strong>Interpretare:</strong> A câștigă v = ${fmt(sp.val)} unități dacă aplică strategia a${sub(sp.row+1)}.
-          B pierde v = ${fmt(sp.val)} unități dacă adoptă strategia b${sub(sp.col+1)}.</span>
+          <span><strong>Interpretare:</strong> A câștigă v = ${fmt(sp.val)} unități dacă aplică strategia a${sub(sp.row + 1)}.
+          B pierde v = ${fmt(sp.val)} unități dacă adoptă strategia b${sub(sp.col + 1)}.</span>
         </div>`;
         document.getElementById('gtStep2NextBtn').style.display = 'none';
       } else {
@@ -4249,8 +4358,8 @@ Această acțiune nu poate fi anulată.`)) return;
 
       // Build allVars
       const allVars = [];
-      for (let j = 0; j < n; j++) allVars.push({name: `y${sub(j+1)}`, type: 'main', coefObj: 1, origIdx: j});
-      for (let i = 0; i < m; i++) allVars.push({name: `u${sub(i+1)}`, type: 'slack', coefObj: 0, row: i, coefInRow: +1});
+      for (let j = 0; j < n; j++) allVars.push({ name: `y${sub(j + 1)}`, type: 'main', coefObj: 1, origIdx: j });
+      for (let i = 0; i < m; i++) allVars.push({ name: `u${sub(i + 1)}`, type: 'slack', coefObj: 0, row: i, coefInRow: +1 });
       const total = allVars.length;
 
       // Objective (MAX converted to MIN internally by negating main vars)
@@ -4264,7 +4373,7 @@ Această acțiune nu poate fi anulată.`)) return;
         const coefs = new Array(total).fill(0);
         for (let j = 0; j < n; j++) coefs[j] = Q[i][j];
         coefs[n + i] = 1; // slack
-        plsConstraints.push({coefs, rhs: 1});
+        plsConstraints.push({ coefs, rhs: 1 });
         basisInitial.push(n + i); // slack starts in basis
       }
 
@@ -4288,12 +4397,12 @@ Această acțiune nu poate fi anulată.`)) return;
       let plaHtml = `<div class="pl-formulation">
         <span class="kw">PLA (MIN)</span><br>
         <span class="kw">min</span> <span class="var">f(x)</span> = `;
-      for (let i = 0; i < m; i++) plaHtml += (i>0?` + `:'')+`<span class="var">x${sub(i+1)}</span>`;
+      for (let i = 0; i < m; i++) plaHtml += (i > 0 ? ` + ` : '') + `<span class="var">x${sub(i + 1)}</span>`;
       plaHtml += `<br><span class="kw">cu restricțiile:</span><br>`;
       for (let j = 0; j < n; j++) {
         plaHtml += `&nbsp;&nbsp;`;
-        for (let i = 0; i < m; i++) plaHtml += (i>0?` + `:'')+`${fmt(Q[i][j])}<span class="var">x${sub(i+1)}</span>`;
-        plaHtml += ` <span class="ineq">≥</span> 1 &nbsp;(col j=${j+1})<br>`;
+        for (let i = 0; i < m; i++) plaHtml += (i > 0 ? ` + ` : '') + `${fmt(Q[i][j])}<span class="var">x${sub(i + 1)}</span>`;
+        plaHtml += ` <span class="ineq">≥</span> 1 &nbsp;(col j=${j + 1})<br>`;
       }
       plaHtml += `&nbsp;&nbsp;<span class="var">x${sub(1)}</span>,...,<span class="var">x${sub(m)}</span> <span class="ineq">≥</span> 0</div>`;
 
@@ -4301,12 +4410,12 @@ Această acțiune nu poate fi anulată.`)) return;
       let plbHtml = `<div class="pl-formulation">
         <span class="kw">PLB (MAX)</span><br>
         <span class="kw">max</span> <span class="var">g(y)</span> = `;
-      for (let j = 0; j < n; j++) plbHtml += (j>0?` + `:'')+`<span class="var">y${sub(j+1)}</span>`;
+      for (let j = 0; j < n; j++) plbHtml += (j > 0 ? ` + ` : '') + `<span class="var">y${sub(j + 1)}</span>`;
       plbHtml += `<br><span class="kw">cu restricțiile:</span><br>`;
       for (let i = 0; i < m; i++) {
         plbHtml += `&nbsp;&nbsp;`;
-        for (let j = 0; j < n; j++) plbHtml += (j>0?` + `:'')+`${fmt(Q[i][j])}<span class="var">y${sub(j+1)}</span>`;
-        plbHtml += ` <span class="ineq">≤</span> 1 &nbsp;(linie i=${i+1})<br>`;
+        for (let j = 0; j < n; j++) plbHtml += (j > 0 ? ` + ` : '') + `${fmt(Q[i][j])}<span class="var">y${sub(j + 1)}</span>`;
+        plbHtml += ` <span class="ineq">≤</span> 1 &nbsp;(linie i=${i + 1})<br>`;
       }
       plbHtml += `&nbsp;&nbsp;<span class="var">y${sub(1)}</span>,...,<span class="var">y${sub(n)}</span> <span class="ineq">≥</span> 0</div>`;
 
@@ -4314,13 +4423,13 @@ Această acțiune nu poate fi anulată.`)) return;
       let plbsHtml = `<div class="pl-formulation" style="border-color:rgba(108,99,255,.3)">
         <span class="kw">PLBS (forma standard)</span><br>
         <span class="kw">max</span> <span class="var">g(y)</span> = `;
-      for (let j = 0; j < n; j++) plbsHtml += (j>0?` + `:'')+`<span class="var">y${sub(j+1)}</span>`;
-      for (let i = 0; i < m; i++) plbsHtml += ` + 0·<span style="color:var(--accent3)">u${sub(i+1)}</span>`;
+      for (let j = 0; j < n; j++) plbsHtml += (j > 0 ? ` + ` : '') + `<span class="var">y${sub(j + 1)}</span>`;
+      for (let i = 0; i < m; i++) plbsHtml += ` + 0·<span style="color:var(--accent3)">u${sub(i + 1)}</span>`;
       plbsHtml += `<br><span class="kw">s.t.</span><br>`;
       for (let i = 0; i < m; i++) {
         plbsHtml += `&nbsp;&nbsp;`;
-        for (let j = 0; j < n; j++) plbsHtml += (j>0?` + `:'')+`${fmt(Q[i][j])}<span class="var">y${sub(j+1)}</span>`;
-        plbsHtml += ` + <span style="color:var(--accent3)">u${sub(i+1)}</span> = 1<br>`;
+        for (let j = 0; j < n; j++) plbsHtml += (j > 0 ? ` + ` : '') + `${fmt(Q[i][j])}<span class="var">y${sub(j + 1)}</span>`;
+        plbsHtml += ` + <span style="color:var(--accent3)">u${sub(i + 1)}</span> = 1<br>`;
       }
       plbsHtml += `&nbsp;&nbsp;<span class="var">y${sub(1)}</span>,...,<span class="var">y${sub(n)}</span> <span class="ineq">≥</span> 0 &nbsp;(VP)&nbsp; &nbsp; <span style="color:var(--accent3)">u${sub(1)}</span>,...,<span style="color:var(--accent3)">u${sub(m)}</span> <span class="ineq">≥</span> 0 &nbsp;(VS)</div>`;
 
@@ -4360,22 +4469,22 @@ Această acțiune nu poate fi anulată.`)) return;
       for (let it = 0; it <= 50; it++) {
         const cB = basis.map(b => objPls[b]);
         const xb = T.map(row => row[total]);
-        const zRow = Array.from({length: total}, (_, j) => cB.reduce((s,c,i) => s + c*T[i][j], 0));
-        const delta = objPls.map((c,j) => c - zRow[j]);
-        const deltaFree = delta.map((d,j) => basis.includes(j) ? 0 : d);
+        const zRow = Array.from({ length: total }, (_, j) => cB.reduce((s, c, i) => s + c * T[i][j], 0));
+        const delta = objPls.map((c, j) => c - zRow[j]);
+        const deltaFree = delta.map((d, j) => basis.includes(j) ? 0 : d);
 
         const snap = {
-          it, tableau: T.map(r=>[...r]), basis: [...basis], cB:[...cB], xb:[...xb],
-          zRow:[...zRow], delta:[...delta], status:null, enterIdx:null, leaveRow:null, theta:null, pivotInfo:null
+          it, tableau: T.map(r => [...r]), basis: [...basis], cB: [...cB], xb: [...xb],
+          zRow: [...zRow], delta: [...delta], status: null, enterIdx: null, leaveRow: null, theta: null, pivotInfo: null
         };
 
-        const negIdx = deltaFree.map((d,j) => ({j,d})).filter(x => x.d < -1e-8);
+        const negIdx = deltaFree.map((d, j) => ({ j, d })).filter(x => x.d < -1e-8);
         if (!negIdx.length) { snap.status = 'optimal'; iterations.push(snap); break; }
 
-        const enterIdx = negIdx.reduce((a,b) => b.d < a.d ? b : a).j;
+        const enterIdx = negIdx.reduce((a, b) => b.d < a.d ? b : a).j;
         snap.enterIdx = enterIdx;
         const col = T.map(row => row[enterIdx]);
-        const theta = col.map((a,i) => a > 1e-9 ? xb[i]/a : Infinity);
+        const theta = col.map((a, i) => a > 1e-9 ? xb[i] / a : Infinity);
         snap.theta = [...theta];
         if (theta.every(t => t === Infinity)) { snap.status = 'unbounded'; iterations.push(snap); break; }
 
@@ -4383,16 +4492,16 @@ Această acțiune nu poate fi anulată.`)) return;
         snap.leaveRow = leaveRow; snap.status = 'pivot';
         iterations.push(snap);
 
-        const preT = T.map(r=>[...r]);
+        const preT = T.map(r => [...r]);
         const pivVal = T[leaveRow][enterIdx];
-        T[leaveRow] = T[leaveRow].map(v => v/pivVal);
+        T[leaveRow] = T[leaveRow].map(v => v / pivVal);
         for (let r = 0; r < m; r++) {
           if (r === leaveRow) continue;
           const f = T[r][enterIdx];
-          T[r] = T[r].map((v,j) => v - f*T[leaveRow][j]);
+          T[r] = T[r].map((v, j) => v - f * T[leaveRow][j]);
         }
         const prevSnap = iterations[iterations.length - 1];
-        prevSnap.pivotInfo = {preT, pivRow: leaveRow, pivCol: enterIdx, pivVal};
+        prevSnap.pivotInfo = { preT, pivRow: leaveRow, pivCol: enterIdx, pivVal };
         basis[leaveRow] = enterIdx;
       }
 
@@ -4402,14 +4511,14 @@ Această acțiune nu poate fi anulată.`)) return;
       const xb = lastIt.xb;
       const vars = new Array(total).fill(0);
       for (let i = 0; i < m; i++) vars[lastIt.basis[i]] = xb[i];
-      const gmax = xb.slice(0,m).reduce((s,v,i) => s + (lastIt.basis[i] < GT.plbN ? 1 : 0) * v, 0);
+      const gmax = xb.slice(0, m).reduce((s, v, i) => s + (lastIt.basis[i] < GT.plbN ? 1 : 0) * v, 0);
       // Actually gmax = -lastIt.zRow's obj value (since we converted max to min internally)
       // The actual objective for PLB (max) = Σ y_j in basis * xb
       let gmaxVal = 0;
       for (let i = 0; i < m; i++) {
         if (lastIt.basis[i] < GT.plbN) gmaxVal += xb[i]; // y variables
       }
-      GT.plbSolution = {objVal: gmaxVal, vars};
+      GT.plbSolution = { objVal: gmaxVal, vars };
       GT.plbDelta = lastIt.delta;
 
       gtRenderSimplexTable();
@@ -4433,7 +4542,7 @@ Această acțiune nu poate fi anulată.`)) return;
         const it = iterations[itIdx];
         const isOptimal = it.status === 'optimal';
         const isLast = itIdx === iterations.length - 1;
-        const nextIt = itIdx + 1 < iterations.length ? iterations[itIdx+1] : null;
+        const nextIt = itIdx + 1 < iterations.length ? iterations[itIdx + 1] : null;
 
         // Determine entering/leaving
         const enterIdx = it.enterIdx;
@@ -4448,7 +4557,7 @@ Această acțiune nu poate fi anulată.`)) return;
         for (let j = 0; j < total; j++) {
           const isComing = !isOptimal && j === enterIdx;
           const cjVal = allVars[j].type === 'main' ? 1 : 0;
-          html += `<th class="${isComing ? 'entering-hdr' : ''}">c${sub(j+1)}=${fmt(cjVal)}</th>`;
+          html += `<th class="${isComing ? 'entering-hdr' : ''}">c${sub(j + 1)}=${fmt(cjVal)}</th>`;
         }
         if (!isOptimal) html += `<th rowspan="2" style="color:var(--accent4)">θ</th>`;
         html += `</tr>`;
@@ -4456,7 +4565,7 @@ Această acțiune nu poate fi anulată.`)) return;
         html += `<tr>`;
         for (let j = 0; j < total; j++) {
           const isComing = !isOptimal && j === enterIdx;
-          html += `<th class="${isComing ? 'entering-hdr' : ''}">${allVars[j].name}</th>`;
+          html += `<th class="${isComing ? 'entering-hdr' : ''}">${gtDisplayVarName(allVars[j], j)}</th>`;
         }
         html += `</tr>`;
 
@@ -4465,20 +4574,20 @@ Această acțiune nu poate fi anulată.`)) return;
           const bv = it.basis[r];
           const isLeaving = (!isOptimal) && r === leaveRow;
           const cbDisp = allVars[bv].type === 'main' ? 1 : 0; // display coef: y=1, u=0
-          html += `<tr${isLeaving?' style="background:rgba(255,169,77,.05)"':''}>`;
-          html += `<td class="${isLeaving?'leaving-row':''}" style="color:var(--accent)">${fmt(cbDisp)}</td>`;
-          html += `<td style="font-weight:700;color:${isLeaving?'var(--leaving)':'var(--accent2)'}">${allVars[bv].name}</td>`;
+          html += `<tr${isLeaving ? ' style="background:rgba(255,169,77,.05)"' : ''}>`;
+          html += `<td class="${isLeaving ? 'leaving-row' : ''}" style="color:var(--accent)">${fmt(cbDisp)}</td>`;
+          html += `<td style="font-weight:700;color:${isLeaving ? 'var(--leaving)' : 'var(--accent2)'}">${gtDisplayVarName(allVars[bv], bv)}</td>`;
           html += `<td style="color:var(--accent3);font-weight:600">${fmtH(it.xb[r])}</td>`;
           for (let j = 0; j < total; j++) {
             const isPivot = !isOptimal && r === leaveRow && j === enterIdx;
             const isEnterCol = !isOptimal && j === enterIdx;
-            html += `<td class="${isPivot?'pivot-cell':''} ${isEnterCol&&!isPivot?'entering-col':''}" 
+            html += `<td class="${isPivot ? 'pivot-cell' : ''} ${isEnterCol && !isPivot ? 'entering-col' : ''}" 
               ondblclick="gtShowPopup(${itIdx},${r},${j},'aij')">${fmtH(it.tableau[r][j])}</td>`;
           }
           if (!isOptimal) {
             const th = it.theta?.[r] ?? Infinity;
             const isMin = r === leaveRow;
-            html += `<td class="${isMin?'theta-min':'theta-col'}">${th===Infinity?'∞':fmtH(th)}</td>`;
+            html += `<td class="${isMin ? 'theta-min' : 'theta-col'}">${th === Infinity ? '∞' : fmtH(th)}</td>`;
           }
           html += `</tr>`;
         }
@@ -4488,7 +4597,7 @@ Această acțiune nu poate fi anulată.`)) return;
         html += `<td colspan="2" style="text-align:right;color:var(--muted);font-size:10px;font-weight:700">Δ<sub>j</sub> =</td>`;
         html += `<td style="color:var(--muted)">—</td>`;
         for (let j = 0; j < total; j++) {
-          const d = it.delta[j];
+          const d = -it.delta[j]; // afișăm Δ_j pentru problema MAX originală
           const inBasis = it.basis.includes(j);
           let cls = 'zero';
           if (!inBasis) cls = d < -1e-8 ? 'neg' : (d > 1e-8 ? 'pos' : 'zero');
@@ -4505,41 +4614,39 @@ Această acțiune nu poate fi anulată.`)) return;
         // gmax la această iterație = suma y_j din bază * xb (valoarea reală MAX)
         const gmaxIt = it.basis.slice(0, m).reduce((s, b, i) => s + (b < GT.plbN ? it.xb[i] : 0), 0);
 
-        // Termenii z^k: C_B[i] · x_B[i]
+        // Termenii z^k pentru problema MAX afișată: C_B[i] · x_B[i]
         const zkTermsGT = it.basis.slice(0, m).map((b, i) =>
-          `${fmt(GT.plbObjPls[b])}·${fmtH(it.xb[i])}`
+          `${fmt(allVars[b].type === 'main' ? 1 : 0)}·${fmtH(it.xb[i])}`
         ).join(' + ');
 
-        // Δ_j pentru variabilele non-baza
+        // Δ_j pentru variabilele non-baza (afișate în semnul problemei MAX originale)
         const nonBasisDeltasGT = [];
         for (let j = 0; j < total; j++) {
           if (it.basis.slice(0, m).includes(j)) continue;
-          const dj = it.delta[j];
-          const cj = GT.plbObjPls[j];
-          const zj = it.zRow[j];
-          // display coef: main vars (y) = 1, slack (u) = 0
+          const dj = -it.delta[j];
+          const zj = -it.zRow[j];
           const cjDisp = allVars[j].type === 'main' ? 1 : 0;
-          const dColor = dj < -1e-9 ? 'var(--accent2)' : (dj > 1e-9 ? 'var(--accent3)' : 'var(--muted)');
-          nonBasisDeltasGT.push({ j, vn: allVars[j].name, cj: fmt(cjDisp), zj: fmtH(zj), dj: fmtH(dj), dColor, dNum: dj });
+          const dColor = dj > 1e-9 ? 'var(--accent3)' : (dj < -1e-9 ? 'var(--accent2)' : 'var(--muted)');
+          nonBasisDeltasGT.push({ j, vn: gtDisplayVarName(allVars[j], j), cj: fmt(cjDisp), zj: fmtH(zj), dj: fmtH(dj), dColor, dNum: dj });
         }
 
-        // TO: ∀Δ_j ≥ 0 → STOP (pentru MAX convertit la MIN intern, condiția e Δ_j ≥ 0)
-        const allOptimalGT = nonBasisDeltasGT.every(d => d.dNum >= -1e-9);
+        // TO pentru problema MAX: ∀Δ_j ≤ 0 → STOP, iar dacă există Δ_j > 0 continuăm
+        const allOptimalGT = nonBasisDeltasGT.every(d => d.dNum <= 1e-9);
         const toDecisionGT = allOptimalGT
-          ? `<span style="color:var(--accent3);font-weight:700">✓ ∀Δ_j ≥ 0 → STOP → I_STOP = I${sub(itIdx)}</span>`
-          : `<span style="color:var(--accent4)">∃Δ_j &lt; 0 → NU → continuăm cu I${sub(itIdx + 1)}</span>`;
+          ? `<span style="color:var(--accent3);font-weight:700">✓ ∀Δ_j ≤ 0 → STOP → I_STOP = I${sub(itIdx)}</span>`
+          : `<span style="color:var(--accent4)">∃Δ_j &gt; 0 → NU → continuăm cu I${sub(itIdx + 1)}</span>`;
 
         // CVB / CΛB
         let cvbHtmlGT = '', cabHtmlGT = '';
         if (!isOptimal && enterIdx !== null && enterIdx !== undefined) {
           cvbHtmlGT = `<div style="padding:10px 16px;border-top:1px solid var(--border);background:rgba(67,233,123,.05)">
             <div style="font-family:var(--mono);font-size:10px;color:var(--accent3);font-weight:700;margin-bottom:4px">
-              CVB — Coloana care intră (min{Δ_j &lt; 0})
+              CVB — Coloana care intră (max{Δ_j &gt; 0})
             </div>
             <div style="font-family:var(--mono);font-size:12px">
-              <span style="color:var(--entering);font-weight:700">${allVars[enterIdx].name} ↓ B</span>
+              <span style="color:var(--entering);font-weight:700">${gtDisplayVarName(allVars[enterIdx], enterIdx)} ↓ B</span>
               <span style="color:var(--muted)"> — Δ = </span>
-              <span style="color:var(--entering);font-weight:700">${fmtH(it.delta[enterIdx])}</span>
+              <span style="color:var(--entering);font-weight:700">${fmtH(-it.delta[enterIdx])}</span>
             </div>
           </div>`;
         }
@@ -4549,8 +4656,8 @@ Această acțiune nu poate fi anulată.`)) return;
             const th = it.theta[r];
             const isMinRow = r === leaveRow;
             const thStr = th === Infinity ? '∞' : fmtH(th);
-            return `<span style="padding:2px 7px;border-radius:4px;background:${isMinRow?'rgba(255,169,77,.2)':'var(--surface)'};border:1px solid ${isMinRow?'var(--leaving)':'var(--border)'};color:${isMinRow?'var(--leaving)':'var(--muted)'};white-space:nowrap;font-family:var(--mono);font-size:10px">
-              ${allVars[b].name}: ${fmtH(it.xb[r])}/${fmtH(a)}=${thStr}${isMinRow?' ←min':''}
+            return `<span style="padding:2px 7px;border-radius:4px;background:${isMinRow ? 'rgba(255,169,77,.2)' : 'var(--surface)'};border:1px solid ${isMinRow ? 'var(--leaving)' : 'var(--border)'};color:${isMinRow ? 'var(--leaving)' : 'var(--muted)'};white-space:nowrap;font-family:var(--mono);font-size:10px">
+              ${gtDisplayVarName(allVars[b], b)}: ${fmtH(it.xb[r])}/${fmtH(a)}=${thStr}${isMinRow ? ' ←min' : ''}
             </span>`;
           }).join('');
           cabHtmlGT = `<div style="padding:10px 16px;border-top:1px solid var(--border);background:rgba(255,169,77,.04)">
@@ -4558,7 +4665,7 @@ Această acțiune nu poate fi anulată.`)) return;
               CΛB — Linia care iese (min θ = x_B/a, a > 0)
             </div>
             <div style="font-family:var(--mono);font-size:12px;margin-bottom:6px">
-              <span style="color:var(--leaving);font-weight:700">${allVars[it.basis[leaveRow]].name} ↑ B</span>
+              <span style="color:var(--leaving);font-weight:700">${gtDisplayVarName(allVars[it.basis[leaveRow]], it.basis[leaveRow])} ↑ B</span>
               <span style="color:var(--muted)"> — θ_min = </span>
               <span style="color:var(--leaving);font-weight:700">${fmtH(it.theta[leaveRow])}</span>
               <span style="color:var(--muted)">  |  pivot = </span>
@@ -4588,7 +4695,7 @@ Această acțiune nu poate fi anulată.`)) return;
                    ondblclick="gtShowPopup(${itIdx},-1,-1,'zkObj')" title="dublu-click → formulă">
                 <span style="color:var(--text)">${zkTermsGT || '0'}</span>
                 <span style="color:var(--muted)"> = </span>
-                <strong style="color:var(--accent);font-size:13px">${fmtH(zkVal)}</strong>
+                <strong style="color:var(--accent);font-size:13px">${fmtH(gmaxIt)}</strong>
               </div>
               <span style="color:var(--muted);font-size:11px">&nbsp;|&nbsp; g<sub>max</sub>(iterație) =</span>
               <strong style="color:var(--accent3);font-size:13px">${fmtH(gmaxIt)}</strong>
@@ -4617,13 +4724,13 @@ Această acțiune nu poate fi anulată.`)) return;
           </div>
 
           <!-- TO Test Optimalitate -->
-          <div style="padding:12px 16px;${allOptimalGT?'background:rgba(67,233,123,.05)':'background:rgba(249,202,36,.04)'}">
+          <div style="padding:12px 16px;${allOptimalGT ? 'background:rgba(67,233,123,.05)' : 'background:rgba(249,202,36,.04)'}">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
               <span style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent4)">
                 TO(I${sub(itIdx)}, MAX)
               </span>
               <span style="font-family:var(--mono);font-size:10px;color:var(--muted)">
-                — ∀Δ_j ≥ 0 ?
+                — ∀Δ_j ≤ 0 ?
               </span>
             </div>
             <div style="font-family:var(--mono);font-size:12px">${toDecisionGT}</div>
@@ -4643,7 +4750,7 @@ Această acțiune nu poate fi anulată.`)) return;
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">`;
         for (let j = 0; j < total; j++) {
           html += `<div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-family:var(--mono);font-size:12px;text-align:center">
-            <div style="font-size:9px;color:var(--muted);margin-bottom:3px">${allVars[j].name}</div>
+            <div style="font-size:9px;color:var(--muted);margin-bottom:3px">${gtDisplayVarName(allVars[j], j)}</div>
             <div style="color:var(--accent);font-weight:700;font-size:14px">${fmtH(vars[j])}</div>
           </div>`;
         }
@@ -4675,51 +4782,52 @@ Această acțiune nu poate fi anulată.`)) return;
       const av = GT.plbAllVars;
       const total = av.length;
       const m = GT.plbM;
-      let title='', sym='', num='', res='';
+      let title = '', sym = '', num = '', res = '';
 
       if (type === 'aij') {
         const aNew = it.tableau[row][col];
         const vn = av[col].name;
-        const prevIt = itIdx > 0 ? GT.plbIterations[itIdx-1] : null;
+        const prevIt = itIdx > 0 ? GT.plbIterations[itIdx - 1] : null;
         if (prevIt && prevIt.pivotInfo) {
-          const {preT, pivRow, pivCol, pivVal} = prevIt.pivotInfo;
+          const { preT, pivRow, pivCol, pivVal } = prevIt.pivotInfo;
           const aOld = preT[row][col];
           if (row === pivRow) {
-            title = `a'_${row+1},${col+1} [LINIA PIVOT, col ${vn}]`;
+            title = `a'_${row + 1},${col + 1} [LINIA PIVOT, col ${vn}]`;
             sym = `Regula liniei pivot: a' = a / pivot`;
             num = `${fmtH(aOld)} / ${fmtH(pivVal)} = ${fmtH(aNew)}`;
           } else {
-            const aPivRowJ = preT[pivRow][col]/pivVal;
+            const aPivRowJ = preT[pivRow][col] / pivVal;
             const aIPivCol = preT[row][pivCol];
-            title = `a'_${row+1},${col+1} [linia ${row+1}, col ${vn}]`;
+            title = `a'_${row + 1},${col + 1} [linia ${row + 1}, col ${vn}]`;
             sym = `Gauss-Jordan: a' = a − (a_pivot_col / pivot) · a_pivot_row`;
             num = `${fmtH(aOld)} − ${fmtH(aIPivCol)} · ${fmtH(aPivRowJ)} = ${fmtH(aNew)}`;
           }
         } else {
-          title = `a_${row+1},${col+1} [col ${vn}]`;
+          title = `a_${row + 1},${col + 1} [col ${vn}]`;
           sym = `Valoare inițială din PLBS`;
-          num = `a_${row+1},${col+1} = ${fmtH(aNew)}`;
+          num = `a_${row + 1},${col + 1} = ${fmtH(aNew)}`;
         }
         res = fmtH(aNew);
       } else if (type === 'zkObj') {
-        const zk = it.xb.slice(0,m).reduce((s,v,i) => s + GT.plbObjPls[it.basis[i]]*v, 0);
-        title = `z_${it.it} [funcția obiectiv PLB]`;
-        sym = `z = Σ c_B[i] · x_B[i]`;
-        num = it.basis.slice(0,m).map((b,i) => `${fmt(GT.plbObjPls[b])}·${fmtH(it.xb[i])}`).join(' + ') + ` = ${fmtH(zk)}`;
-        res = fmtH(zk);
+        const gmax = it.basis.slice(0, m).reduce((s, b, i) => s + (b < GT.plbN ? it.xb[i] : 0), 0);
+        title = `g_${it.it} [funcția obiectiv PLB MAX]`;
+        sym = `g = Σ c_B[i] · x_B[i]`;
+        num = it.basis.slice(0, m).map((b, i) => `${fmt(av[b].type === 'main' ? 1 : 0)}·${fmtH(it.xb[i])}`).join(' + ') + ` = ${fmtH(gmax)}`;
+        res = fmtH(gmax);
       } else if (type === 'zk') {
-        const zj = it.zRow[col];
+        const zj = -it.zRow[col];
         title = `z_j [coloana ${av[col].name}]`;
         sym = `z_j = Σ c_B[i] · a_i,j`;
-        num = it.basis.slice(0,m).map((b,i) => `${fmt(GT.plbObjPls[b])}·${fmtH(it.tableau[i][col])}`).join(' + ') + ` = ${fmtH(zj)}`;
+        num = it.basis.slice(0, m).map((b, i) => `${fmt(av[b].type === 'main' ? 1 : 0)}·${fmtH(it.tableau[i][col])}`).join(' + ') + ` = ${fmtH(zj)}`;
         res = fmtH(zj);
       } else if (type === 'delta') {
-        const cj = GT.plbObjPls[col];
-        const zj = it.zRow[col];
-        const dj = it.delta[col];
-        title = `Δ_${col+1} [coloana ${av[col].name}]`;
-        sym = `Δ_j = c_j − z_j`;
-        num = `${fmt(cj)} − ${fmtH(zj)} = ${fmtH(dj)}`;
+        const cj = av[col].type === 'main' ? 1 : 0;
+        const zj = -it.zRow[col];
+        const dj = -it.delta[col];
+        title = `Δ_${col + 1} [coloana ${av[col].name}]`;
+        sym = `Δ_j = c_j − z_j
+Criteriu MAX: intră în bază dacă Δ_j > 0, optim dacă ∀Δ_j ≤ 0`;
+        num = `${fmt(cj)} − (${fmtH(zj)}) = ${fmtH(dj)}`;
         res = fmtH(dj);
       }
 
@@ -4737,8 +4845,8 @@ Această acțiune nu poate fi anulată.`)) return;
         const sp = GT.saddlePoint;
         const m = GT.rows, n = GT.cols;
         GT.gameValue = sp.val;
-        GT.x0 = Array.from({length:m}, (_,i) => i===sp.row ? 1 : 0);
-        GT.y0 = Array.from({length:n}, (_,j) => j===sp.col ? 1 : 0);
+        GT.x0 = Array.from({ length: m }, (_, i) => i === sp.row ? 1 : 0);
+        GT.y0 = Array.from({ length: n }, (_, j) => j === sp.col ? 1 : 0);
         return;
       }
 
@@ -4752,12 +4860,12 @@ Această acțiune nu poate fi anulată.`)) return;
       GT.gameValue = v;
 
       // y0 = v * Y_B (Y_B = y1..yn from PLB solution)
-      GT.y0 = Array.from({length:n}, (_,j) => v * vars[j]);
+      GT.y0 = Array.from({ length: n }, (_, j) => v * vars[j]);
 
       // XA from delta of PLB: x_i^A = |delta_{n+i}|
       const lastIt = GT.plbIterations[GT.plbIterations.length - 1];
       const delta = lastIt.delta;
-      const xA = Array.from({length:m}, (_,i) => Math.abs(delta[n+i]));
+      const xA = Array.from({ length: m }, (_, i) => Math.abs(delta[n + i]));
       // x0 = v * XA
       GT.x0 = xA.map(x => v * x);
     }
@@ -4785,31 +4893,31 @@ Această acțiune nu poate fi anulată.`)) return;
           <div class="panel-title">Reconstrucția Soluției din PLB</div>
           <div style="font-family:var(--mono);font-size:12px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 20px;margin-bottom:14px">
             <div>g<sub>max</sub> = ${gmax_frac} &nbsp;→&nbsp; <strong style="color:var(--accent3)">v = 1/g<sub>max</sub> = ${v_frac}</strong></div>
-            <div style="margin-top:6px;font-size:10px;color:var(--muted)">v ∈ [${fmt(GT.v1)}, ${fmt(GT.v2)}] &nbsp; verificare: ${fmt(GT.v1)} ${GT.v1<=v+1e-9?'≤':'>'} ${v_frac} ${v<=GT.v2+1e-9?'≤':'>'} ${fmt(GT.v2)} ${Math.abs(GT.v1-v)<1e-4 || (v>=GT.v1-1e-9 && v<=GT.v2+1e-9) ? '✓':'✗'}</div>
+            <div style="margin-top:6px;font-size:10px;color:var(--muted)">v ∈ [${fmt(GT.v1)}, ${fmt(GT.v2)}] &nbsp; verificare: ${fmt(GT.v1)} ${GT.v1 <= v + 1e-9 ? '≤' : '>'} ${v_frac} ${v <= GT.v2 + 1e-9 ? '≤' : '>'} ${fmt(GT.v2)} ${Math.abs(GT.v1 - v) < 1e-4 || (v >= GT.v1 - 1e-9 && v <= GT.v2 + 1e-9) ? '✓' : '✗'}</div>
           </div>
 
           <div class="panel-title" style="margin-top:16px">Strategia Mixtă Optimă a lui A — x₀</div>
-          <div style="font-family:var(--mono);font-size:12px;margin-bottom:8px;color:var(--muted)">x₀ = v · X_A = ${v_frac} · (${Array.from({length:m},(_,i)=>fmtH(Math.abs(GT.plbIterations[GT.plbIterations.length-1].delta[n+i]))).join(', ')})</div>
+          <div style="font-family:var(--mono);font-size:12px;margin-bottom:8px;color:var(--muted)">x₀ = v · X_A = ${v_frac} · (${Array.from({ length: m }, (_, i) => fmtH(Math.abs(GT.plbIterations[GT.plbIterations.length - 1].delta[n + i]))).join(', ')})</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
-            ${x0.map((p,i) => `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px 16px;text-align:center;min-width:80px">
-              <div style="font-size:9px;color:var(--muted);margin-bottom:4px">a${sub(i+1)}</div>
+            ${x0.map((p, i) => `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px 16px;text-align:center;min-width:80px">
+              <div style="font-size:9px;color:var(--muted);margin-bottom:4px">a${sub(i + 1)}</div>
               <div style="color:var(--accent2);font-weight:700;font-size:16px">${fmtH(p)}</div>
               <div style="margin-top:4px;display:flex;align-items:center;gap:4px">
-                <div class="prob-track"><div class="prob-fill" style="width:${Math.round(p*100)}%"></div></div>
-                <span style="font-size:9px;color:var(--muted)">${Math.round(p*100)}%</span>
+                <div class="prob-track"><div class="prob-fill" style="width:${Math.round(p * 100)}%"></div></div>
+                <span style="font-size:9px;color:var(--muted)">${Math.round(p * 100)}%</span>
               </div>
             </div>`).join('')}
           </div>
 
           <div class="panel-title">Strategia Mixtă Optimă a lui B — y₀</div>
-          <div style="font-family:var(--mono);font-size:12px;margin-bottom:8px;color:var(--muted)">y₀ = v · Y_B = ${v_frac} · (${GT.plbSolution.vars.slice(0,n).map(fmtH).join(', ')})</div>
+          <div style="font-family:var(--mono);font-size:12px;margin-bottom:8px;color:var(--muted)">y₀ = v · Y_B = ${v_frac} · (${GT.plbSolution.vars.slice(0, n).map(fmtH).join(', ')})</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
-            ${y0.map((p,j) => `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px 16px;text-align:center;min-width:80px">
-              <div style="font-size:9px;color:var(--muted);margin-bottom:4px">b${sub(j+1)}</div>
+            ${y0.map((p, j) => `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px 16px;text-align:center;min-width:80px">
+              <div style="font-size:9px;color:var(--muted);margin-bottom:4px">b${sub(j + 1)}</div>
               <div style="color:var(--accent3);font-weight:700;font-size:16px">${fmtH(p)}</div>
               <div style="margin-top:4px;display:flex;align-items:center;gap:4px">
-                <div class="prob-track"><div class="prob-fill" style="width:${Math.round(p*100)}%"></div></div>
-                <span style="font-size:9px;color:var(--muted)">${Math.round(p*100)}%</span>
+                <div class="prob-track"><div class="prob-fill" style="width:${Math.round(p * 100)}%"></div></div>
+                <span style="font-size:9px;color:var(--muted)">${Math.round(p * 100)}%</span>
               </div>
             </div>`).join('')}
           </div>
@@ -4819,336 +4927,90 @@ Această acțiune nu poate fi anulată.`)) return;
       gtNavigateTo(5);
     }
 
-    // ── Verify game solution & render summary (LP-style full verification) ──
+    // ── Verify game solution & render summary ────────────────────
     function gtBuildVerification() {
       const Q = GT.matrix, m = GT.rows, n = GT.cols;
       const v = GT.gameValue, x0 = GT.x0, y0 = GT.y0;
-      if (!v || !x0 || !y0) {
-        document.getElementById('gt-verification-content').innerHTML =
-          '<div class="alert alert-warning"><span class="ai">⚠</span><span>Rulați mai întâi pașii anteriori.</span></div>';
-        gtNavigateTo(6); return;
-      }
 
-      let allOk = true;
-
-      // ══ Soluția optimă — x₀ și y₀ cu fracții vizuale ══
-      const x0html = x0.map((p, i) => `
-        <div style="text-align:center;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:4px">x₀[a${sub(i+1)}]</div>
-          <div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--accent2)">${fmtH(p)}</div>
-        </div>`).join('');
-      const y0html = y0.map((p, j) => `
-        <div style="text-align:center;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:4px">y₀[b${sub(j+1)}]</div>
-          <div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--accent3)">${fmtH(p)}</div>
-        </div>`).join('');
-
-      // ══ PAS 1 — Verificare b = S · x_B (pentru PLB, dacă strategii mixte) ══
-      let pas1Html = '';
-      if (!GT.hasSaddle && GT.plbIterations) {
-        const lastIt = GT.plbIterations[GT.plbIterations.length - 1];
-        const finalBasis = lastIt.basis.slice(0, m);
-        const xBfinal = finalBasis.map((_, i) => lastIt.xb[i]);
-        const plsC = GT.plbConstraints; // [{coefs, rhs}]
-        const total = GT.plbAllVars.length;
-
-        // b_calc[r] = Σ_j (coef variabilă baza j în ecuația r) * xB[j]
-        const bCalc = plsC.map((_, r) =>
-          finalBasis.reduce((s, bj, j) => s + plsC[r].coefs[bj] * xBfinal[j], 0)
-        );
-        const bOrig = plsC.map(row => row.rhs);
-        const matrixOk = bCalc.every((val, r) => Math.abs(val - bOrig[r]) < 1e-4);
-        if (!matrixOk) allOk = false;
-        const basisNames = finalBasis.map(b => GT.plbAllVars[b].name);
-
-        const mkCol = (arr, color) => `<table style="border-collapse:collapse;font-family:var(--mono);font-size:11px;margin:0 auto">
-          ${arr.map((val, i) => `<tr>
-            <td style="padding:3px 2px;color:var(--muted)">${i===0?'(':i===arr.length-1?'(':'|'}</td>
-            <td style="padding:3px 10px;text-align:center;color:${color};font-weight:600">${fmtH(val)}</td>
-            <td style="padding:3px 2px;color:var(--muted)">${i===0?')':i===arr.length-1?')':'|'}</td>
-          </tr>`).join('')}
-        </table>`;
-
-        const Shtml = `<table style="border-collapse:collapse;font-family:var(--mono);font-size:11px;margin:0 auto">
-          ${plsC.map((row, r) => `<tr>
-            <td style="padding:3px 2px;color:var(--muted)">${r===0?'(':r===m-1?'(':'|'}</td>
-            ${finalBasis.map(bj => `<td style="padding:3px 8px;text-align:center;color:var(--text)">${fmtH(row.coefs[bj])}</td>`).join('')}
-            <td style="padding:3px 2px;color:var(--muted)">${r===0?')':r===m-1?')':'|'}</td>
-          </tr>`).join('')}
-        </table>`;
-
-        pas1Html = `
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:20px">
-          <div style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted);font-weight:700;margin-bottom:4px">PAS 1 — VERIFICARE MATRICEALĂ PLB</div>
-          <div style="font-family:var(--mono);font-size:12px;color:var(--accent4);margin-bottom:16px">
-            b <span style="color:var(--muted)">= S · x<sub>B</sub></span> ?
-            <span style="font-size:10px;color:var(--muted)">(baza finală PLB: {${basisNames.join(', ')}})</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:16px">
-            <div style="text-align:center">
-              <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:4px">S (coloane baza PLB)</div>
-              ${Shtml}
-            </div>
-            <div style="font-family:var(--mono);font-size:20px;color:var(--muted)">·</div>
-            <div style="text-align:center">
-              <div style="font-family:var(--mono);font-size:9px;color:var(--accent3);margin-bottom:4px">x<sub>B</sub></div>
-              ${mkCol(xBfinal, 'var(--accent3)')}
-            </div>
-            <div style="font-family:var(--mono);font-size:16px;color:var(--muted)">=</div>
-            <div style="text-align:center">
-              <div style="font-family:var(--mono);font-size:9px;color:var(--accent4);margin-bottom:4px">rezultat</div>
-              ${mkCol(bCalc, 'var(--accent4)')}
-            </div>
-            <div style="font-family:var(--mono);font-size:20px;color:${matrixOk?'var(--accent3)':'var(--accent2)'}">${matrixOk?'=':'≠'}</div>
-            <div style="text-align:center">
-              <div style="font-family:var(--mono);font-size:9px;color:var(--accent3);margin-bottom:4px">b (RHS = 1...1)</div>
-              ${mkCol(bOrig, 'var(--accent3)')}
-            </div>
-            <div style="font-family:var(--mono);font-size:24px;color:${matrixOk?'var(--accent3)':'var(--accent2)'}">${matrixOk?'✓':'✗'}</div>
-          </div>
-          <div style="font-family:var(--mono);font-size:11px;color:${matrixOk?'var(--accent3)':'var(--accent2)'};text-align:center">
-            ${matrixOk?'b = S·x<sub>B</sub> ✓ — soluția PLB verificată matriceal':'✗ Discrepanță la verificarea matriceală PLB'}
-          </div>
-        </div>`;
-      } else if (GT.hasSaddle) {
-        pas1Html = `
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 24px;margin-bottom:20px">
-          <div style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted);font-weight:700;margin-bottom:8px">PAS 1 — PUNCT DE ȘA (verificare directă)</div>
-          <div style="font-family:var(--mono);font-size:12px;color:var(--accent3)">
-            q<sub>${GT.saddlePoint.row+1}${GT.saddlePoint.col+1}</sub> = ${fmtH(GT.saddlePoint.val)} este simultan minim pe linia ${GT.saddlePoint.row+1} și maxim pe coloana ${GT.saddlePoint.col+1} ✓
-          </div>
-        </div>`;
-      }
-
-      // ══ PAS 2 — Verificare restricții PLB: Q·y₀ ≤ 1 ══
-      const restrPLBHtml = Q.map((row, i) => {
-        const lhs = row.reduce((s, q, j) => s + q * y0[j], 0);
-        const ok = lhs <= 1 + 1e-6;
-        if (!ok) allOk = false;
-        const col = ok ? 'var(--accent3)' : 'var(--accent2)';
-        const bg = ok ? 'rgba(67,233,123,.06)' : 'rgba(255,101,132,.06)';
-        const border = ok ? 'rgba(67,233,123,.2)' : 'rgba(255,101,132,.2)';
-        const termsHtml = row.map((q, j) =>
-          `<span style="white-space:nowrap">${fmtH(q)}·${fmtH(y0[j])}</span>`
-        ).join('<span style="color:var(--muted);margin:0 4px">+</span>');
-        return `<div style="background:${bg};border:1px solid ${border};border-radius:10px;padding:12px 18px;margin-bottom:8px">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-            <span style="font-size:16px;color:${col}">${ok?'✓':'✗'}</span>
-            <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">R${sub(i+1)} (PLB)</span>
-            <span style="font-family:var(--mono);font-size:11px;color:var(--accent4)">
-              ${row.map((q,j)=>`${fmtH(q)}·y${sub(j+1)}`).join(' + ')} ≤ 1
-            </span>
-            <span style="margin-left:auto;font-family:var(--mono);font-size:10px;font-weight:700;
-                  background:${ok?'rgba(67,233,123,.15)':'rgba(255,101,132,.15)'};
-                  border:1px solid ${border};border-radius:4px;padding:2px 8px;color:${col}">
-              ${ok?'✓ OK':'✗ FAIL'}
-            </span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-size:12px">
-            <span style="color:var(--muted)">${termsHtml}</span>
-            <span style="color:var(--muted)">=</span>
-            <strong style="color:${col}">${fmtH(lhs)}</strong>
-            <span style="color:var(--accent2)">≤</span>
-            <span style="color:var(--text)">1</span>
-            <span style="color:${col};font-size:10px">${ok?'✓ satisfăcută':'✗ nesatisfăcută'}</span>
-          </div>
-        </div>`;
-      }).join('');
-
-      // ══ PAS 3 — Nenegativitate x₀ și y₀ ══
-      const nnX0html = x0.map((p, i) => {
-        const ok = p >= -1e-9; if (!ok) allOk = false;
-        const col = ok ? 'var(--accent3)' : 'var(--accent2)';
-        return `<div style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
-                  background:${ok?'rgba(67,233,123,.06)':'rgba(255,101,132,.06)'};
-                  border:1px solid ${ok?'rgba(67,233,123,.2)':'rgba(255,101,132,.2)'};
-                  border-radius:7px;font-family:var(--mono);font-size:11px;margin:3px">
-          <span style="color:${col}">${ok?'✓':'✗'}</span>
-          <span style="color:var(--muted)">x₀[${i+1}]</span>
-          <span style="color:var(--muted)">=</span>
-          <strong style="color:${col}">${fmtH(p)}</strong>
-          <span style="color:var(--muted)">≥ 0</span>
-        </div>`;
-      }).join('');
-      const nnY0html = y0.map((p, j) => {
-        const ok = p >= -1e-9; if (!ok) allOk = false;
-        const col = ok ? 'var(--accent3)' : 'var(--accent2)';
-        return `<div style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
-                  background:${ok?'rgba(67,233,123,.06)':'rgba(255,101,132,.06)'};
-                  border:1px solid ${ok?'rgba(67,233,123,.2)':'rgba(255,101,132,.2)'};
-                  border-radius:7px;font-family:var(--mono);font-size:11px;margin:3px">
-          <span style="color:${col}">${ok?'✓':'✗'}</span>
-          <span style="color:var(--muted)">y₀[${j+1}]</span>
-          <span style="color:var(--muted)">=</span>
-          <strong style="color:${col}">${fmtH(p)}</strong>
-          <span style="color:var(--muted)">≥ 0</span>
-        </div>`;
-      }).join('');
-
-      // ══ PAS 4 — Suma probabilităților ══
-      const sumX = x0.reduce((s,p)=>s+p,0);
-      const sumY = y0.reduce((s,p)=>s+p,0);
-      const sumXok = Math.abs(sumX-1)<1e-5; if(!sumXok) allOk=false;
-      const sumYok = Math.abs(sumY-1)<1e-5; if(!sumYok) allOk=false;
-      const sumXTerms = x0.map(fmtH).join(' + ');
-      const sumYTerms = y0.map(fmtH).join(' + ');
-
-      // ══ PAS 5 — v = x₀ · Q · y₀ ══
+      // Verification 1: sum x0 = 1
+      const sumX = x0.reduce((s, p) => s + p, 0);
+      const ok1 = Math.abs(sumX - 1) < 1e-6;
+      // Verification 2: sum y0 = 1
+      const sumY = y0.reduce((s, p) => s + p, 0);
+      const ok2 = Math.abs(sumY - 1) < 1e-6;
+      // Verification 3: all xi >= 0
+      const ok3 = x0.every(p => p >= -1e-9);
+      // Verification 4: all yj >= 0
+      const ok4 = y0.every(p => p >= -1e-9);
+      // Verification 5: v = x0 * Q * y0
       let xQy = 0;
-      for (let i = 0; i < m; i++) for (let j = 0; j < n; j++) xQy += x0[i]*Q[i][j]*y0[j];
-      const vOk = Math.abs(xQy - v) < 1e-4; if (!vOk) allOk = false;
-      // Termeni produs matriceal: x₀[i] · Q[i][j] · y₀[j]
-      const xQyTerms = [];
-      for (let i = 0; i < m; i++) for (let j = 0; j < n; j++) {
-        const t = x0[i]*Q[i][j]*y0[j];
-        if (Math.abs(t) > 1e-9) xQyTerms.push(`${fmtH(x0[i])}·${fmtH(Q[i][j])}·${fmtH(y0[j])}`);
-      }
+      for (let i = 0; i < m; i++) for (let j = 0; j < n; j++) xQy += x0[i] * Q[i][j] * y0[j];
+      const ok5 = Math.abs(xQy - v) < 1e-4;
 
-      // Interpretare
+      const checks = [
+        { ok: ok1, label: 'Σx₀_i = 1', val: `${fmtH(sumX)} ≈ 1` },
+        { ok: ok2, label: 'Σy₀_j = 1', val: `${fmtH(sumY)} ≈ 1` },
+        { ok: ok3, label: 'x₀_i ≥ 0', val: `${x0.map(fmtH).join(', ')}` },
+        { ok: ok4, label: 'y₀_j ≥ 0', val: `${y0.map(fmtH).join(', ')}` },
+        { ok: ok5, label: 'v = x₀·Q·y₀', val: `${fmtH(xQy)} ≈ ${fmtH(v)}` },
+      ];
+
+      const allOk = checks.every(c => c.ok);
+
+      // Interpretation text
       let interp = '';
       if (GT.hasSaddle) {
         const sp = GT.saddlePoint;
-        interp = `A câștigă v = <strong>${fmtH(v)}</strong> unități aplicând strategia <strong>a${sub(sp.row+1)}</strong> cu prob. 1 (100%).<br>
-          B pierde v = <strong>${fmtH(v)}</strong> unități adoptând strategia <strong>b${sub(sp.col+1)}</strong> cu prob. 1 (100%).`;
+        interp = `<div style="font-family:var(--mono);font-size:12px;line-height:1.9">
+          A câștigă v = <strong>${fmtH(v)}</strong> unități dacă aplică strategia <strong>a${sub(sp.row + 1)}</strong> cu probabilitate 1 (100%).<br>
+          B pierde v = <strong>${fmtH(v)}</strong> unități dacă adoptă strategia <strong>b${sub(sp.col + 1)}</strong> cu probabilitate 1 (100%).
+        </div>`;
       } else {
-        const partsA = x0.map((p,i) => p>1e-9 ? `A joacă <strong>a${sub(i+1)}</strong> cu prob. <strong style="color:var(--accent2)">${fmtH(p)}</strong> (${Math.round(p*100)}%)` : null).filter(Boolean);
-        const partsB = y0.map((p,j) => p>1e-9 ? `B joacă <strong>b${sub(j+1)}</strong> cu prob. <strong style="color:var(--accent3)">${fmtH(p)}</strong> (${Math.round(p*100)}%)` : null).filter(Boolean);
-        interp = [...partsA, ...partsB].join('<br>') + `<br>Valoarea medie a jocului: v = <strong style="color:var(--accent4)">${fmtH(v)}</strong>`;
+        interp = `<div style="font-family:var(--mono);font-size:12px;line-height:1.9">`;
+        for (let i = 0; i < m; i++) {
+          if (x0[i] > 1e-9) interp += `A joacă <strong>a${sub(i + 1)}</strong> cu probabilitatea <strong style="color:var(--accent2)">${fmtH(x0[i])}</strong> (${Math.round(x0[i] * 100)}%).<br>`;
+        }
+        for (let j = 0; j < n; j++) {
+          if (y0[j] > 1e-9) interp += `B joacă <strong>b${sub(j + 1)}</strong> cu probabilitatea <strong style="color:var(--accent3)">${fmtH(y0[j])}</strong> (${Math.round(y0[j] * 100)}%).<br>`;
+        }
+        interp += `Valoarea medie a jocului: v = <strong style="color:var(--accent4)">${fmtH(v)}</strong></div>`;
       }
 
-      const fc = allOk ? 'var(--accent3)' : 'var(--accent2)';
+      const html = `
+      <div class="panel">
+        <div class="panel-title">Verificare Matematică</div>
+        ${checks.map(c => `<div class="verify-check ${c.ok ? 'ok' : 'fail'}">
+          <span style="font-size:16px">${c.ok ? '✓' : '✗'}</span>
+          <span style="color:var(--accent4);font-weight:700;min-width:120px">${c.label}</span>
+          <span style="color:${c.ok ? 'var(--accent3)' : 'var(--accent2)'}">${c.val}</span>
+        </div>`).join('')}
+      </div>
 
-      const verifyHtml = `
-      <!-- ══ SOLUȚIA OPTIMĂ ══ -->
-      <div style="background:rgba(255,101,132,.08);border:1px solid rgba(255,101,132,.25);border-radius:12px;padding:20px 24px;margin-bottom:20px">
-        <div style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--accent2);font-weight:700;margin-bottom:14px">SOLUȚIA OPTIMĂ A JOCULUI</div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px">Strategia lui A — x₀</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">${x0html}</div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px">Strategia lui B — y₀</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">${y0html}</div>
-        <div style="font-family:var(--mono);font-size:12px;color:var(--muted)">
-          <span style="color:var(--accent4);font-weight:600">Valoarea jocului v =</span>
-          <strong style="color:var(--accent3);font-size:16px;margin-left:8px">${fmtH(v)}</strong>
+      <div class="panel" style="background:linear-gradient(135deg,rgba(67,233,123,.06),rgba(108,99,255,.06));border-color:${allOk ? 'rgba(67,233,123,.3)' : 'rgba(255,101,132,.3)'}">
+        <div class="panel-title">Rezumat Final — Soluția Jocului</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:16px">
+          <div class="result-item"><div class="rl">Tip joc</div><div class="rv" style="font-size:13px">${GT.hasSaddle ? 'Cu punct de șa' : 'Fără punct de șa'}</div></div>
+          <div class="result-item"><div class="rl">Valoarea jocului v</div><div class="rv">${fmtH(v)}</div></div>
+          <div class="result-item"><div class="rl">v₁ (maximin)</div><div class="rv" style="font-size:15px">${fmtH(GT.v1)}</div></div>
+          <div class="result-item"><div class="rl">v₂ (minimax)</div><div class="rv" style="font-size:15px">${fmtH(GT.v2)}</div></div>
+          <div class="result-item"><div class="rl">Metoda</div><div class="rv" style="font-size:12px">${GT.hasSaddle ? 'Strategii pure' : 'Simplex PLB'}</div></div>
+          <div class="result-item"><div class="rl">Verificare</div><div class="rv" style="color:${allOk ? 'var(--accent3)' : 'var(--accent2)'}">${allOk ? '✓ OK' : '✗ EROARE'}</div></div>
         </div>
-      </div>
-
-      ${pas1Html}
-
-      <!-- ══ PAS 2: Verificare restricții PLB — Q·y₀ ≤ 1 ══ -->
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:20px">
-        <div style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted);font-weight:700;margin-bottom:4px">PAS 2 — VERIFICARE RESTRICȚII PLB (Q·y₀ ≤ 1)</div>
-        <div style="font-family:var(--mono);font-size:12px;color:var(--accent4);margin-bottom:14px">
-          Substituim y₀ în fiecare restricție a PLB: Q·y₀ ≤ 1
-        </div>
-        ${restrPLBHtml}
-      </div>
-
-      <!-- ══ PAS 3: Nenegativitate ══ -->
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 24px;margin-bottom:20px">
-        <div style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted);font-weight:700;margin-bottom:10px">PAS 3 — NENEGATIVITATE x₀ ≥ 0 și y₀ ≥ 0</div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--accent2);margin-bottom:6px">Strategia lui A:</div>
-        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px">${nnX0html}</div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--accent3);margin-bottom:6px">Strategia lui B:</div>
-        <div style="display:flex;flex-wrap:wrap;gap:4px">${nnY0html}</div>
-      </div>
-
-      <!-- ══ PAS 4: Suma probabilităților ══ -->
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 24px;margin-bottom:20px">
-        <div style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted);font-weight:700;margin-bottom:10px">PAS 4 — SUMA PROBABILITĂȚILOR = 1</div>
-        <div style="display:flex;flex-direction:column;gap:8px;font-family:var(--mono);font-size:12px">
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-            <span style="color:var(--muted)">Σ x₀_i =</span>
-            <span>${sumXTerms}</span>
-            <span style="color:var(--muted)">=</span>
-            <strong style="color:${sumXok?'var(--accent3)':'var(--accent2)'};font-size:14px">${fmtH(sumX)}</strong>
-            <span style="color:${sumXok?'var(--accent3)':'var(--accent2)'}">= 1 ${sumXok?'✓':'✗'}</span>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 14px;font-family:var(--mono);font-size:12px;flex:1;min-width:220px">
+            <div style="font-size:9px;color:var(--accent2);margin-bottom:6px">STRATEGIA LUI A</div>
+            <div>x₀ = (${x0.map(fmtH).join(', ')})</div>
           </div>
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-            <span style="color:var(--muted)">Σ y₀_j =</span>
-            <span>${sumYTerms}</span>
-            <span style="color:var(--muted)">=</span>
-            <strong style="color:${sumYok?'var(--accent3)':'var(--accent2)'};font-size:14px">${fmtH(sumY)}</strong>
-            <span style="color:${sumYok?'var(--accent3)':'var(--accent2)'}">= 1 ${sumYok?'✓':'✗'}</span>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 14px;font-family:var(--mono);font-size:12px;flex:1;min-width:220px">
+            <div style="font-size:9px;color:var(--accent3);margin-bottom:6px">STRATEGIA LUI B</div>
+            <div>y₀ = (${y0.map(fmtH).join(', ')})</div>
           </div>
         </div>
-      </div>
-
-      <!-- ══ PAS 5: v = x₀ · Q · y₀ ══ -->
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 24px;margin-bottom:20px">
-        <div style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted);font-weight:700;margin-bottom:10px">PAS 5 — VALOAREA JOCULUI: v = x₀ · Q · y₀</div>
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-size:12px">
-          <span style="color:var(--muted)">x₀·Q·y₀ =</span>
-          <span style="color:var(--text)">${xQyTerms.join(' + ') || '0'}</span>
-          <span style="color:var(--muted)">=</span>
-          <strong style="color:${vOk?'var(--accent3)':'var(--accent2)'};font-size:14px">${fmtH(xQy)}</strong>
-          <span style="color:${vOk?'var(--accent3)':'var(--accent2)'}">= v = ${fmtH(v)} ${vOk?'✓':'✗'}</span>
-        </div>
+        <div class="section-label">Interpretare</div>
+        ${interp}
       </div>`;
 
-      document.getElementById('gt-verification-content').innerHTML = verifyHtml;
-
-      // ══ Concluzie finală (identică cu LP) ══
-      const existingFinal = document.getElementById('gt-final-result');
-      let finalEl = existingFinal;
-      if (!finalEl) {
-        finalEl = document.createElement('div');
-        finalEl.id = 'gt-final-result';
-        document.getElementById('gt-verification-content').after(finalEl);
-      }
-
-      let fr = `<div style="background:${allOk?'rgba(67,233,123,.08)':'rgba(255,101,132,.08)'};
-                  border:2px solid ${fc};border-radius:14px;padding:24px 28px;margin-top:4px">
-        <div style="font-family:var(--mono);font-size:14px;font-weight:800;color:${fc};margin-bottom:16px">
-          ${allOk?'✅  VERIFICARE COMPLETĂ — Soluția jocului este VALIDĂ și OPTIMĂ!':'⚠️  Verificare cu erori.'}
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px">`;
-      fr += `<div style="background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px 14px;text-align:center">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px">Tip joc</div>
-          <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent)">${GT.hasSaddle?'Punct de șa':'Strategii mixte'}</div>
-        </div>`;
-      fr += `<div style="background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px 14px;text-align:center">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px">v₁ = maximin</div>
-          <div style="font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent2)">${fmtH(GT.v1)}</div>
-        </div>`;
-      fr += `<div style="background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px 14px;text-align:center">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px">v₂ = minimax</div>
-          <div style="font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent3)">${fmtH(GT.v2)}</div>
-        </div>`;
-      fr += `<div style="background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px 14px;text-align:center">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px">Valoarea jocului v</div>
-          <div style="font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent3)">${fmtH(v)}</div>
-        </div>`;
-      x0.forEach((p,i) => { fr += `<div style="background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px 14px;text-align:center">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px">x₀[a${sub(i+1)}]</div>
-          <div style="font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent2)">${fmtH(p)}</div>
-        </div>`; });
-      y0.forEach((p,j) => { fr += `<div style="background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px 14px;text-align:center">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px">y₀[b${sub(j+1)}]</div>
-          <div style="font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent3)">${fmtH(p)}</div>
-        </div>`; });
-      fr += `</div>`;
-      if (allOk) fr += `<div style="font-family:var(--mono);font-size:11px;color:var(--accent3)">
-          ${GT.hasSaddle
-            ? `Punct de șa verificat · x₀ și y₀ sunt probabilități pure · v = q<sub>${GT.saddlePoint.row+1}${GT.saddlePoint.col+1}</sub> = ${fmtH(v)} ✓`
-            : `Toate restricțiile PLB satisfăcute · nenegativitate OK · Σx₀=1 ✓ · Σy₀=1 ✓ · v = x₀·Q·y₀ ✓`}
-        </div>`;
-      fr += `<div style="margin-top:16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-family:var(--mono);font-size:12px;line-height:1.9">
-          <div style="font-size:10px;color:var(--accent4);margin-bottom:8px;letter-spacing:1px">INTERPRETARE PRACTICĂ</div>
-          ${interp}
-        </div>`;
-      fr += '</div>';
-
-      // Append final result after verification content
-      let gtStep6 = document.getElementById('gt-step6');
-      let existingFinalDiv = document.getElementById('gt-final-result');
-      if (existingFinalDiv) { existingFinalDiv.innerHTML = fr; }
-      else {
-        const div = document.createElement('div');
-        div.id = 'gt-final-result';
-        div.innerHTML = fr;
-        gtStep6.insertBefore(div, gtStep6.querySelector('div[style*="display:flex"]'));
-      }
-
+      document.getElementById('gt-verification-content').innerHTML = html;
       gtNavigateTo(6);
     }
 
@@ -5157,11 +5019,11 @@ Această acțiune nu poate fi anulată.`)) return;
       let matrix, rows, cols;
       if (n === 1) {
         // Example with saddle point: Q = [[2,3,4],[1,5,6]]
-        matrix = [[2,3,4],[1,5,6]];
+        matrix = [[2, 3, 4], [1, 5, 6]];
         rows = 2; cols = 3;
       } else {
         // Example without saddle: Q = [[1,1,2],[3,2,1],[2,4,5]]
-        matrix = [[1,1,2],[3,2,1],[2,4,5]];
+        matrix = [[1, 1, 2], [3, 2, 1], [2, 4, 5]];
         rows = 3; cols = 3;
       }
       document.getElementById('gtRows').value = rows;
@@ -5200,7 +5062,7 @@ Această acțiune nu poate fi anulată.`)) return;
       const m = GT.rows, n = GT.cols;
       document.getElementById('gtSavePreview').innerHTML = GT.matrix
         ? `<div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:8px">PREVIEW JOC</div>
-           <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;font-family:var(--mono);font-size:11px;color:var(--accent4)">Matrice ${m}×${n} — ${GT.hasSaddle!==null?(GT.hasSaddle?'Cu punct de șa':'Fără punct de șa'):'Nerezolvat'}</div>`
+           <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;font-family:var(--mono);font-size:11px;color:var(--accent4)">Matrice ${m}×${n} — ${GT.hasSaddle !== null ? (GT.hasSaddle ? 'Cu punct de șa' : 'Fără punct de șa') : 'Nerezolvat'}</div>`
         : '(completează matricea mai întâi)';
       document.getElementById('gtExName').value = '';
       document.getElementById('gtSaveModalOverlay').classList.remove('hidden');
@@ -5212,13 +5074,13 @@ Această acțiune nu poate fi anulată.`)) return;
     async function gtConfirmSave() {
       if (!GT.matrix) { showToast('⚠ Completează matricea jocului înainte de salvare!'); return; }
       const name = document.getElementById('gtExName').value.trim() ||
-        `Joc ${GT.rows}×${GT.cols} — ${new Date().toLocaleDateString('ro')} ${new Date().toLocaleTimeString('ro',{hour:'2-digit',minute:'2-digit'})}`;
+        `Joc ${GT.rows}×${GT.cols} — ${new Date().toLocaleDateString('ro')} ${new Date().toLocaleTimeString('ro', { hour: '2-digit', minute: '2-digit' })}`;
       const record = {
         name, savedAt: new Date().toISOString(),
         type: 'game-theory',
         objType: 'gt',
         gtRows: GT.rows, gtCols: GT.cols,
-        gtMatrix: GT.matrix.map(r=>[...r]),
+        gtMatrix: GT.matrix.map(r => [...r]),
         gtHasSaddle: GT.hasSaddle,
         gtGameValue: GT.gameValue,
         gtX0: GT.x0, gtY0: GT.y0,
@@ -5232,7 +5094,7 @@ Această acțiune nu poate fi anulată.`)) return;
         gtCloseSaveModal();
         showToast('💾 Jocul salvat în baza de date!');
         updateExBadge();
-      } catch(err) { showToast('⚠ Eroare la salvare: ' + err.message); }
+      } catch (err) { showToast('⚠ Eroare la salvare: ' + err.message); }
     }
 
     // ── GT Export PDF ─────────────────────────────────────────────
@@ -5259,8 +5121,8 @@ Această acțiune nu poate fi anulată.`)) return;
             cloneDoc.querySelectorAll('.gt-step-page').forEach(p => { p.style.display = 'block'; });
           }
         });
-        const {jsPDF} = window.jspdf || {};
-        const doc = jsPDF ? new jsPDF({orientation:'portrait',unit:'mm',format:'a4'}) : null;
+        const { jsPDF } = window.jspdf || {};
+        const doc = jsPDF ? new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' }) : null;
         if (!doc) { showToast('⚠ jsPDF not available'); return; }
         const imgData = canvas.toDataURL('image/jpeg', 0.9);
         const pageW = 210, pageH = 297;
@@ -5271,12 +5133,12 @@ Această acțiune nu poate fi anulată.`)) return;
           doc.addImage(imgData, 'JPEG', 0, -y, pageW, imgH);
           y += pageH;
         }
-        doc.save(`teoria_jocurilor_${GT.rows}x${GT.cols}_${new Date().toISOString().slice(0,10)}.pdf`);
+        doc.save(`teoria_jocurilor_${GT.rows}x${GT.cols}_${new Date().toISOString().slice(0, 10)}.pdf`);
         showToast('📄 PDF exportat!');
-      } catch(e) { showToast('⚠ Eroare PDF: ' + e.message); }
+      } catch (e) { showToast('⚠ Eroare PDF: ' + e.message); }
 
       gtPages.forEach(p => { p.style.display = ''; });
-      document.querySelectorAll('.gt-step-page').forEach((p,i) => {
+      document.querySelectorAll('.gt-step-page').forEach((p, i) => {
         if (i === GT.currentStep) p.classList.add('active');
         else p.classList.remove('active');
       });
